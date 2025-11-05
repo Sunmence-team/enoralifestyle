@@ -9,6 +9,7 @@ const Navbar: React.FC = () => {
   const navLinks = [
     { path: "/", name: "Home" },
     { path: "/services", name: "Services" },
+    { path: "/packages", name: "Packages" },
     { path: "/blog", name: "Blog" },
     { path: "/appointment", name: "Appointment" },
     
@@ -19,7 +20,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="h-[70px] bg-white fixed top-0 left-0 w-full z-50 flex items-center lg:px-10 px-5">
+    <nav className="h-[70px] bg-white/30 fixed top-0 left-0 w-full z-50 flex items-center lg:px-10 px-5">
       <div className="made-container flex items-center justify-between w-full">
         {/* Logo */}
         <div className="flex items-center gap-3">

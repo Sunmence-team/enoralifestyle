@@ -13,13 +13,13 @@ const Contact = () => {
         height="h-[70vh]" // home page is taller 
       />
 
-      <div className='flex flex-col gap-6 items-center justify-center h-[50vh]'>
-        <div className='flex gap-3 items-center justify-center'>
-          <input type='name' placeholder='Fullname' value={name} onChange={(e) => setName(e.target.value)} className='bg-gray-200 w-90 px-4 py-3 rounded-md border border-(--primary-color) text-xs focus:ring-1 focus:ring-(--primary-color) ' />
-          <input type='email' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)} className='bg-gray-200 w-90 px-4 py-3 rounded-md border border-(--primary-color) text-xs focus:ring-1 focus:ring-(--primary-color) ' />
+      <div className='flex flex-col gap-6 items-center justify-center h-[50vh] '>
+        <div className='flex flex-col md:flex-row lg:flex w-full gap-3 items-center justify-center'>
+          <input type='name' placeholder='Fullname' value={name} onChange={(e) => setName(e.target.value)} className='bg-gray-200 w-72 md:w-90 px-4 py-3 rounded-md border border-(--primary-color) text-xs focus:ring-1 focus:ring-(--primary-color) ' />
+          <input type='email' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)} className='bg-gray-200 w-72 md:w-90 px-4 py-3 rounded-md border border-(--primary-color) text-xs focus:ring-1 focus:ring-(--primary-color) ' />
         </div>
 
-        <textarea placeholder='Drop your enquires here' className='bg-gray-200 w-183 px-4 py-7 rounded-md border border-(--primary-color) text-xs focus:ring-1 focus:ring-primary' />
+        <textarea placeholder='Drop your enquires here' className='bg-gray-200 w-72 md:w-[720px] px-4 py- rounded-md border border-(--primary-color) text-xs focus:ring-1 focus:ring-primary' />
 
       </div>
     </div>

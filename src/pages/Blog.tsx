@@ -1,17 +1,19 @@
 import React from 'react'
 import Bloghero from '../components/Bloghero'
 import { assets } from "../assets/assests";
+import Blogpost from '../components/Blogpost';
 
-const Blog = () => {
+export default function Blog() {
   return (
     <div>
-      <Bloghero
-        title="Blog"
-        backgroundImage={assets.blogImg}
-        height="h-[70vh]" // home page is taller 
-      />
+      <div>
+        <Bloghero
+          title="Blog"
+          backgroundImage={assets.blogImg}
+          height="h-[70vh]" // home page is taller 
+        />
+        <Blogpost />
+      </div>
     </div>
   )
 }
-
-export default Blog

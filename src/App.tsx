@@ -8,6 +8,8 @@ import Home from "./pages/Home";
 import BookAppointment from "./pages/BookAppointment";
 import Services from "./pages/Services";
 import Blog from "./pages/Blog";
+import Packages from "./pages/Packages";
+
 
 const App: React.FC = () => {
   return (
@@ -18,6 +20,7 @@ const App: React.FC = () => {
         <Route path="/blog" element={<MainLayout children={<Blog />} />} />
         <Route path="/appointment" element={<MainLayout children={<BookAppointment />} />} />
         <Route path="/services" element={<MainLayout children={<Services />} />} />
+        <Route path="/packages" element={<MainLayout children={<Packages />} />} />
       </Routes>
     </>
   );

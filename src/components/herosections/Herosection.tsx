@@ -33,16 +33,16 @@ const HeroSection: React.FC<HeroSectionProps> = ({
       <div className="relative z-10 max-w-3xl px-4">
         <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-4">{title}</h1>
         {subtitle && (
-          <p className="text-lg md:text-xl mb-6 text-gray-200">{subtitle}</p>
+          <p className="text-[14px] md:text-[19px] mb-6 text-white">{subtitle}</p>
         )}
         <div className="flex justify-center gap-4">
           {button1Text && (
-            <button className="bg-[#a1007e] text-white px-6 py-2 rounded-full hover:bg-[#820065] transition">
+            <button className="bg-[#a1007e] text-white px-10 py-2 rounded-full hover:bg-[#820065] transition cursor-pointer">
               {button1Text}
             </button>
           )}
           {button2Text && (
-            <button className="border border-white px-6 py-2 rounded-full hover:bg-white hover:text-black transition">
+            <button className="border border-white px-6 py-2 rounded-full hover:bg-white hover:text-black transition cursor-pointer">
               {button2Text}
             </button>
           )}

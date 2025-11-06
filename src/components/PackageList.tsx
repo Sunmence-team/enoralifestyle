@@ -1,5 +1,7 @@
 import React from 'react'
 import { assets } from "../assets/assests";
+import { IoCartOutline } from "react-icons/io5";
+import { MdOutlineArrowOutward } from "react-icons/md";
 
 export default function PackageList() {
 
@@ -50,13 +52,13 @@ export default function PackageList() {
     ]
 
     return (
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:px-12 py-10">
+        <div className="m-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:px-12 py-10">
             {packages.map((pkg, index) => (
                 <div key={index} className="relative flex justify-center">
                     {/* Purple bar slightly showing behind card */}
                     <div
                         className={`absolute ${index % 2 === 0 ? "-top-2" : "-bottom-2"
-                            } w-[100%] h-13 bg-[var(--primary-color)] rounded-full z-0`}
+                            } w-full h-13 bg-(--primary-color) rounded-full z-0`}
                     ></div>
 
                     {/* Card content */}
@@ -72,9 +74,15 @@ export default function PackageList() {
                             {pkg.price}
                         </p>
 
-                        <button className="text-[var(--primary-color)] font-bold rounded-full hover:text-black transition-all duration-300 cursor-pointer md:text-[24px] text-[20px] mt-5">
-                            Book Now
-                        </button>
+                        <div className='flex gap-3'>
+                            <button className="bg-(--primary-color) flex items-center gap-2 font-bold rounded-md px-4 py-3 text-white hover:text-black transition-all duration-300 cursor-pointer md:text-[19px] text-[16px] mt-5">
+                                <IoCartOutline size={25} /> Add to cart
+                            </button>
+                            <button className="text-(--primary-color) border-2 border-(--primary-color) flex items-center gap-2  font-bold rounded-md px-2 py-3 hover:text-black transition-all duration-300 cursor-pointer md:text-[19px] text-[16px] mt-5">
+                                View Details <MdOutlineArrowOutward size={25}/>
+                            </button>
+                        </div>
+
                     </div>
                 </div>
             ))}

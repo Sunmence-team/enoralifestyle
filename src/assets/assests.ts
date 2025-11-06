@@ -4,6 +4,7 @@ import packageImg from "./images/packageImg.jpg"
 import service from "./images/service.jpg"
 import leg from "./images/leg.jpg"
 import face from "./images/face.jpg"
+import blogImg from "./images/blogImg.jpg"
 
 export const assets = {
     logo,
@@ -11,5 +12,6 @@ export const assets = {
     packageImg,
     service,
     leg,
-    face
+    face,
+    blogImg
 };

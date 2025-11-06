@@ -1,9 +1,15 @@
 import React from 'react'
+import Bloghero from '../components/Bloghero'
+import { assets } from "../assets/assests";
 
 const Blog = () => {
   return (
     <div>
-      <h1 className='text-[40px] text-black'>blog</h1>
+      <Bloghero
+        title="Blog"
+        backgroundImage={assets.blogImg}
+        height="h-[70vh]" // home page is taller 
+      />
     </div>
   )
 }

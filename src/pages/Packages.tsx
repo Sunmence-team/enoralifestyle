@@ -7,7 +7,7 @@ const Packages = () => {
   return (
     <div>
       <Packagehero 
-        title="Packages"
+        title="Our Packages"
         backgroundImage={assets.packageImg}
         height="h-[70vh]" // home page is taller 
       />

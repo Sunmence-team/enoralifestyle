@@ -24,7 +24,7 @@ export default function Sidebar() {
               to={link.href}
               className='flex flex-col gap-10 items-center justify-center mb-6 hover:bg-[var(--pink-color)] p-2 rounded-md transition-colors'
             >
-              <div className='p-3 bg-white rounded-md'>
+              <div className='p-2 bg-white rounded-md'>
                 {link.icon}
               </div>
               {/* <span className='text-xs font-medium text-[var(--primary-color)] mt-1'>{link.name}</span> */}

@@ -13,3 +13,13 @@
   --secondary-color: #FDF9F5;
   --accent-color: #000000CC;
 }
+
+/* .blog-action{
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  border-width: 0 195.5px 50px 195.5px;
+  border-radius: 10px;
+  border-color: rgba(255, 0, 0, 0.028) rgba(255, 0, 0, 0.015) #fff red;
+  transform: rotate(0deg);
+} */

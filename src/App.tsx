@@ -8,6 +8,8 @@ import Packages from "./pages/Packages";
 import BookAppointment from "./pages/BookAppointment";
 import Services from "./pages/Services";
 import Blog from "./pages/Blog";
+import Packages from "./pages/Packages";
+
 
 const App: React.FC = () => {
   return (

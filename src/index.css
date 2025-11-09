@@ -14,12 +14,28 @@
   --accent-color: #000000CC;
 }
 
-/* .blog-action{
-  width: 0px;
-  height: 0px;
-  border-style: solid;
-  border-width: 0 195.5px 50px 195.5px;
-  border-radius: 10px;
-  border-color: rgba(255, 0, 0, 0.028) rgba(255, 0, 0, 0.015) #fff red;
-  transform: rotate(0deg);
-} */
+.blog-action{
+  width: 100%;
+  height: 100px;
+  background: #4a90e2;
+  border-radius: 100% 100% 0 0 / 100% 100% 0 0; /* top semicircle */
+  position: absolute;
+  left: 0;
+  bottom: -50px; /* or top: 0; for inverted */
+}
+
+.rounded-pyramid {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* keeps it proportional */
+  background: #4a90e2;
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+  border-top-left-radius: 50% 40%;
+  border-top-right-radius: 50% 40%;
+}
+
+.wave-div {
+  height: 300px;
+  /* clip-path: path("M0,200 Q250,250 500,200 L500,300 L0,300 Z"); */
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 92%, 0 100%);
+
+}

@@ -5,6 +5,8 @@ import { FiShoppingCart, FiArrowRight } from "react-icons/fi";
 import { BiSolidQuoteSingleLeft } from "react-icons/bi";
 import HeroSection from "../components/herosections/Herosection";
 import { IoIosArrowRoundForward } from "react-icons/io";
+import { FaChevronRight } from "react-icons/fa6";
+import { GoChevronRight } from "react-icons/go";
 
 const Home = () => {
   // --- Array of packages ---
@@ -82,7 +84,7 @@ const Home = () => {
   // --- Array of client reviews (NEW) ---
   const reviews = [
     {
-      iconColor: "black/80",
+      iconColor: "#000000CC",
       reviewText:
         "I struggled with hormonal acne for years and nothing worked until I found this spa. Their acne facial plan cleared my skin in just 4 weeks. Highly recommended!",
       profileImage: assets.banker,
@@ -91,22 +93,22 @@ const Home = () => {
       bgColor: "#C97BB7",
     },
     {
-      iconColor: "#6B5BFF",
+      iconColor: "#C97BB7",
       reviewText:
         "I used to think facials were just for women until I tried their deep cleansing facial. My skin feels fresh and clean, and my beard bumps reduced. I’m definitely coming back.",
       profileImage: assets.soft,
       name: "Michael Peters",
       role: "Software Engineer",
-      bgColor: "#6C5DD3",
+      bgColor: "#000000CC",
     },
     {
-      iconColor: "#00C49F",
+      iconColor: "#000000CC",
       reviewText:
         "I came for a skin consultation and left with so much knowledge. They actually understood my skin and recommended the right products. My dark spots are fading already.",
       profileImage: assets.desi,
       name: "Jennifer Okeke",
       role: "Digital Marketer",
-      bgColor: "#10B981",
+      bgColor: "#C97BB7",
     },
   ];
 
@@ -128,54 +130,47 @@ const Home = () => {
           Blog <span className="text-[var(--primary-color)]">News</span>
         </h1>
 
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {blogs.map((blog, index) => (
-            <div
-              key={index}
-              className="relative pb-8 bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col text-center border border-1 border-black/20 overflow-hidden"
-            >
-              {/* Text before image */}
-              <div className="px-5 pt-6 text-start">
-                <h2 className="text-[20px] font-semibold text-black mb-2">
-                  {blog.title}
-                </h2>
-                <p className="text-gray-600 text-sm mb-4">{blog.description}</p>
-              </div>
-
-              {/* Blog image with smooth concave bottom */}
-              <div className="relative overflow-hidden rounded-b-3xl p-5">
-                <img
-                  src={blog.image}
-                  alt={blog.title}
-                  className="w-full h-[300px] border object-cover rounded-t-3xl"
-                />
-
-                {/* Smooth concave curve (not sharp) */}
-                {/* <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
-                  <svg
-                    className="relative block w-full h-[60px]"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 1200 60"
-                    preserveAspectRatio="none"
-                  >
-                    <path
-                      d="M0,0 L0,30 Q600,60 1200,30 L1200,0 Z"
-                      className="fill-white"
-                    />
-                  </svg>
-                </div> */}
-              </div>
-
-              {/* Read more link */}
-              <Link
-                to="/blog"
-                className="absolute border w-full bottom-0 blog-action text-[var(--primary-color)] border font-semibold hover:text-black transition-colors  text-center mt-4 pb-6 bg-white inline-block px-6 py-3"
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {blogs.map((blog, index) => (
+              <div
+                key={index}
+                className="relative bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col justify-between text-center border border-black/10 overflow-hidden"
               >
-                Read more &gt;&gt;&gt;
-              </Link>
-            </div>
-          ))}
-        </div>
+                {/* Text before image */}
+                <div className="px-5 pt-6 text-start">
+                  <h2 className="text-[20px] font-semibold text-black mb-2">
+                    {blog.title}
+                  </h2>
+                  <p className="text-gray-600 text-sm">{blog.description}</p>
+                </div>
+
+                {/* Blog image with smooth concave bottom */}
+                <div className="relative overflow-hidden p-5">
+                  <div className="wave-div z-1 rounded-t-3xl h-[300px] overflow-hidden mb-8">
+                    <img
+                    src={blog.image}
+                    alt={blog.title}
+                    className="w-full h-full object-cover"
+                  />
+                  </div>
+                  <Link
+                    to={`/blog/${index + 1}`}
+                    className="text-[var(--primary-color)] font-semibold hover:text-black transition-colors text-center mt-4 pb-6 absolute z-99 bottom-0 left-1/2 -translate-x-1/2 flex items-center"
+                  >
+                    <span>Read more</span>
+                    <span className="flex mt-1">
+                      <GoChevronRight />
+                      <GoChevronRight />
+                      <GoChevronRight />
+                    </span>
+                  </Link>
+
+                </div>
+
+                {/* Read more link */}
+              </div>
+            ))}
+          </div>
 
         {/* See more */}
         <div className="flex justify-end mt-10">

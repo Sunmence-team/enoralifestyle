@@ -17,6 +17,9 @@ import icon from "./images/icon.png"
 import soft from "./images/soft.jpg"
 import desi from "./images/desi.jpg"
 import servicehero from "./images/services.jpg"
+import dets from "./images/details.jpg"
+import newblog from "./images/blog.jpg"
+import pac from "./images/pack.jpg"
 
 export const assets = {
     logo,
@@ -38,4 +41,8 @@ export const assets = {
     soft,
     desi,
     servicehero,
+    dets,
+    newblog,
+    pac,
+
 };

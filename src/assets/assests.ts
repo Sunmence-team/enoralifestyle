@@ -25,6 +25,10 @@ import servicehero from "./images/services.jpg"
 import dets from "./images/details.jpg"
 import newblog from "./images/blog.jpg"
 import pac from "./images/pack.jpg"
+import blog1 from "./images/blog1.jpg"
+import blog2 from "./images/blog2.jpg"
+import blog3 from "./images/blog3.jpg"
+import contact from "./images/contact.jpg"
 
 export const assets = {
     logo,
@@ -34,6 +38,10 @@ export const assets = {
     leg,
     face,
     blogImg,
+    blog1,
+    blog2,
+    blog3,
+    contact,
     about,
     our1,
     our2,

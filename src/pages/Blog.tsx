@@ -27,7 +27,7 @@ const blogs = [
   },
 ];
 
-const Blog = () => {
+export default function Blog() {
   return (
     <div>
       {/* HERO SECTION */}

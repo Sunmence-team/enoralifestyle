@@ -52,7 +52,7 @@ export default function PackageList() {
     ]
 
     return (
-        <div className="m-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:px-12 py-10">
+        <div className="m-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:px-10 py-10">
             {packages.map((pkg, index) => (
                 <div key={index} className="relative flex justify-center">
                     {/* Purple bar slightly showing behind card */}
@@ -62,7 +62,7 @@ export default function PackageList() {
                     ></div>
 
                     {/* Card content */}
-                    <div className="bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 px-1 py-10 flex flex-col items-center text-center relative z-10">
+                    <div className="w-full bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 px-7 py-10 flex flex-col items-center text-center relative z-10">
                         <img
                             src={pkg.img}
                             alt={pkg.name}
@@ -74,12 +74,15 @@ export default function PackageList() {
                             {pkg.price}
                         </p>
 
-                        <div className='flex gap-3'>
-                            <button className="bg-(--primary-color) flex items-center gap-2 font-bold rounded-md px-4 py-3 text-white hover:text-black transition-all duration-300 cursor-pointer md:text-[19px] text-[16px] mt-5">
-                                <IoCartOutline size={25} /> Add to cart
+                        <div className="flex gap-3">
+                            <button className="bg-[var(--primary-color)] flex items-center justify-center gap-2 font-bold rounded-md p-2  text-white transition-all duration-300 cursor-pointer md:text-[16px] text-[16px] mt-5">
+                                <IoCartOutline size={25} /> 
+                                <span>Add to cart</span>
                             </button>
-                            <button className="text-(--primary-color) border-2 border-(--primary-color) flex items-center gap-2  font-bold rounded-md px-2 py-3 hover:text-black transition-all duration-300 cursor-pointer md:text-[19px] text-[16px] mt-5">
-                                View Details <MdOutlineArrowOutward size={25}/>
+
+                            <button className="text-[var(--primary-color)] border-2 border-[--primary-color] flex items-center gap-2 font-bold rounded-md p-2  hover:text-black transition-all duration-300 cursor-pointer md:text-[16px] text-[16px] mt-5">
+                                <span>View Details</span>
+                                <MdOutlineArrowOutward size={25} />
                             </button>
                         </div>
 

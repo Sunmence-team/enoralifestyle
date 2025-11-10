@@ -5,9 +5,6 @@ import service from "./images/service.jpg"
 import leg from "./images/leg.jpg"
 import face from "./images/face.jpg"
 import blogImg from "./images/blogImg.jpg"
-import blog1 from "./images/blog1.jpg"
-import blog2 from "./images/blog2.jpg"
-import blog3 from "./images/blog3.jpg"
 import contact from "./images/contact.jpg"
 import about from "./images/about.jpg"
 import our1 from "./images/our1.jpg"
@@ -41,14 +38,11 @@ export const assets = {
     blog1,
     blog2,
     blog3,
-    contact
+    contact,
     about,
     our1,
     our2,
     our3,
-    blog1,
-    blog2,
-    blog3,
     newabout,
     ser1,
     ser2,

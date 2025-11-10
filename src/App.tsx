@@ -4,7 +4,6 @@ import MainLayout from "./Layout/MainLayout";
 
 import { Toaster } from "sonner";
 import Home from "./pages/Home";
-import Packages from "./pages/Packages";
 import Services from "./pages/Services";
 import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
@@ -15,6 +14,9 @@ import BlogUpload from "./pages/dashboard/BlogUpload";
 import Package from "./pages/dashboard/Package";
 import Packages from "./pages/Packages";
 import BlogDetails from "./pages/BlogDetails";
+import BookAppointment from "./pages/BookAppointment";
+import  Login  from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
 
 
 const App: React.FC = () => {
@@ -24,6 +26,10 @@ const App: React.FC = () => {
 
       {/* Main route */}
       <Routes>
+
+
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/" element={<MainLayout children={<Home />} />} />
         <Route path="/blog" element={<MainLayout children={<Blog />} />} />
         <Route path="/blog/:id" element={<MainLayout children={<BlogDetails />} />} />

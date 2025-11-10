@@ -72,7 +72,7 @@ const Navbar: React.FC = () => {
         {/* Desktop Button */}
         <Link
           to="/appointment"
-          className={`hidden lg:flex py-2 px-5 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer hover:opacity-90 active:scale-95 ${
+          className={`hidden lg:flex py-3 px-6 rounded-[10px]  text-sm font-medium transition-all duration-200 cursor-pointer hover:opacity-90 active:scale-95 ${
             isScrolled
               ? "bg-[var(--primary-color)] text-white"
               : "bg-[var(--primary-color)] text-white"
@@ -131,7 +131,7 @@ const Navbar: React.FC = () => {
           <Link
             to="/appointment"
             onClick={handleLinkClick}
-            className="bg-[var(--primary-color)] hover:opacity-90 active:scale-95 text-white py-3 px-5 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer mt-6"
+            className="bg-[var(--primary-color)] hover:opacity-90 active:scale-95 text-white py-3 px-5 rounded-2xl text-sm font-medium transition-all duration-200 cursor-pointer mt-6"
           >
             Book Appointment
           </Link>

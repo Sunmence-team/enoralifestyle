@@ -11,32 +11,32 @@ const Footer: React.FC = () => {
 
         {/* Navigation Links */}
         <nav className="flex flex-wrap justify-center gap-6 md:gap-10 text-sm font-medium">
-          <a href="/" className="hover:text-[var(--primary-color)] transition">
+          <a href="/" className="hover:text-(--primary-color) transition">
             Home
           </a>
-          <a href="/services" className="hover:text-[var(--primary-color)] transition">
+          <a href="/services" className="hover:text-(--primary-color) transition">
             Services
           </a>
-          <a href="/packages" className="hover:text-[var(--primary-color)] transition">
+          <a href="/packages" className="hover:text-(--primary-color) transition">
             Packages
           </a>
-          <a href="/blog" className="hover:text-[var(--primary-color)] transition">
+          <a href="/blog" className="hover:text-(--primary-color) transition">
             Blog
           </a>
-          <a href="/contact" className="hover:text-[var(--primary-color)] transition">
+          <a href="/contact" className="hover:text-(--primary-color) transition">
             Contact Us
           </a>
         </nav>
 
         {/* Social Icons */}
         <div className="flex justify-center gap-6 mt-6 text-2xl">
-          <a href="https://wa.me/yournumber" target="_blank" className="hover:text-[var(--primary-color)] transition">
+          <a href="https://wa.me/yournumber" target="_blank" className="hover:text-(--primary-color) transition">
             <FaWhatsapp />
           </a>
-          <a href="https://instagram.com" target="_blank" className="hover:text-[var(--primary-color)] transition">
+          <a href="https://instagram.com" target="_blank" className="hover:text-(--primary-color) transition">
             <FaInstagram />
           </a>
-          <a href="https://x.com" target="_blank" className="hover:text-[var(--primary-color)] transition">
+          <a href="https://x.com" target="_blank" className="hover:text-(--primary-color) transition">
             <FaXTwitter />
           </a>
         </div>
@@ -56,13 +56,13 @@ const Footer: React.FC = () => {
           Enoralifestyle© {new Date().getFullYear()} All rights reserved
         </p>
         <div className="flex items-center divide-x divide-gray-600">
-          <a href="/terms" className="px-3 hover:text-[var(--primary-color)] transition">
+          <a href="/terms" className="px-3 hover:text-(--primary-color) transition">
             Terms
           </a>
-          <a href="/privacy" className="px-3 hover:text-[var(--primary-color)] transition">
+          <a href="/privacy" className="px-3 hover:text-(--primary-color) transition">
             Privacy
           </a>
-          <a href="/contact" className="px-3 hover:text-[var(--primary-color)] transition">
+          <a href="/contact" className="px-3 hover:text-(--primary-color) transition">
             Contact
           </a>
         </div>

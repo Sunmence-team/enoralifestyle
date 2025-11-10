@@ -49,7 +49,7 @@ export default function Overview() {
 
           <div className='flex flex-col gap-2 w-full'>
             <label htmlFor="name">Description</label>
-            <textarea placeholder='Description' rows={2} value={description} onChange={(e) => setDescription(e.target.value)} className='w-72 h-30 md:w-auto px-4 py-3 rounded-md border border-(--primary-color)/40 text-xs focus:ring-1 focus:ring-[var(--primary-color)] ' />
+            <textarea placeholder='Description' rows={4} value={description} onChange={(e) => setDescription(e.target.value)} className='w-auto md:w-auto px-4 py-3 rounded-md border border-(--primary-color)/40 text-xs focus:ring-1 focus:ring-[var(--primary-color)] ' />
           </div>
 
           <div className='w-full'>
@@ -71,11 +71,11 @@ export default function Overview() {
                 ) : (
                   <>
                     <div className="w-10 h-10 flex items-center justify-center">
-                      <BiImageAlt className="w-10 h-10 text-(--primary-color)" />
+                      <BiImageAlt className="w-10 h-10 text-[var(--primary-color)]" />
                     </div>
                     <div className='flex items-center gap-3'>
                       <div className="text-sm rounded-full px-2 py-0.5 border border-(--primary-color)/20 ">Choose File</div>
-                      <div className="text-xs">No file chosen</div>
+                      <div className="text-xs">No file choosen</div>
                     </div>
                   </>
                 )}

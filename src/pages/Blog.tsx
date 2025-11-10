@@ -1,7 +1,7 @@
 import React from 'react'
-import Bloghero from '../components/Bloghero'
+// import Bloghero from '../components/Bloghero'
 import { assets } from "../assets/assests";
-import Blogpost from '../components/Blogpost';
+// import Blogpost from '../components/Blogpost';
 import { Link } from "react-router-dom";
 import HeroSection from "../components/herosections/Herosection";
 
@@ -90,5 +90,3 @@ export default function Blog() {
     </div>
   );
 };
-
-export default Blog;

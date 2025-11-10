@@ -66,7 +66,7 @@ export default function DashboardTable() {
                         {appointments.map((appt, index) => (
                             <tr
                                 key={index}
-                                className="border-b hover:bg-gray-50 transition-colors duration-200"
+                                className={`border-b hover:bg-gray-50 transition-colors duration-200 ${index % 2 === 0 ? 'bg-white' : 'bg-[var(--light-primary)]'} `}
                             >
                                 <td className="py-4 px-6">{appt.name}</td>
                                 <td className="py-4 px-6">{appt.email}</td>
@@ -102,13 +102,13 @@ export default function DashboardTable() {
             {/* Pagination */}
             <div className="flex items-center justify-center space-x-4 mt-3">
                 <button className="p-2 text-gray-600 hover:text-black"><FaAngleLeft /></button>
-                <button className="w-8 h-8 flex items-center justify-center font-bold bg-[var(--primary-color)] text-white rounded-full">
+                <button className="w-8 h-8 flex items-center justify-center font-bold bg-[var(--primary-color)] text-white rounded-lg">
                     1
                 </button>
-                <button className="w-8 h-8 flex items-center justify-center font-bold text-gray-700 hover:bg-gray-200 rounded-full">
+                <button className="w-8 h-8 flex items-center justify-center font-bold text-gray-700 hover:bg-gray-200 rounded-lg">
                     2
                 </button>
-                <button className="w-8 h-8 flex items-center justify-center font-bold text-gray-700 hover:bg-gray-200 rounded-full">
+                <button className="w-8 h-8 flex items-center justify-center font-bold text-gray-700 hover:bg-gray-200 rounded-lg">
                     3
                 </button>
                 <span className="text-gray-500">...</span>

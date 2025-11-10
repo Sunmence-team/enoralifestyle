@@ -13,7 +13,6 @@ import DashboardLayout from "./pages/dashboard/DashboardLayout";
 import Appointments from "./pages/dashboard/Appointments";
 import BlogUpload from "./pages/dashboard/BlogUpload";
 import Package from "./pages/dashboard/Package";
-import Packages from "./pages/Packages";
 import BlogDetails from "./pages/BlogDetails";
 
 
@@ -27,7 +26,7 @@ const App: React.FC = () => {
         <Route path="/" element={<MainLayout children={<Home />} />} />
         <Route path="/blog" element={<MainLayout children={<Blog />} />} />
         <Route path="/blog/:id" element={<MainLayout children={<BlogDetails />} />} />
-        <Route path="/appointment" element={<MainLayout children={<BookAppointment />} />} />
+        {/* <Route path="/appointment" element={<MainLayout children={<BookAppointment />} />} /> */}
         <Route path="/services" element={<MainLayout children={<Services />} />} />
         <Route path="/packages" element={<MainLayout children={<Packages />} />} />
         <Route path="/contact" element={<MainLayout children={<Contact />} />} />

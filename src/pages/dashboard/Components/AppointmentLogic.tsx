@@ -5,6 +5,7 @@ import { MdFilterList } from "react-icons/md";
 import { IoIosNotifications } from "react-icons/io";
 import { FaRegUserCircle } from "react-icons/fa";
 import DashboardTable from './DashboardTable';
+// import { IoSearch } from "react-icons/io5";
 
 export default function Appointments() {
 
@@ -45,24 +46,24 @@ export default function Appointments() {
         <div className='flex space-x-3'>
 
           <div className='flex gap-2'>
-            <div className="flex items-center border rounded-full p-2 border-(--primary-color) ">
+            <div className="flex items-center border rounded-full p-2 md:border-(--primary-color) ">
               <input
                 type="text"
                 placeholder="Search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="flex-1 outline-none px-1 bg-transparent"
+                className="hidden md:flex-1 outline-none px-1 bg-transparent"
               />
               <IoSearch size={20} className="text-gray-500" />
             </div>
 
-            <div className="flex items-center border rounded-full p-2 border-(--primary-color)">
+            <div className="flex items-center border rounded-full p-2 md:border-(--primary-color)">
               <input
                 type="text"
                 placeholder="filter"
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
-                className="flex-1 outline-none px-1 bg-transparent"
+                className="hidden md:flex-1 outline-none px-1 bg-transparent"
               />
               <MdFilterList size={20} className="text-gray-500" />
             </div>
@@ -75,7 +76,7 @@ export default function Appointments() {
         </div>
       </div>
 
-      <div className='grid grid-cols-4 gap-4 mt-3'>
+      <div className='grid grid-cols-1 md:grid-cols-4 gap-4 mt-3'>
         <div className='bg-[var(--primary-color)] text-white p-3 rounded-xl flex flex-col'>
           <span className='text-sm'>Total Appointment</span>
           <p className='text-2xl font-bold'>{totalAppointment}</p>

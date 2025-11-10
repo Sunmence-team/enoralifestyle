@@ -29,9 +29,9 @@ export default function UploadBlog() {
         </div>
       </div>
 
-      <div className='bg-white rounded-md p-3'>
+      <div className='bg-white rounded-md p-6'>
         <div>
-          <h2>Upload Blug</h2>
+          <h2 className='font-bold mb-4 text-2xl'>Upload Blug</h2>
 
           <div className="mb-5 ">
             <label className="block text-sm text-gray-700 mb-2">Post Title</label>

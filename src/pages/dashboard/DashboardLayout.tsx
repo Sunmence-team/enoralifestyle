@@ -48,7 +48,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
 
   return (
     <div className="flex min-h-screen w-full bg-[#C97BB74D] ">
-       <div className="fixed z-30 top-0 w-full h-14 py-2 px-2.5 sm:py-5 sm:px-6 md:px-12 xl:px-24 bg-white md:hidden border ">
+       <div className="fixed z-30 top-0 w-full h-14 py-2 px-2.5 sm:py-5 sm:px-6 md:px-12 xl:px-24 bg- md:hidden ">
         <div className="flex  sm:gap-5">
           <RiMenu2Line onClick={toggleMenu} className="text-black md:hidden size-5 sm:size-8 cursor-pointer " />
         </div>

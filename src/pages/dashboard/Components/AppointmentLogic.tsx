@@ -4,7 +4,7 @@ import { MdFilterList } from "react-icons/md";
 
 import { IoIosNotifications } from "react-icons/io";
 import { FaRegUserCircle } from "react-icons/fa";
-import DashboardTable from './DashboardTable';
+// import DashboardTable from './DashboardTable';
 // import { IoSearch } from "react-icons/io5";
 
 export default function Appointments() {
@@ -98,7 +98,7 @@ export default function Appointments() {
 
       </div>
       <div>
-        <DashboardTable />
+        {/* <DashboardTable /> */}
 
       </div>
 

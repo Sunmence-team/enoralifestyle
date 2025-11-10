@@ -34,22 +34,22 @@ export default function Overview() {
 
         <div className='flex flex-col lg:flex w-full gap-5 items-center justify-center'>
 
-          <div className='flex space-x-7 w-full '>
+          <div className='flex flex-col md:flex-row space-x-7 w-full gap-3 '>
 
             <div className='flex flex-col gap-2'>
               <label htmlFor="name">Name</label>
-              <input type='name' placeholder='Fullname' value={name} onChange={(e) => setName(e.target.value)} className='w-72 md:w-125 px-4 py-3 rounded-md border border-(--primary-color) text-xs focus:ring-1 focus:ring-(--primary-color) ' />
+              <input type='name' placeholder='Fullname' value={name} onChange={(e) => setName(e.target.value)} className='w-100 md:w-125 px-4 py-3 rounded-md border border-(--primary-color) text-xs focus:ring-1 focus:ring-(--primary-color) ' />
             </div>
 
             <div className='flex flex-col gap-2'>
               <label htmlFor="name">Price</label>
-              <input type='Price' placeholder='Price' value={price} onChange={(e) => setPrice(e.target.value)} className='w-72 md:w-125 px-4 py-3 rounded-md border border-(--primary-color) text-xs focus:ring-1 focus:ring-(--primary-color) ' />
+              <input type='Price' placeholder='Price' value={price} onChange={(e) => setPrice(e.target.value)} className='w-100 md:w-125 px-4 py-3 rounded-md border border-(--primary-color) text-xs focus:ring-1 focus:ring-(--primary-color) ' />
             </div>
           </div>
 
           <div className='flex flex-col gap-2 w-full'>
             <label htmlFor="name">Description</label>
-            <input type='Price' placeholder='Description' value={description} onChange={(e) => setDescription(e.target.value)} className='w-72 h-30 md:w-auto px-4 py-3 rounded-md border border-(--primary-color) text-xs focus:ring-1 focus:ring-(--primary-color) ' />
+            <textarea placeholder='Description' rows={2} value={description} onChange={(e) => setDescription(e.target.value)} className='w-72 h-30 md:w-auto px-4 py-3 rounded-md border border-(--primary-color) text-xs focus:ring-1 focus:ring-(--primary-color) ' />
           </div>
 
           <div className='w-full'>
@@ -83,9 +83,7 @@ export default function Overview() {
             </div>
 
           </div>
-
         </div>
-
       </div>
     </div>
   )

@@ -24,7 +24,7 @@ const Contact = () => {
           <input type='email' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)} className='bg-gray-200 w-72 md:w-90 px-4 py-3 rounded-md border border-(--primary-color) text-xs focus:ring-1 focus:ring-(--primary-color) ' />
         </div>
 
-        <textarea placeholder='Drop your enquires here' className='bg-gray-200 w-72 md:w-[720px] px-4 py-3 rounded-md border border-(--primary-color) text-xs focus:ring-1 focus:ring-primary' />
+        <textarea placeholder='Drop your enquires here' rows={4} className='bg-gray-200 w-72 md:w-[720px] px-4 py-3 rounded-md border border-(--primary-color) text-xs focus:ring-1 focus:ring-primary' />
 
       </div>
     </div>

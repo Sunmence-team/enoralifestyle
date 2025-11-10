@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -142,7 +142,6 @@
     @apply bg-background text-foreground;
   }
 }
-}
 
 .blog-action{
   width: 100%;
@@ -164,8 +163,12 @@
 }
 
 .wave-div {
-  height: 300px;
+  height: 250px;
   /* clip-path: path("M0,200 Q250,250 500,200 L500,300 L0,300 Z"); */
   clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 92%, 0 100%);
 
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  @apply hidden;
 }

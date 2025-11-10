@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { assets } from "../assets/assests";
 import { Link } from "react-router-dom";
 import { FiShoppingCart, FiArrowRight } from "react-icons/fi";
@@ -6,29 +6,38 @@ import { BiSolidQuoteSingleLeft } from "react-icons/bi";
 import HeroSection from "../components/herosections/Herosection";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import BlogCard from "../components/cards/BlogCard"
+import PackageCard from "../components/cards/PackageCard";
 
 const Home = () => {
+  useEffect(() => {
+    window.scroll(0, 0)
+    document.title = "Home - Enora Lifestyle And Spa";
+  }, [])
+
   // --- Array of packages ---
   const packages = [
     {
+      id: "1",
       title: "Manicure & Pedicure",
       description:
         "Manicure is for general hand care. Our classic pedicure includes nail painting/leg reflexology. Ideal for encouraging blood circulation.",
-      price: "₦15,000",
+      price: 15_000,
       image: assets.our1,
     },
     {
+      id: "2",
       title: "Facial & Waxing",
       description:
         "Specialized facials for acne, anti-aging, and skin rejuvenation, plus expert waxing services. We also offer personalized skin consultations.",
-      price: "₦12,000",
+      price: 12_000,
       image: assets.our2,
     },
     {
+      id: "3",
       title: "Body Scrub & Polish",
       description:
         "Is your skin dull and dehydrated? Get Enora Brightening Scrub, Polish, Moroccan Hammam Scrub or Enora Glow Bath.",
-      price: "₦18,000",
+      price: 18_000,
       image: assets.our3,
     },
   ];
@@ -163,9 +172,9 @@ const Home = () => {
       </section>
 
       {/* ABOUT SECTION */}
-      <section className="relative w-full bg-white mt-10 lg:px-10 px-5 pb-80 ">
+      <section className="relative w-full bg-white mt-10 lg:px-10 px-5 md:pb-60">
         {/* Background Image */}
-        <div className="relative h-[350px] overflow-hidden rounded-[20px]">
+        <div className="relative h-[350px] overflow-hidden rounded-[20px] md:block hidden">
           <img
             src={assets.newabout}
             alt="Spa background"
@@ -174,7 +183,7 @@ const Home = () => {
         </div>
 
         {/* Text Card Overlay */}
-        <div className="absolute inset-0 h-max md:top-30 bottom-5 left-1/2 transform -translate-x-1/2 translate-y-10 bg-[#fff9f7] shadow-lg rounded-2xl w-[90%] md:w-5/6 lg:w-5/6 p-6 md:p-10 text-center">
+        <div className="md:absolute inset-0 h-max md:top-30 bottom-5 left-1/2 transform md:-translate-x-1/2 md:translate-y-10 bg-[#fff9f7] shadow-lg rounded-2xl w-full md:w-5/6 lg:w-5/6 p-6 md:p-10 text-center">
           <h2 className="text-3xl md:text-4xl font-semibold mb-4">
             <span className="text-[#b23a8a] font-semibold!">About</span>{" "}
             <span className="text-(--accent-color)">Us</span>
@@ -220,44 +229,16 @@ const Home = () => {
         {/* Display packages */}
         <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {packages.map((item, index) => (
-            <div key={index} className="relative flex justify-center">
-              {/* Purple bar slightly showing behind card */}
-              <div
-                className={`absolute ${
-                  index % 2 === 0 ? "-top-2" : "-bottom-2"
-                } w-[100%] h-13 bg-(--primary-color) rounded-full z-0`}
-              ></div>
+            <PackageCard
+              key={item.id}
+              id={item.id}
+              index={index}
+              title={item.title}
+              description={item.description}
+              price={item.price}
+              image={item.image}
 
-              {/* Card content */}
-              <div className="bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-5 flex flex-col items-center text-center relative z-10">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-[180px] h-[180px] object-cover rounded-full mb-4"
-                />
-                <h2 className="text-[22px] font-semibold text-(--primary-color)">
-                  {item.title}
-                </h2>
-                <p className="text-gray-600 mt-2">{item.description}</p>
-                <p className="mt-3 font-bold text-black/80 md:text-[24px] text-[20px]">
-                  {item.price}
-                </p>
-
-                <div className="flex gap-3 mt-10">
-                  {/* Add to Cart Button */}
-                  <button className="flex items-center justify-center gap-2 bg-(--primary-color) hover:bg-(--primary-color) text-white font-medium px-6 py-3 rounded-md transition-colors duration-200 shadow-sm">
-                    <FiShoppingCart className="w-5 h-5" />
-                    Add to Cart
-                  </button>
-
-                  {/* View Details Button */}
-                  <button className="flex items-center justify-center gap-1 bg-transparent hover:bg-gray-200 text-(--primary-color) font-medium px-6 py-3 rounded-md transition-colors duration-200 border border-(--primary-color)">
-                    View Details
-                    <FiArrowRight className="w-4 h-4 ml-1" />
-                  </button>
-                </div>
-              </div>
-            </div>
+            />
           ))}
         </div>
 
@@ -273,7 +254,7 @@ const Home = () => {
       </div>
 
       {/* services SECTION */}
-      <div className="bg-[var(--secondary-color)] mt-10 lg:px-10 px-5 py-10">
+      <div className="bg-(--secondary-color) mt-10 lg:px-10 px-5 py-10">
         <div>
           <h1 className="md:text-[48px] text-[30px] text-center font-semibold text-black">
             Our <span className="text-(--primary-color)">Services</span>
@@ -363,7 +344,7 @@ const Home = () => {
       </div>
       {/* FAQ SECTION */}
       {/* FAQ SECTION */}
-      <section className="bg-[var(--secondary-color)] mt-20 lg:px-10 px-5 py-16">
+      <section className="bg-(--secondary-color) mt-20 lg:px-10 px-5 py-16">
         <h1 className="md:text-[48px] text-[30px] text-center font-semibold mb-12">
           Frequently{" "}
           <span className="text-(--primary-color)">Asked Questions</span>

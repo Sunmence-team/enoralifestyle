@@ -33,7 +33,6 @@ export default function Appointments() {
     const fetchInterval = setInterval(fetchData, 10000)
     return () => clearInterval(fetchInterval);
 
-
   }, [])
 
   return (
@@ -46,24 +45,24 @@ export default function Appointments() {
         <div className='flex space-x-3'>
 
           <div className='flex gap-2'>
-            <div className="flex items-center border rounded-full p-2 md:border-(--primary-color) ">
+            <div className="flex items-center border rounded-full p-2 md:border-[var(--primary-color)]/30 bg-white ">
               <input
                 type="text"
                 placeholder="Search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="hidden md:flex-1 outline-none px-1 bg-transparent"
+                className="hidden md:flex flex-1 outline-none px-1 bg-transparent"
               />
               <IoSearch size={20} className="text-gray-500" />
             </div>
 
-            <div className="flex items-center border rounded-full p-2 md:border-(--primary-color)">
+            <div className="flex items-center border rounded-full p-2 md:border-[var(--primary-color)]/30 bg-white">
               <input
                 type="text"
                 placeholder="filter"
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
-                className="hidden md:flex-1 outline-none px-1 bg-transparent"
+                className="hidden md:flex flex-1 outline-none px-1 bg-transparent"
               />
               <MdFilterList size={20} className="text-gray-500" />
             </div>

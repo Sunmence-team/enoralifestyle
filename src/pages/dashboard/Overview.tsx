@@ -49,7 +49,7 @@ export default function Overview() {
 
           <div className='flex flex-col gap-2 w-full'>
             <label htmlFor="name">Description</label>
-            <input type='Price' placeholder='Description' value={description} onChange={(e) => setDescription(e.target.value)} className='w-72 h-30 md:w-auto px-4 py-3 rounded-md border border-(--primary-color) text-xs focus:ring-1 focus:ring-(--primary-color) ' />
+            <textarea placeholder='Description' rows={2} value={description} onChange={(e) => setDescription(e.target.value)} className='w-72 h-30 md:w-auto px-4 py-3 rounded-md border border-(--primary-color) text-xs focus:ring-1 focus:ring-(--primary-color) ' />
           </div>
 
           <div className='w-full'>
@@ -83,9 +83,7 @@ export default function Overview() {
             </div>
 
           </div>
-
         </div>
-
       </div>
     </div>
   )

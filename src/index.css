@@ -16,6 +16,14 @@
   --secondary-color: #FDF9F5;
   --pink-color: #901E761A;
   --accent-color: #000000CC;
+  --color-green: #36E3A2;
+  --another-green: #DFF7EECC;
+  --transparent-red: #EAC4C2CC;  
+  --completed-color: #2F5318;
+  --cancelled-color: #D1503D;
+  --pending-color: #00000080;
+  --pending-bg: #D9D9D9;
+  --light-primary: #F8F6F7;
 
 }
 

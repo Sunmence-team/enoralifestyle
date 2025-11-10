@@ -11,6 +11,8 @@ import Contact from "./pages/Contact";
 import Overview from "./pages/dashboard/Overview";
 import DashboardLayout from "./pages/dashboard/DashboardLayout";
 import Appointments from "./pages/dashboard/Appointments";
+import BlogUpload from "./pages/dashboard/BlogUpload";
+import Package from "./pages/dashboard/Package";
 
 const App: React.FC = () => {
   return (
@@ -27,10 +29,9 @@ const App: React.FC = () => {
 
         {/* Dashboard Route */}
         <Route path="/dashboard/overview" element={<DashboardLayout children={<Overview />} />} />
-        <Route path="/dashboard/Appointments" element={<DashboardLayout children={<Appointments />} />} />
-        {/* <Route path="/dashboard/appontments" element={<DashboardLayout children={} />} /> */}
-        {/* <Route path="/dashboard/uploadBlog" element={<DashboardLayout children={} />} /> */}
-        {/* <Route path="/dashboard/createPackage" element={<DashboardLayout children={} />} /> */}
+        <Route path="/dashboard/appointments" element={<DashboardLayout children={<Appointments />} />} />
+        <Route path="/dashboard/blogUpload" element={<DashboardLayout children={<BlogUpload/>} />} />
+        <Route path="/dashboard/package" element={<DashboardLayout children={<Package /> } />} />
 
       </Routes>
 

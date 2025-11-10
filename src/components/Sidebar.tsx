@@ -10,8 +10,8 @@ export default function Sidebar() {
   const barLinks = [
     { name: "Add Service", href: '/dashboard/overview', icon: <LuPackagePlus size={30} className='text-[var(--primary-color)] ' /> },
     { name: "Appointment", href: '/dashboard/appointments', icon: <MdBathroom size={30} className='text-[var(--primary-color)] ' /> },
-    { name: "Upload Blog", href: '/dashboard/uploadBlug', icon: <FaCloudUploadAlt size={30} className='text-[var(--primary-color)] ' /> },
-    { name: "Create Package", href: '/dashboard/createPackage', icon: <IoIosCreate size={30} className='text-[var(--primary-color)] ' /> },
+    { name: "Upload Blog", href: '/dashboard/blogUpload', icon: <FaCloudUploadAlt size={30} className='text-[var(--primary-color)] ' /> },
+    { name: "Create Package", href: '/dashboard/package', icon: <IoIosCreate size={30} className='text-[var(--primary-color)] ' /> },
   ];
 
   return (

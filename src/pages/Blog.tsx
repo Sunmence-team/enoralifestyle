@@ -1,6 +1,8 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react'
+import Bloghero from '../components/Bloghero'
 import { assets } from "../assets/assests";
+import Blogpost from '../components/Blogpost';
+import { Link } from "react-router-dom";
 import HeroSection from "../components/herosections/Herosection";
 
 const blogs = [
@@ -27,7 +29,7 @@ const blogs = [
   },
 ];
 
-const Blog = () => {
+export default function Blog() {
   return (
     <div>
       {/* HERO SECTION */}

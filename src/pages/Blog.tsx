@@ -90,5 +90,3 @@ export default function Blog() {
     </div>
   );
 };
-
-// export default Blog;

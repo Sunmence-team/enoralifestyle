@@ -240,163 +240,39 @@ setImagePreview(imageUrl);
             />
           </div>
 
-          <textarea
-            placeholder="Service description..."
-            rows={3}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-            className="w-full px-4 py-3 border rounded-md resize-none focus:ring-2 focus:ring-[var(--primary-color)]"
-          />
-
-          <div>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              id="image-upload"
-              className="hidden"
-            />
-            <label
-              htmlFor="image-upload"
-              className="block border-2 border-dashed border-[var(--primary-color)] rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 transition"
-            >
-              {imagePreview ? (
-                <img src={imagePreview} alt="Preview" className="mx-auto max-h-48 rounded" />
-              ) : (
-                <div>
-                  <BiImageAlt className="mx-auto text-5xl text-[var(--primary-color)] mb-2" />
-                  <p className="text-sm">Click to upload image</p>
-                </div>
-              )}
-            </label>
-            {isEditing && imagePreview && !image && (
-              <p className="text-xs text-green-600 font-medium mt-2 text-center">
-                Current image loaded. Upload new one to replace.
-              </p>
-            )}
+          <div className='flex flex-col gap-2 w-full'>
+            <label htmlFor="name">Description</label>
+            <textarea placeholder='Description' rows={4} value={description} onChange={(e) => setDescription(e.target.value)} className='w-auto md:w-auto px-4 py-3 rounded-md border border-(--primary-color)/40 text-xs focus:ring-1 focus:ring-[var(--primary-color)] ' />
           </div>
 
-          <div className="flex gap-3">
-            {isEditing && (
-              <button
-                type="button"
-                onClick={resetForm}
-                className="px-6 py-3 border-2 border-red-300 text-red-600 rounded-md hover:bg-red-50 font-medium"
+          <div className='w-full'>
+            <label className="mb-4">Image</label>
+            <div className="border-2 border-dashed border-(--primary-color)/40 rounded-lg p-6 text-center hover:border-(--primary-color) transition-colors">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+                id="image-upload"
+              />
+              <label
+                htmlFor="image-upload"
+                className="cursor-pointer flex flex-col items-center gap-2"
               >
-                Cancel
-              </button>
-            )}
-            <button
-              type="submit"
-              disabled={submitting}
-              className="flex-1 py-3 bg-[var(--primary-color)] text-white font-bold rounded-md hover:opacity-90 disabled:opacity-60 transition shadow-lg"
-            >
-              {submitting ? "Saving..." : isEditing ? "Update Service" : "Add Service"}
-            </button>
-          </div>
-        </form>
-      </div>
-
-      {/* TABLE */}
-      <div className="bg-white rounded-xl shadow-xl overflow-hidden">
-        <div className="px-8 py-6 bg-[var(--primary-color)]">
-          <h2 className="text-2xl font-bold text-white">All Services</h2>
-        </div>
-
-        {loading ? (
-          <div className="p-20 text-center">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-pink-500 border-t-transparent"></div>
-          </div>
-        ) : services.length === 0 ? (
-          <p className="text-center py-20 text-gray-500 text-lg">No services found.</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-gray-50 border-b-2 border-gray-200">
-                  <th className="px-8 py-5 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">Image</th>
-                  <th className="px-8 py-5 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">Name</th>
-                  <th className="px-8 py-5 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">Price</th>
-                  <th className="px-8 py-5 text-left text-sm font-bold text-gray-700 uppercase tracking-wider">Description</th>
-                  <th className="px-8 py-5 text-center text-sm font-bold text-gray-700 uppercase tracking-wider">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {services.map((service) => (
-                  <tr key={service.id} className="hover:bg-pink-50 transition duration-200">
-                    <td className="px-8 py-6">
-                      {service.image ? (
-                        <img
-                          src={`${IMAGE_URL}${service.image.replace(/^public\//, "")}`}
-                          alt={service.name}
-                          className="w-20 h-20 object-cover rounded-xl shadow-md border-2 border-white"
-                          onError={(e) => (e.currentTarget.src = "/placeholder.jpg")}
-                        />
-                      ) : (
-                        <div className="w-20 h-20 bg-gray-200 border-2 border-dashed rounded-xl">
-                          <BiImageAlt className="w-full h-full text-gray-400 p-4" />
-                        </div>
-                      )}
-                    </td>
-                    <td className="px-8 py-6 font-semibold text-gray-900 text-lg">{service.name}</td>
-                    <td className="px-8 py-6 font-bold text-pink-600 text-xl">₦{parseFloat(service.price).toLocaleString()}</td>
-                    <td className="px-8 py-6 text-gray-600 max-w-md">
-                      {service.description || <span className="text-gray-400 italic">No description</span>}
-                    </td>
-                    <td className="px-8 py-6 text-center">
-                      <div className="flex justify-center gap-4">
-                        <button
-                          onClick={() => startEdit(service)}
-                          className="p-3 bg-blue-100 rounded-xl hover:bg-blue-200 transition transform hover:scale-110 shadow-md"
-                          title="Edit"
-                        >
-                          <FaEdit className="text-blue-600" size={20} />
-                        </button>
-                        <button
-                          onClick={() => openDeleteModal(service)}
-                          className="p-3 bg-red-100 rounded-xl hover:bg-red-200 transition transform hover:scale-110 shadow-md"
-                          title="Delete"
-                        >
-                          <FaTrashAlt className="text-red-600" size={20} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
-
-      {/* DELETE MODAL */}
-      {deleteModal && deletingService && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
-            <div className="flex justify-between items-start mb-6">
-              <h3 className="text-2xl font-bold text-gray-800">Delete Service?</h3>
-              <button onClick={() => setDeleteModal(false)} className="p-2 hover:bg-gray-100 rounded-lg">
-                <FaTimes className="text-gray-500" />
-              </button>
-            </div>
-            <p className="text-gray-600 mb-8 text-lg">
-              Permanently delete <span className="font-bold text-pink-600">"{deletingService.name}"</span>?
-              This action <span className="font-bold text-red-600">cannot</span> be undone.
-            </p>
-            <div className="flex gap-4 justify-end">
-              <button
-                onClick={() => setDeleteModal(false)}
-                className="px-8 py-3 border-2 border-gray-300 rounded-xl font-semibold hover:bg-gray-50 transition"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={confirmDelete}
-                className="px-10 py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition shadow-lg"
-              >
-                Yes, Delete
-              </button>
+                {image ? (
+                  <img src={image} alt="Preview" className="max-h-40 rounded" />
+                ) : (
+                  <>
+                    <div className="w-10 h-10 flex items-center justify-center">
+                      <BiImageAlt className="w-10 h-10 text-[var(--primary-color)]" />
+                    </div>
+                    <div className='flex items-center gap-3'>
+                      <div className="text-sm rounded-full px-2 py-0.5 border border-(--primary-color)/20 ">Choose File</div>
+                      <div className="text-xs">No file choosen</div>
+                    </div>
+                  </>
+                )}
+              </label>
             </div>
           </div>
         </div>

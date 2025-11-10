@@ -38,23 +38,23 @@ export default function Overview() {
 
             <div className='flex flex-col gap-2'>
               <label htmlFor="name">Name</label>
-              <input type='name' placeholder='Fullname' value={name} onChange={(e) => setName(e.target.value)} className='w-100 md:w-125 px-4 py-3 rounded-md border border-(--primary-color) text-xs focus:ring-1 focus:ring-(--primary-color) ' />
+              <input type='name' placeholder='Fullname' value={name} onChange={(e) => setName(e.target.value)} className='w-full md:w-125 px-4 py-3 rounded-md border border-(--primary-color)/40 text-xs focus:ring-1 focus:ring-(--primary-color) ' />
             </div>
 
             <div className='flex flex-col gap-2'>
-              <label htmlFor="name">Price</label>
-              <input type='Price' placeholder='Price' value={price} onChange={(e) => setPrice(e.target.value)} className='w-100 md:w-125 px-4 py-3 rounded-md border border-(--primary-color) text-xs focus:ring-1 focus:ring-(--primary-color) ' />
+              <label htmlFor="number">Price</label>
+              <input type='price' placeholder='Price' value={price} onChange={(e) => setPrice(e.target.value)} className='w-full md:w-125 px-4 py-3 rounded-md border border-(--primary-color)/40 text-xs focus:ring-1 focus:ring-[var(--primary-color)] ' />
             </div>
           </div>
 
           <div className='flex flex-col gap-2 w-full'>
             <label htmlFor="name">Description</label>
-            <textarea placeholder='Description' rows={2} value={description} onChange={(e) => setDescription(e.target.value)} className='w-72 h-30 md:w-auto px-4 py-3 rounded-md border border-(--primary-color) text-xs focus:ring-1 focus:ring-(--primary-color) ' />
+            <textarea placeholder='Description' rows={2} value={description} onChange={(e) => setDescription(e.target.value)} className='w-72 h-30 md:w-auto px-4 py-3 rounded-md border border-(--primary-color)/40 text-xs focus:ring-1 focus:ring-[var(--primary-color)] ' />
           </div>
 
           <div className='w-full'>
             <label className="mb-4">Image</label>
-            <div className="border border-dashed border-(--primary-color) rounded-lg p-6 text-center hover:border-(--primary-color) transition-colors">
+            <div className="border-2 border-dashed border-(--primary-color)/40 rounded-lg p-6 text-center hover:border-(--primary-color) transition-colors">
               <input
                 type="file"
                 accept="image/*"
@@ -74,7 +74,7 @@ export default function Overview() {
                       <BiImageAlt className="w-10 h-10 text-(--primary-color)" />
                     </div>
                     <div className='flex items-center gap-3'>
-                      <div className="text-sm rounded-full px-2 py-0.5 border border-(--primary-color) ">Choose File</div>
+                      <div className="text-sm rounded-full px-2 py-0.5 border border-(--primary-color)/20 ">Choose File</div>
                       <div className="text-xs">No file chosen</div>
                     </div>
                   </>

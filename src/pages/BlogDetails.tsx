@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assests";
-import HeroSection from "../components/herosections/Herosection";
+import { GoArrowLeft } from "react-icons/go";
 import BlogCard from "../components/cards/Blogcard";
-// BlogCard component
 
 // --- Blog data ---
 const blogs = [
@@ -46,6 +45,8 @@ interface Comment {
 
 const BlogDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+
   const blog = blogs.find((b) => b.id.toString() === id);
 
   const [comments, setComments] = useState<Comment[]>([]);
@@ -85,20 +86,40 @@ const BlogDetails: React.FC = () => {
   const otherBlogs = blogs.filter((b) => b.id !== blog.id);
 
   return (
-    <div>
-      {/* Hero Section */}
-      <HeroSection
-        title={blog.title}
-        backgroundImage={assets.dets}
-        height="lg:h-[65vh] h-[35vh]"
-      />
+    <div className="min-h-screen bg-white">
+      {/* Back Button */}
+      <div className="flex items-center gap-3 px-5 lg:px-10 pt-8">
+        <button
+          onClick={() => navigate("/blog")}
+          className="flex items-center gap-1 text-[var(--primary-color)] hover:text-black transition"
+        >
+          <GoArrowLeft size={30} />
+          <span className="font-medium text-lg"></span>
+        </button>
+      </div>
+
+      {/* Blog Title */}
+      <div className="px-5 lg:px-10 mt-6">
+        <h1 className="text-2xl lg:text-3xl font-semibold text-gray-900 leading-snug">
+          {blog.title}
+        </h1>
+      </div>
+
+      {/* Blog Image */}
+      <div className="px-5 lg:px-10 mt-6">
+        <img
+          src={blog.image}
+          alt={blog.title}
+          className="w-full max-h-[450px] object-cover rounded-2xl shadow-md"
+        />
+      </div>
 
       {/* Blog Content */}
       <div className="px-5 lg:px-10 py-10">
         {blog.heading && (
-          <h1 className="text-2xl lg:text-3xl font-semibold mb-6 text-gray-800">
+          <h2 className="text-xl lg:text-2xl font-semibold mb-4 text-gray-800">
             {blog.heading}
-          </h1>
+          </h2>
         )}
         <p className="text-gray-700 text-[16px] leading-relaxed whitespace-pre-line">
           {blog.content}
@@ -106,7 +127,7 @@ const BlogDetails: React.FC = () => {
       </div>
 
       {/* Comment Section */}
-      <div className="px-5 lg:px-15 py-12">
+      <div className="px-5 lg:px-10 py-12">
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 lg:gap-20 gap-10">
           {/* Comments List */}
           <div className="bg-[#C97BB7] rounded-2xl p-6 shadow-md">
@@ -150,7 +171,7 @@ const BlogDetails: React.FC = () => {
           </div>
 
           {/* Comment Form */}
-          <div className=" p-6">
+          <div className="p-6">
             <p className="text-xl font-medium text-gray-800 mb-5">
               Drop your comment
             </p>

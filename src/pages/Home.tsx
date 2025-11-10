@@ -164,7 +164,7 @@ const Home = () => {
             <span className="text-gray-800">Us</span>
           </h2>
 
-          <div className="text-gray-700 leading-relaxed space-y-4 text-sm md:text-base">
+          <div className="text-gray-700 leading-relaxed space-y-4 text-[14px] md:text-base">
             <p>
               At Enoralifestyle Spa, we believe self-care is not a luxury—it is
               a lifestyle.
@@ -222,10 +222,10 @@ const Home = () => {
                 <h2 className="text-[22px] font-semibold text-[var(--primary-color)]">
                   {item.title}
                 </h2>
-                <p className="text-gray-600 mt-2">{item.description}</p>
-                <p className="mt-3 font-bold text-black/80 md:text-[24px] text-[20px]">
+                <p className="text-gray-600 mt-2 text-sm">{item.description}</p>
+                <h2 className="mt-3 font-semibold text-black/80 md:text-[24px] text-[21px]">
                   {item.price}
-                </p>
+                </h2>
 
                 <div className="flex gap-3 mt-10">
                   {/* Add to Cart Button */}
@@ -281,9 +281,9 @@ const Home = () => {
                   {item.title}
                 </h2>
                 <p className="text-gray-600 mt-2 text-sm">{item.description}</p>
-                <p className="mt-3 font-bold text-black/80 md:text-[24px] text-[20px]">
-                  Price: {item.price}
-                </p>
+                <h2 className="mt-3 font-semibold text-black/80 md:text-[24px] text-[21px]">
+                  {item.price}
+                </h2>
 
                 <div className="flex gap-3 mt-10">
                   {/* Add to Cart Button */}

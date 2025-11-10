@@ -99,9 +99,9 @@ const Services = () => {
                   {item.title}
                 </h2>
                 <p className="text-gray-600 mt-2 text-sm">{item.description}</p>
-                <p className="mt-3 font-bold text-black/80 md:text-[24px] text-[20px]">
-                  Price: {item.price}
-                </p>
+                <h2 className="mt-3 font-semibold text-black/80 md:text-[24px] text-[21px]">
+                  {item.price}
+                </h2>
 
                 <div className="flex gap-3 mt-10">
                   {/* Add to Cart Button */}

@@ -10,6 +10,7 @@ interface PackageCardProps {
   description: string;
   image: string;
   price: number;
+  showMidLine?: boolean;
 }
 
 const PackageCard = (item: PackageCardProps) => {
@@ -33,7 +34,7 @@ const PackageCard = (item: PackageCardProps) => {
         {/* Purple bar slightly showing behind card */}
         <div
         className={`absolute ${
-            item.index % 2 === 0 ? "-top-2" : "-bottom-2"
+            !item.showMidLine ? "hidden": item.index % 2 === 0 ? "-top-2" : "-bottom-2"
         } w-full h-13 bg-(--primary-color)/50 rounded-full z-0`}
         ></div>
 

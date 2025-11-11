@@ -20,6 +20,8 @@ export default function Blog() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [lastPage, setLastPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Scroll to top on mount
   useEffect(() => {
@@ -30,9 +32,14 @@ export default function Blog() {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await axios.get(`${API_URL}blogs`);
-        const data = response.data?.data?.data || response.data?.data || [];
-        setBlogs(Array.isArray(data) ? data : []);
+        const response = await axios.get(`${API_URL}/blogs`);
+        console.log("response", response)
+        if (response.status === 200) {
+          const { data, current_page, last_page } = response.data.data;
+          setBlogs(data);
+          setCurrentPage(current_page);
+          setLastPage(last_page);
+        }
       } catch (err: any) {
         console.error("Failed to fetch blogs:", err);
         setError("Failed to load blogs. Please try again later.");
@@ -57,8 +64,8 @@ export default function Blog() {
       <section className="bg-white py-16 lg:py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Title */}
-          <h1 className="text-center text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-gray-900 mb-4">
-            Blog <span className="text-[var(--primary-color)]">News</span>
+          <h1 className="text-center font-semibold! text-3xl sm:text-4xl md:text-5xl lg:text-[48px] text-gray-900 mb-4">
+            Blog <span className="text-(--primary-color) font-inherit">News</span>
           </h1>
           <p className="text-center text-gray-600 text-base sm:text-lg max-w-2xl mx-auto mb-12">
             Discover skincare tips, beauty secrets, and wellness insights from our experts.

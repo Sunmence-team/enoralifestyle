@@ -36,13 +36,18 @@ const BlogDetails: React.FC = () => {
   const [name, setName] = useState("");
   const [comment, setComment] = useState("");
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.title = `${blog?.title} - Enora Lifestyle And Spa`;
+  }, []);
+
   // FETCH BLOG
   useEffect(() => {
     const fetchBlog = async () => {
       if (!id) return setError("Invalid blog ID");
 
       try {
-        const res = await axios.get(`${API_URL}blogs/${id}`);
+        const res = await axios.get(`${API_URL}/blogs/${id}`);
         setBlog(res.data?.data || res.data);
       } catch (err) {
         setError("Blog not found.");

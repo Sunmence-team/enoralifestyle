@@ -34,12 +34,12 @@ button:disabled {
   cursor: not-allowed;
 }
 
-.styled-scrollbar::-webkit-scrollbar {
+/* .styled-scrollbar::-webkit-scrollbar {
   @apply lg:w-2 w-1 h-1;
 }
 .styled-scrollbar::-webkit-scrollbar-thumb {
   @apply bg-[#cbd5e1] rounded-full;
-}
+} */
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);

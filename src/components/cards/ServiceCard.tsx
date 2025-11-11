@@ -4,12 +4,12 @@ import { formatterUtility } from '../../utilities/formatterutility';
 import { useCartStore } from '../../store/cartStore';
 
 interface ServiceCardProps {
-  id: string;
-  index: number;
-  title: string;
-  description: string;
-  image: string;
-  price: number;
+    id: string;
+    index: number;
+    title: string;
+    description: string;
+    image: string;
+    price: number;
 }
 
 const ServiceCard = (item: ServiceCardProps) => {

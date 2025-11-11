@@ -17,6 +17,10 @@ interface DashboardTableProps<T extends { id: number }> {
   onView?: (item: T) => void;
   loading?: boolean;
   emptyMessage?: string;
+  total?: number;
+  currentPage?: number;
+  perPage?: number;
+  onPageChange?: (page: number) => void;
 }
 
 export default function DashboardTable<T extends { id: number }>({
@@ -27,7 +31,13 @@ export default function DashboardTable<T extends { id: number }>({
   onView,
   loading = false,
   emptyMessage = "No data found.",
+  total = 0,
+  currentPage = 1,
+  perPage = 10,
+  onPageChange,
 }: DashboardTableProps<T>) {
+  const totalPages = Math.ceil(total / perPage) || 1;
+
   if (loading) {
     return (
       <div className="p-20 text-center">
@@ -42,7 +52,6 @@ export default function DashboardTable<T extends { id: number }>({
 
   return (
     <div className="w-full flex flex-col items-center py-4">
-      {/* Table Container */}
       <div className="bg-white rounded-xl shadow-sm w-full overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
@@ -66,7 +75,7 @@ export default function DashboardTable<T extends { id: number }>({
                 }`}
               >
                 {columns.map((col) => (
-                  <td key={col.key as string} className="py-4 px-6">
+                  <td key={col.key as string} className="py-4 px-6 align-middle">
                     {col.render ? (
                       col.render(item)
                     ) : col.key === "image" ? (
@@ -77,53 +86,27 @@ export default function DashboardTable<T extends { id: number }>({
                             : "/placeholder.jpg"
                         }
                         alt="img"
-                        className="w-8 h-8 object-cover rounded-lg shadow"
+                        className="w-12 h-12 object-cover rounded-lg shadow"
                         onError={(e) => ((e.target as HTMLImageElement).src = "/placeholder.jpg")}
                       />
                     ) : col.key === "actions" ? (
                       <div className="flex justify-center space-x-5 text-[var(--primary-color)]">
                         {onView && (
-                          <button
-                            onClick={() => onView(item)}
-                            className="cursor-pointer hover:text-blue-600 transition"
-                            title="View"
-                          >
+                          <button onClick={() => onView(item)} className="hover:text-blue-600 transition" title="View">
                             <FaEye size={18} />
                           </button>
                         )}
                         {onEdit && (
-                          <button
-                            onClick={() => onEdit(item)}
-                            className="cursor-pointer hover:text-green-600 transition"
-                            title="Edit"
-                          >
+                          <button onClick={() => onEdit(item)} className="hover:text-green-600 transition" title="Edit">
                             <FaEdit size={18} />
                           </button>
                         )}
                         {onDelete && (
-                          <button
-                            onClick={() => onDelete(item)}
-                            className="cursor-pointer hover:text-red-600 transition"
-                            title="Delete"
-                          >
+                          <button onClick={() => onDelete(item)} className="hover:text-red-600 transition" title="Delete">
                             <FaTrash size={18} />
                           </button>
                         )}
                       </div>
-                    ) : col.key === "status" ? (
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          String((item as any)[col.key]) === "Completed"
-                            ? "bg-green-100 text-green-800"
-                            : String((item as any)[col.key]) === "Cancelled"
-                            ? "bg-red-100 text-red-800"
-                            : String((item as any)[col.key]) === "Pending"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : "bg-gray-100 text-gray-800"
-                        }`}
-                      >
-                        {String((item as any)[col.key])}
-                      </span>
                     ) : (
                       String((item as any)[col.key])
                     )}
@@ -135,25 +118,60 @@ export default function DashboardTable<T extends { id: number }>({
         </table>
       </div>
 
-      {/* Pagination - Your exact design */}
-      <div className="flex items-center justify-center space-x-4 mt-6">
-        <button className="p-2 text-gray-600 hover:text-black disabled:opacity-50" disabled>
-          <FaAngleLeft />
-        </button>
-        <button className="w-8 h-8 flex items-center justify-center font-bold bg-[var(--primary-color)] text-white rounded-lg">
-          1
-        </button>
-        <button className="w-8 h-8 flex items-center justify-center font-bold text-gray-700 hover:bg-gray-200 rounded-lg">
-          2
-        </button>
-        <button className="w-8 h-8 flex items-center justify-center font-bold text-gray-700 hover:bg-gray-200 rounded-lg">
-          3
-        </button>
-        <span className="text-gray-500">...</span>
-        <button className="p-2 text-gray-600 hover:text-black">
-          <FaAngleRight />
-        </button>
-      </div>
+      {/* Working Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center space-x-3 mt-8">
+          <button
+            onClick={() => onPageChange?.(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="p-2.5 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          >
+            <FaAngleLeft size={18} />
+          </button>
+
+          {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+            let pageNum;
+            if (totalPages <= 5) pageNum = i + 1;
+            else if (currentPage <= 3) pageNum = i + 1;
+            else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + i;
+            else pageNum = currentPage - 2 + i;
+
+            return (
+              <button
+                key={pageNum}
+                onClick={() => onPageChange?.(pageNum)}
+                className={`w-10 h-10 rounded-lg font-bold transition ${
+                  currentPage === pageNum
+                    ? "bg-[var(--primary-color)] text-white"
+                    : "text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                {pageNum}
+              </button>
+            );
+          }).filter(Boolean)}
+
+          {totalPages > 5 && currentPage < totalPages - 2 && (
+            <>
+              <span className="text-gray-500">...</span>
+              <button
+                onClick={() => onPageChange?.(totalPages)}
+                className="w-10 h-10 rounded-lg font-bold text-gray-700 hover:bg-gray-200 transition"
+              >
+                {totalPages}
+              </button>
+            </>
+          )}
+
+          <button
+            onClick={() => onPageChange?.(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="p-2.5 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          >
+            <FaAngleRight size={18} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

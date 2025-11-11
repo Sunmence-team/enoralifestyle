@@ -14,10 +14,11 @@ import BlogUpload from "./pages/dashboard/BlogUpload";
 import Package from "./pages/dashboard/Package";
 import BlogDetails from "./pages/BlogDetails";
 import BookAppointment from "./pages/BookAppointment";
-import  Login  from "./pages/auth/Login";
+import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Packages from "./pages/Packages";
-
+import ManageContacts from "./pages/dashboard/ManageContacts";
+import PaymentStatus from "./pages/PaymentStatus";
 
 const App: React.FC = () => {
   return (
@@ -26,25 +27,54 @@ const App: React.FC = () => {
 
       {/* Main route */}
       <Routes>
-
-
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<MainLayout children={<Home />} />} />
         <Route path="/blog" element={<MainLayout children={<Blog />} />} />
-        <Route path="/blog/:id" element={<MainLayout children={<BlogDetails />} />} />
+        <Route
+          path="/blog/:id"
+          element={<MainLayout children={<BlogDetails />} />}
+        />
         {/* <Route path="/appointment" element={<MainLayout children={<BookAppointment />} />} /> */}
-        <Route path="/services" element={<MainLayout children={<Services />} />} />
-        <Route path="/packages" element={<MainLayout children={<Packages />} />} />
-        <Route path="/contact" element={<MainLayout children={<Contact />} />} />
+        <Route
+          path="/services"
+          element={<MainLayout children={<Services />} />}
+        />
+        <Route
+          path="/packages"
+          element={<MainLayout children={<Packages />} />}
+        />
+        <Route
+          path="/contact"
+          element={<MainLayout children={<Contact />} />}
+        />
+        <Route
+          path="/payment-status"
+          element={<MainLayout children={<PaymentStatus />} />}
+        />
 
         {/* Dashboard Route */}
-        <Route path="/dashboard/overview" element={<DashboardLayout children={<Overview />} />} />
-        <Route path="/dashboard/appointments" element={<DashboardLayout children={<Appointments />} />} />
-        <Route path="/dashboard/blogUpload" element={<DashboardLayout children={<BlogUpload/>} />} />
-        <Route path="/dashboard/package" element={<DashboardLayout children={<Package /> } />} />
+        <Route
+          path="/dashboard/overview"
+          element={<DashboardLayout children={<Overview />} />}
+        />
+        <Route
+          path="/dashboard/appointments"
+          element={<DashboardLayout children={<Appointments />} />}
+        />
+        <Route
+          path="/dashboard/blogUpload"
+          element={<DashboardLayout children={<BlogUpload />} />}
+        />
+        <Route
+          path="/dashboard/package"
+          element={<DashboardLayout children={<Package />} />}
+        />
+        <Route
+          path="/dashboard/contacts"
+          element={<DashboardLayout children={<ManageContacts />} />}
+        />
       </Routes>
-
     </>
   );
 };

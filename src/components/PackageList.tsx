@@ -75,12 +75,12 @@ export default function PackageList() {
                         </p>
 
                         <div className="flex gap-3">
-                            <button className="bg-[var(--primary-color)] flex items-center justify-center gap-2 font-bold rounded-md p-2  text-white transition-all duration-300 cursor-pointer md:text-[16px] text-[16px] mt-5">
+                            <button className="bg-(--primary-color) flex items-center justify-center gap-2 font-bold rounded-md p-2  text-white transition-all duration-300 cursor-pointer md:text-[16px] text-[16px] mt-5">
                                 <IoCartOutline size={25} /> 
                                 <span>Add to cart</span>
                             </button>
 
-                            <button className="text-[var(--primary-color)] border-2 border-[--primary-color] flex items-center gap-2 font-bold rounded-md p-2  hover:text-black transition-all duration-300 cursor-pointer md:text-[16px] text-[16px] mt-5">
+                            <button className="text-(--primary-color) border-2 border-[--primary-color] flex items-center gap-2 font-bold rounded-md p-2  hover:text-black transition-all duration-300 cursor-pointer md:text-[16px] text-[16px] mt-5">
                                 <span>View Details</span>
                                 <MdOutlineArrowOutward size={25} />
                             </button>

@@ -103,7 +103,7 @@ export default function UploadBlog() {
   return (
     <div>
       <div className="flex justify-between items-center w-full mb-3">
-        <h2 className="font-bold text-2xl">Uplaod Blug</h2>
+        <h2 className="font-bold text-2xl">Uplaod Blog</h2>
         <div className="flex gap-3">
           <div className="p-3 rounded-full bg-[var(--pink-color)] ">
             <IoIosNotifications

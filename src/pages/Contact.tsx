@@ -1,5 +1,5 @@
 import React from 'react'
-import Contacthero from '../components/Contacthero'
+import Contacthero from '../components/herosections/Contacthero'
 import { assets } from "../assets/assests";
 
 const Contact = () => {

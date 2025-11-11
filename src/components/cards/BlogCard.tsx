@@ -9,7 +9,7 @@ interface BlogCardProps {
   image: string;
 }
 
-const BlogCard = (blog : BlogCardProps) => {
+const BlogCard = ( blog : BlogCardProps) => {
   return (
     <Link
       key={blog.id}

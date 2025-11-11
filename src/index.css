@@ -172,3 +172,18 @@
 .no-scrollbar::-webkit-scrollbar {
   @apply hidden;
 }
+
+.styled-scrollbar::-webkit-scrollbar {
+  @apply lg:w-2 w-1 h-1;
+}
+.styled-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-(--primary-color)/30 rounded-full;
+}
+
+.floating-label {
+  transform-origin: left top;
+}
+.floating-label-input:focus + .floating-label,
+.floating-label-input:not(:placeholder-shown) + .floating-label {
+  transform: translateY(-.1rem) scale(0.55);
+}

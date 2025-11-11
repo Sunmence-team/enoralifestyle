@@ -1,6 +1,6 @@
 import React from "react";
 import type { ReactNode } from "react";
-import Sidebar from "../../components/Sidebar";
+import Sidebar from "../../components/navs/Sidebar";
 // import { Outlet } from "react-router-dom";
 import { RiMenu2Line } from "react-icons/ri";
 import { useState, useEffect } from 'react'

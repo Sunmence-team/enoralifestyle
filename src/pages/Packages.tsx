@@ -1,12 +1,17 @@
 import React, { useState } from "react";
-import Packagehero from '../components/Packagehero'
 import { assets } from "../assets/assests";
-import PackageList from '../components/PackageList';
 import HeroSection from "../components/herosections/Herosection";
 import { FiShoppingCart, FiArrowRight, FiX } from "react-icons/fi";
 
+interface SelectedPackage {
+  title: string;
+  description: string;
+  price: string;
+  image: string;
+}
+
 const Packages = () => {
-  const [selectedPackage, setSelectedPackage] = useState<any>(null);
+  const [selectedPackage, setSelectedPackage] = useState<SelectedPackage | null>(null);
 
   // --- Array of packages ---
   const packages = [

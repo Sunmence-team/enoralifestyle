@@ -14,6 +14,7 @@ import Appointments from "./pages/dashboard/Appointments";
 import BlogUpload from "./pages/dashboard/BlogUpload";
 import Package from "./pages/dashboard/Package";
 import BlogDetails from "./pages/BlogDetails";
+import Reservation from "./pages/Reservation";
 
 
 const App: React.FC = () => {
@@ -26,10 +27,10 @@ const App: React.FC = () => {
         <Route path="/" element={<MainLayout children={<Home />} />} />
         <Route path="/blog" element={<MainLayout children={<Blog />} />} />
         <Route path="/blog/:id" element={<MainLayout children={<BlogDetails />} />} />
-        {/* <Route path="/appointment" element={<MainLayout children={<BookAppointment />} />} /> */}
         <Route path="/services" element={<MainLayout children={<Services />} />} />
         <Route path="/packages" element={<MainLayout children={<Packages />} />} />
         <Route path="/contact" element={<MainLayout children={<Contact />} />} />
+        <Route path="/reservation" element={<MainLayout children={<Reservation />} />} />
 
         {/* Dashboard Route */}
         <Route path="/dashboard/overview" element={<DashboardLayout children={<Overview />} />} />

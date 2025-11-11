@@ -59,7 +59,7 @@ export default function DashboardTable<T extends { id: number }>({
               {columns.map((col) => (
                 <th
                   key={col.key as string}
-                  className="py-3 px-6 uppercase tracking-wider text-sm font-semibold text-gray-700"
+                  className="py-6 px-6 uppercase tracking-wider text-sm font-semibold text-gray-700"
                 >
                   {col.header}
                 </th>

@@ -206,9 +206,9 @@ export default function Appointments() {
       header: "Status",
       render: (b: Booking) => (
         <span
-          className={`px-3 py-1 rounded-full text-xs font-medium ${
+          className={`px-4 py-2 rounded-full text-sm font-bold ${
             b.status === "pending"
-              ? "bg-yellow-100 text-yellow-800"
+              ? "bg-gray-300 text-black/50"
               : b.status === "confirmed"
               ? "bg-blue-100 text-blue-800"
               : "bg-green-100 text-green-800"

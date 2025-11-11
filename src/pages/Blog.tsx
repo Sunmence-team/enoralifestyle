@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from "react";
 // import Bloghero from '../components/Bloghero'
 import { assets } from "../assets/assests";
 // import Blogpost from '../components/Blogpost';
@@ -30,18 +30,19 @@ const blogs = [
 ];
 
 export default function Blog() {
+  const [loadingBlogs, setLoadingBlogs] = useState(true);
+  const [blogs, setBlogs] = useState<blogProps[]>([]);
   return (
     <div>
-      {/* HERO SECTION */}
       <HeroSection
         title="Blogs"
         backgroundImage={assets.newblog}
         height="lg:h-[65vh] h-[35vh]"
       />
       <div className="bg-white mt-16 lg:px-10 px-5">
-      <h1 className="md:text-[48px] text-[30px] text-center font-semibold">
-        Blog <span className="text-(--primary-color)">News</span>
-      </h1>
+        <h1 className="md:text-[48px] text-[30px] text-center font-semibold">
+          Blog <span className="text-(--primary-color)">News</span>
+        </h1>
 
       <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {blogs.map((blog, index) => (
@@ -58,4 +59,4 @@ export default function Blog() {
     </div>
     </div>
   );
-};
+}

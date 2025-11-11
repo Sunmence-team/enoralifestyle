@@ -16,14 +16,17 @@ const Login: React.FC = () => {
 
   const formik = useFormik({
     initialValues: {
-      login: "", // this is email
+      login: "",
       password: "",
+      rememberMe: false,
     },
+    enableReinitialize: true,
     validationSchema: Yup.object({
       login: Yup.string().email("Invalid email").required("Email is required"),
       password: Yup.string()
         .required("Password is required")
         .min(6, "Too short"),
+      rememberMe: Yup.bool().required("Can only be true or false"),
     }),
     onSubmit: async (values, { setSubmitting }) => {
       try {
@@ -54,30 +57,24 @@ const Login: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen bg-[#fff9f7] flex items-center justify-center px-4 py-12">
-      <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 w-full max-w-md border border-black/10">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <img src={assets.logo || assets.hero} alt="Enoralifestyle Spa" className="w-12 mx-auto rounded-full" />
-          <h1 className="text-3xl font-bold mt-4">Welcome Back</h1>
-          <p className="text-gray-600 text-sm mt-2">Login to book your spa session</p>
-        </div>
-
+    <div className="h-screen overflow-hidden bg-(--primary-color)/30 flex flex-row items-center justify-center">
+      <div className="md:w-3/5 p-8 md:p-12 w-full space-y-10">
+        <h3 className="font-[Raleway]! font-bold! text-4xl">Login</h3>
         <form onSubmit={formik.handleSubmit} className="space-y-6">
           {/* Email */}
           <div>
-            <label className="block text-gray-800 font-medium mb-2">Email</label>
+            <label className="block text-gray-800 font-[Raleway]! font-medium! mb-2">Email</label>
             <input
               type="email"
               name="login"
               value={formik.values.login}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              className={`w-full px-4 py-3 rounded-xl border ${
+              className={`w-full px-4 py-3 rounded-md border ${
                 formik.touched.login && formik.errors.login
                   ? "border-red-500"
-                  : "border-gray-300"
-              } focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]`}
+                  : "border-(--accent-color)"
+              } focus:outline-none focus:ring-2 focus:ring-(--primary-color)`}
               placeholder="you@example.com"
             />
             {formik.touched.login && formik.errors.login && (
@@ -87,7 +84,7 @@ const Login: React.FC = () => {
 
           {/* Password */}
           <div>
-            <label className="block text-gray-800 font-medium mb-2">Password</label>
+            <label className="block text-gray-800 font-[Raleway]! font-medium! mb-2">Password</label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
@@ -95,11 +92,11 @@ const Login: React.FC = () => {
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                className={`w-full px-4 py-3 rounded-xl border ${
+                className={`w-full px-4 py-3 rounded-md border ${
                   formik.touched.password && formik.errors.password
                     ? "border-red-500"
-                    : "border-gray-300"
-                } focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]`}
+                    : "border-(--accent-color)"
+                } focus:outline-none focus:ring-2 focus:ring-(--primary-color)`}
                 placeholder="••••••••"
               />
               <button
@@ -115,22 +112,40 @@ const Login: React.FC = () => {
             )}
           </div>
 
+          <div className="flex items-center justify-between font-[Raleway]!">
+            <div className="relative flex items-center gap-2">
+            <input
+                type="checkbox"
+                name="rememberMe"
+                id="rememberMe"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={`rounded-md focus:outline-none accent-(--primary-color) size-4`}
+              />
+              <label htmlFor="rememberMe" className="block text-gray-800 font-[Raleway]! font-medium!">Remember me</label>
+            </div>
+            <Link to="/register" className="text-(--primary-color) font-bold font-[Raleway]!">Forgot Password?</Link>
+          </div>
+
           {/* Submit */}
           <button
             type="submit"
             disabled={formik.isSubmitting || !formik.isValid}
-            className="w-full py-4 bg-[var(--primary-color)] hover:bg-[#b23a8a] text-white font-bold rounded-xl transition-all duration-300 disabled:opacity-60 shadow-lg"
+            className="w-full py-4 bg-(--primary-color) hover:bg-[#b23a8a] font-[Raleway]! text-white font-bold rounded-md mt-3 transition-all duration-300 disabled:opacity-60 shadow-lg"
           >
             {formik.isSubmitting ? "Logging in..." : "Login"}
           </button>
         </form>
-
-        <p className="text-center text-gray-600 mt-6 text-sm">
-          Don’t have an account?{" "}
-          <Link to="/register" className="text-[var(--primary-color)] font-bold hover:underline">
-            Register here
-          </Link>
-        </p>
+      </div>
+      <div className="md:w-2/5 md:inline-flex hidden h-full relative">
+        <img src={assets.login} alt="..." className="w-full h-full object-cover" />
+        <div className="absolute inset-0 p-8 bg-black/50 flex flex-col justify-between">
+          <div></div>
+          <div className="border border-white bg-white/10 backdrop-blur-md rounded-xl lg:p-8 p-6">
+            <h3 className="font-[Raleway]! font-extrabold! text-4xl text-white">Welcome Onboard, Admin</h3>
+          </div>
+        </div>
       </div>
     </div>
   );

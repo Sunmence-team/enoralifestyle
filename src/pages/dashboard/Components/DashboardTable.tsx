@@ -1,119 +1,177 @@
-import React from 'react'
+// src/components/DashboardTable.tsx
+import React from "react";
 import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
-import { FaAngleLeft, FaAngleRight  } from "react-icons/fa6";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 
-export default function DashboardTable() {
-    const appointments = [
-        {
-            name: 'Mella Wuraola',
-            email: 'mella01@gmail.com',
-            service: 'Manicure and Pedicure',
-            time: '10:00 AM',
-            date: '19/09/25',
-            status: 'Completed',
-        },
-        {
-            name: 'Mella Wuraola',
-            email: 'mella01@gmail.com',
-            service: 'Manicure and Pedicure',
-            time: '10:00 AM',
-            date: '19/09/25',
-            status: 'Cancelled',
-        },
-        {
-            name: 'Mella Wuraola',
-            email: 'mella01@gmail.com',
-            service: 'Manicure and Pedicure',
-            time: '10:00 AM',
-            date: '19/09/25',
-            status: 'Pending',
-        },
-        {
-            name: 'Mella Wuraola',
-            email: 'mella01@gmail.com',
-            service: 'Manicure and Pedicure',
-            time: '10:00 AM',
-            date: '19/09/25',
-            status: 'Cancelled',
-        },
-        {
-            name: 'Mella Wuraola',
-            email: 'mella01@gmail.com',
-            service: 'Manicure and Pedicure',
-            time: '10:00 AM',
-            date: '19/09/25',
-            status: 'Completed',
-        },
-    ]
+interface Column<T> {
+  key: keyof T | "image" | "actions" | "status";
+  header: string;
+  render?: (item: T) => React.ReactNode;
+}
 
+interface DashboardTableProps<T extends { id: number }> {
+  data: T[];
+  columns: Column<T>[];
+  onEdit?: (item: T) => void;
+  onDelete?: (item: T) => void;
+  onView?: (item: T) => void;
+  loading?: boolean;
+  emptyMessage?: string;
+  total?: number;
+  currentPage?: number;
+  perPage?: number;
+  onPageChange?: (page: number) => void;
+}
+
+export default function DashboardTable<T extends { id: number }>({
+  data,
+  columns,
+  onEdit,
+  onDelete,
+  onView,
+  loading = false,
+  emptyMessage = "No data found.",
+  total = 0,
+  currentPage = 1,
+  perPage = 10,
+  onPageChange,
+}: DashboardTableProps<T>) {
+  const totalPages = Math.ceil(total / perPage) || 1;
+
+  if (loading) {
     return (
-        <div className=" w-full flex flex-col items-center py-4 px-">
-            {/* Table container */}
-            <div className="bg-white rounded-xl shadow-sm w-full max-w- overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                    <thead>
-                        <tr className="text-gray-600 border-b">
-                            <th className="py-3 px-6">NAME</th>
-                            <th className="py-3 px-6">EMAIL</th>
-                            <th className="py-3 px-6">SERVICE</th>
-                            <th className="py-3 px-6">TIME</th>
-                            <th className="py-3 px-6">DATE</th>
-                            <th className="py-3 px-6">STATUS</th>
-                            <th className="py-3 px-6 text-center">ACTION</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {appointments.map((appt, index) => (
-                            <tr
-                                key={index}
-                                className={`border-b hover:bg-gray-50 transition-colors duration-200 ${index % 2 === 0 ? 'bg-white' : 'bg-[var(--light-primary)]'} `}
-                            >
-                                <td className="py-4 px-6">{appt.name}</td>
-                                <td className="py-4 px-6">{appt.email}</td>
-                                <td className="py-4 px-6">{appt.service}</td>
-                                <td className="py-4 px-6">{appt.time}</td>
-                                <td className="py-4 px-6 text-[var(--primary-color)] font-semibold">
-                                    {appt.date}
-                                </td>
-                                <td className="py-4 px-6">
-                                    <span
-                                        className={`${appt.status === 'Completed' ? 'bg-(--another-green) text-(--completed-color) p-1 rounded-md pr-2 pl-2 ' :
-                                        appt.status === 'Cancelled' ? 'bg-(--transparent-red) text-(--cancelled-color) p-1 pr-2 pl-2  rounded-md' :
-                                            appt.status === 'Pending' ? 'bg-(--pending-bg) text-(--pending-color) p-1 pr-2 pl-2  rounded-md' : ''
+      <div className="p-20 text-center">
+        <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-pink-500 border-t-transparent"></div>
+      </div>
+    );
+  }
 
-                                    }`}
-                                    >
-                                        {appt.status}
-                                    </span>
-                                </td>
-                                <td className="py-4 px-6 text-center">
-                                    <div className="flex justify-center space-x-5 text-[var(--primary-color)]">
-                                        <FaEye className="cursor-pointer hover:text-blue-600" />
-                                        <FaEdit className="cursor-pointer hover:text-green-600" />
-                                        <FaTrash className="cursor-pointer hover:text-red-600" />
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+  if (data.length === 0) {
+    return <p className="text-center py-20 text-gray-500 text-lg">{emptyMessage}</p>;
+  }
 
-            {/* Pagination */}
-            <div className="flex items-center justify-center space-x-4 mt-3">
-                <button className="p-2 text-gray-600 hover:text-black"><FaAngleLeft /></button>
-                <button className="w-8 h-8 flex items-center justify-center font-bold bg-[var(--primary-color)] text-white rounded-lg">
-                    1
-                </button>
-                <button className="w-8 h-8 flex items-center justify-center font-bold text-gray-700 hover:bg-gray-200 rounded-lg">
-                    2
-                </button>
-                <button className="w-8 h-8 flex items-center justify-center font-bold text-gray-700 hover:bg-gray-200 rounded-lg">
-                    3
-                </button>
-                <span className="text-gray-500">...</span>
-                <button className="p-2 text-gray-600 hover:text-black"><FaAngleRight /></button>
-            </div>
+  return (
+    <div className="w-full flex flex-col items-center py-4">
+      <div className="bg-white rounded-xl shadow-sm w-full overflow-x-auto">
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="text-gray-600 border-b">
+              {columns.map((col) => (
+                <th
+                  key={col.key as string}
+                  className="py-3 px-6 uppercase tracking-wider text-sm font-semibold text-gray-700"
+                >
+                  {col.header}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((item, index) => (
+              <tr
+                key={item.id}
+                className={`border-b hover:bg-gray-50 transition-colors duration-200 ${
+                  index % 2 === 0 ? "bg-white" : "bg-[var(--light-primary)]"
+                }`}
+              >
+                {columns.map((col) => (
+                  <td key={col.key as string} className="py-4 px-6 align-middle">
+                    {col.render ? (
+                      col.render(item)
+                    ) : col.key === "image" ? (
+                      <img
+                        src={
+                          (item as any).image
+                            ? `${import.meta.env.VITE_API_IMAGE_URL}${(item as any).image.replace(/^public\//, "")}`
+                            : "/placeholder.jpg"
+                        }
+                        alt="img"
+                        className="w-12 h-12 object-cover rounded-lg shadow"
+                        onError={(e) => ((e.target as HTMLImageElement).src = "/placeholder.jpg")}
+                      />
+                    ) : col.key === "actions" ? (
+                      <div className="flex justify-center space-x-5 text-[var(--primary-color)]">
+                        {onView && (
+                          <button onClick={() => onView(item)} className="hover:text-blue-600 transition" title="View">
+                            <FaEye size={18} />
+                          </button>
+                        )}
+                        {onEdit && (
+                          <button onClick={() => onEdit(item)} className="hover:text-green-600 transition" title="Edit">
+                            <FaEdit size={18} />
+                          </button>
+                        )}
+                        {onDelete && (
+                          <button onClick={() => onDelete(item)} className="hover:text-red-600 transition" title="Delete">
+                            <FaTrash size={18} />
+                          </button>
+                        )}
+                      </div>
+                    ) : (
+                      String((item as any)[col.key])
+                    )}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Working Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center space-x-3 mt-8">
+          <button
+            onClick={() => onPageChange?.(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="p-2.5 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          >
+            <FaAngleLeft size={18} />
+          </button>
+
+          {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+            let pageNum;
+            if (totalPages <= 5) pageNum = i + 1;
+            else if (currentPage <= 3) pageNum = i + 1;
+            else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + i;
+            else pageNum = currentPage - 2 + i;
+
+            return (
+              <button
+                key={pageNum}
+                onClick={() => onPageChange?.(pageNum)}
+                className={`w-10 h-10 rounded-lg font-bold transition ${
+                  currentPage === pageNum
+                    ? "bg-[var(--primary-color)] text-white"
+                    : "text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                {pageNum}
+              </button>
+            );
+          }).filter(Boolean)}
+
+          {totalPages > 5 && currentPage < totalPages - 2 && (
+            <>
+              <span className="text-gray-500">...</span>
+              <button
+                onClick={() => onPageChange?.(totalPages)}
+                className="w-10 h-10 rounded-lg font-bold text-gray-700 hover:bg-gray-200 transition"
+              >
+                {totalPages}
+              </button>
+            </>
+          )}
+
+          <button
+            onClick={() => onPageChange?.(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="p-2.5 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          >
+            <FaAngleRight size={18} />
+          </button>
         </div>
-    )
+      )}
+    </div>
+  );
 }

@@ -42,23 +42,23 @@ const PackageCard = (item: PackageCardProps) => {
   return (
     <>
         <div
-            className="cursor-pointer relative flex justify-center"
+            className="w-full cursor-pointer relative flex justify-center"
         >
             {/* Purple bar slightly showing behind card */}
             <div
             className={`absolute ${
-                !item.showMidLine ? "hidden": item.index % 2 === 0 ? "-top-2" : "-bottom-2"
+                item.index % 2 === 0 ? "-top-2" : "-bottom-2"
             } w-full h-13 bg-(--primary-color)/50 rounded-full z-0`}
             ></div>
 
             {/* Card content */}
-            <div className="bg-white border border-black/5 rounded-3xl shadow-sm hover:shadow-md transition-all duration-300 p-5 flex flex-col items-center text-center relative z-10">
+            <div className="bg-white w-full border border-black/5 rounded-3xl shadow-sm hover:shadow-md transition-all duration-300 p-5 flex flex-col items-center text-center relative z-10">
                 <img
                     src={item.image}
                     alt={item.title}
                     className="w-36 h-36 object-cover rounded-full mb-4"
                 />
-                <h2 className="text-[22px] font-semibold! line-clamp-1 texr-(--accent-color)">
+                <h2 className="capitalize text-[22px] font-semibold! line-clamp-1 text-(--accent-color)">
                     {item.title}
                 </h2>
                 <p className="text-(--accent-color) text-sm mt-2 font-[inter]! line-clamp-3">{item.description}</p>

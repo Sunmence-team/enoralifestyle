@@ -1,8 +1,24 @@
+// src/pages/Packages.tsx
 import React, { useEffect, useState } from "react";
 import { assets } from "../assets/assests";
 import HeroSection from "../components/herosections/Herosection";
 import { FiX } from "react-icons/fi";
 import PackageCard from "../components/cards/PackageCard";
+import axios from "axios";
+import PackageCardSkeleton from "../components/skeletons/PackageCardSkeleton";
+
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
+
+interface Package {
+  id: number;
+  name: string;
+  description: string;
+  price: string;
+  image: string | null;
+  created_at: string;
+  type: "package" | "service";
+}
 
 interface SelectedPackage {
   title: string;
@@ -12,64 +28,59 @@ interface SelectedPackage {
 }
 
 const Packages = () => {
+  const [packages, setPackages] = useState<Package[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage, setlastPage] = useState(1);
   const [selectedPackage, setSelectedPackage] = useState<SelectedPackage | null>(null);
 
   useEffect(() => {
-    window.scroll(0, 0)
+    window.scrollTo(0, 0);
     document.title = "Packages - Enora Lifestyle And Spa";
-  }, [])
+  }, []);
 
-  // --- Array of packages ---
-  const packages = [
-    {
-      id: "1",
-      title: "Manicure & Pedicure",
-      description:
-        "Manicure is for general hand care. Our classic pedicure includes nail painting/leg reflexology. Ideal for encouraging blood circulation.",
-      price: 15_000,
-      image: assets.our1,
-    },
-    {
-      id: "2",
-      title: "Facial & Waxing",
-      description:
-        "Specialized facials for acne, anti-aging, and skin rejuvenation, plus expert waxing services. We also offer personalized skin consultations.",
-      price: 12_000,
-      image: assets.our2,
-    },
-    {
-      id: "3",
-      title: "Body Scrub & Polish",
-      description:
-        "Is your skin dull and dehydrated? Get Enora Brightening Scrub, Polish, Moroccan Hammam Scrub or Enora Glow Bath.",
-      price: 18_000,
-      image: assets.our3,
-    },
-    {
-      id: "4",
-      title: "Manicure & Pedicure",
-      description:
-        "Manicure is for general hand care. Our classic pedicure includes nail painting/leg reflexology. Ideal for encouraging blood circulation.",
-      price: 15_000,
-      image: assets.our1,
-    },
-    {
-      id: "5",
-      title: "Facial & Waxing",
-      description:
-        "Specialized facials for acne, anti-aging, and skin rejuvenation, plus expert waxing services. We also offer personalized skin consultations.",
-      price: 12_000,
-      image: assets.our2,
-    },
-    {
-      id: "6",
-      title: "Body Scrub & Polish",
-      description:
-        "Is your skin dull and dehydrated? Get Enora Brightening Scrub, Polish, Moroccan Hammam Scrub or Enora Glow Bath.",
-      price: 18_000,
-      image: assets.our3,
-    },
-  ];
+  // FETCH ALL PACKAGES FROM API
+  useEffect(() => {
+    const fetchPackages = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/packages`);
+        console.log("response", response);
+
+        if (response.status === 200) {
+          const { data, current_page, last_page } = response.data.data;
+          setPackages(data);
+          setCurrentPage(current_page);
+          setlastPage(last_page);
+        }
+
+        // Filter only packages and sort by latest
+        // const sorted = rawData
+        //   .filter((item: any) => item.type === "package")
+        //   .sort((a: Package, b: Package) =>
+        //     new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        //   );
+
+        // setPackages(sorted);
+      } catch (err) {
+        console.error("Failed to load packages:", err);
+        setPackages([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPackages();
+  }, []);
+
+  // Open modal with selected package
+  const openModal = (pkg: Package) => {
+    setSelectedPackage({
+      title: pkg.name,
+      description: pkg.description,
+      price: pkg.price,
+      image: pkg.image ? `${IMAGE_URL}${pkg.image.replace(/^public\//, "")}` : assets.our1,
+    });
+  };
 
   return (
     <div>
@@ -82,20 +93,35 @@ const Packages = () => {
 
       {/* PACKAGES GRID */}
       <div className="mt-20 lg:px-10 px-5">
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8">
-          {packages.map((item, index) => (
-            <PackageCard 
-              id={item.id}
-              index={index}
-              title={item.title}
-              description={item.description}
-              price={item.price}
-              image={item.image}
-              showMidLine={false}
-            />
-          ))}
-        </div>
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8">
+            {Array(9).fill(0).map((_, index) => (
+              <div className="w-full" key={index}>
+                <PackageCardSkeleton />
+              </div>
+            ))}
+          </div>
+        ) : packages.length === 0 ? (
+          <div className="text-center py-20 text-gray-500">
+            No packages available at the moment.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8">
+            {packages.map((item, index) => (
+              <div key={item?.id} onClick={() => openModal(item)} className="cursor-pointer">
+                <PackageCard
+                  id={item?.id.toString()}
+                  index={index}
+                  title={item?.name}
+                  description={item?.description}
+                  price={parseFloat(item?.price)}
+                  image={`${IMAGE_URL}/${item?.image}`}
+                  showMidLine={false}
+                />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* MODAL */}
@@ -127,17 +153,12 @@ const Packages = () => {
               <p className="mt-4 text-[20px] font-semibold text-black/80">
                 Price:{" "}
                 <span className="text-[var(--primary-color)]">
-                  {selectedPackage.price}
+                  ₦{Number(selectedPackage.price).toLocaleString()}
                 </span>
               </p>
 
               <div className="mt-6 flex justify-end">
-                {/* <button
-                  onClick={() => setSelectedPackage(null)}
-                  className="bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-white px-6 py-2 rounded-md font-medium transition-all"
-                >
-                  Close
-                </button> */}
+                {/* Optional: Add "Book Now" button later */}
               </div>
             </div>
           </div>

@@ -1,140 +1,188 @@
-import React, { useState } from "react";
+// src/pages/BlogDetails.tsx
+import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { assets } from "../assets/assests";
 import HeroSection from "../components/herosections/Herosection";
+import axios from "axios";
 
-const blogs = [
-  {
-    id: 1,
-    title: "Anti-Aging Facials: Do They Really Make You Look Younger?",
-    heading:
-      "Discover how anti-aging facials work, what makes them effective, and whether they truly help your skin look younger and more radiant over time.",
-    image: assets.blog1,
-    content: `Aging is a natural and beautiful process, but it’s okay to want your skin to stay youthful, firm, and glowing... lasting radiance.`,
-  },
-  {
-    id: 2,
-    title: "Why Your Skin Isn't Glowing, 5 Mistakes to Avoid",
-    heading: "Learn how to fix dull skin and regain your natural glow.",
-    image: assets.blog1,
-    content: `Many people make small skincare mistakes that steal their glow... lasting radiance.`,
-  },
-  {
-    id: 3,
-    title: "Why Self-Care Is Not a Luxury but a Necessity",
-    heading: "Self-care isn’t selfish — it’s essential for your wellbeing.",
-    image: assets.blog1,
-    content: `Taking care of yourself helps you give your best to others... lasting radiance.`,
-  },
-];
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+const IMAGE_URL = import.meta.env.VITE_API_IMAGE_URL;
+
+interface Blog {
+  id: number;
+  title: string;
+  short_description: string;
+  body: { content: string };
+  cover_image: string | null;
+  created_at: string;
+}
 
 interface Comment {
   id: number;
   name: string;
   text: string;
-  timestamp: string;
+  created_at: string;
 }
 
 const BlogDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const blog = blogs.find((b) => b.id.toString() === id);
-
+  const [blog, setBlog] = useState<Blog | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingComments, setLoadingComments] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const [name, setName] = useState("");
   const [comment, setComment] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name.trim() || !comment.trim()) return;
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.title = `${blog?.title} - Enora Lifestyle And Spa`;
+  }, []);
 
-    const newComment: Comment = {
-      id: Date.now(),
-      name: name.trim(),
-      text: comment.trim(),
-      timestamp: new Date().toLocaleString("en-US", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true,
-      }),
+  // FETCH BLOG
+  useEffect(() => {
+    const fetchBlog = async () => {
+      if (!id) return setError("Invalid blog ID");
+
+      try {
+        const res = await axios.get(`${API_URL}/blogs/${id}`);
+        setBlog(res.data?.data || res.data);
+      } catch (err) {
+        setError("Blog not found.");
+      } finally {
+        setLoading(false);
+      }
     };
+    fetchBlog();
+  }, [id]);
 
-    setComments([newComment, ...comments]);
-    setName("");
-    setComment("");
+  // FETCH COMMENTS
+  const fetchComments = async () => {
+    if (!id) return;
+    setLoadingComments(true);
+    try {
+      const res = await axios.get(`${API_URL}blogs/${id}/comments?per_page=20`);
+      const data = res.data?.data || [];
+      setComments(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Failed to load comments");
+    } finally {
+      setLoadingComments(false);
+    }
   };
 
-  if (!blog) {
+  useEffect(() => {
+    if (blog) fetchComments();
+  }, [blog]);
+
+  // POST COMMENT
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim() || !comment.trim() || !id) return;
+
+    setSubmitting(true);
+    try {
+      await axios.post(`${API_URL}blogs/${id}/comments`, {
+        name: name.trim(),
+        text: comment.trim(),
+      });
+
+      setName("");
+      setComment("");
+      fetchComments();
+    } catch (err: any) {
+      alert(err.response?.data?.message || "Failed to post comment");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (loading) {
     return (
-      <div className="text-center py-20 text-gray-500">Blog not found 😅</div>
+      <div className="flex justify-center items-center h-screen bg-white">
+        <div className="animate-spin rounded-full h-16 w-16 border-4 border-pink-500 border-t-transparent"></div>
+      </div>
+    );
+  }
+
+  if (error || !blog) {
+    return (
+      <div className="text-center py-32 bg-white">
+        <p className="text-2xl text-red-600 mb-6">Blog not found</p>
+        <Link to="/blog" className="px-8 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:opacity-90">
+          Back to Blogs
+        </Link>
+      </div>
     );
   }
 
   return (
     <div>
-      {/* Hero Section */}
       <HeroSection
         title={blog.title}
-        backgroundImage={assets.dets}
+        backgroundImage={
+          blog.cover_image
+            ? `${IMAGE_URL}${blog.cover_image.replace(/^public\//, "")}`
+            : assets.dets
+        }
         height="lg:h-[65vh] h-[35vh]"
       />
 
-      {/* Blog Content */}
-      <div className="px-5 lg:px-20 py-10">
-        {blog.heading && (
-          <h1 className="text-2xl lg:text-3xl font-semibold mb-6 text-gray-800">
-            {blog.heading}
-          </h1>
-        )}
-        <p className="text-gray-700 text-lg leading-relaxed whitespace-pre-line">
-          {blog.content}
-        </p>
+      <div className="px-5 lg:px-20 py-12 bg-white">
+        <h1 className="text-2xl lg:text-3xl font-bold text-gray-800 mb-6">
+          {blog.short_description || blog.title}
+        </h1>
+        <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed whitespace-pre-line">
+          {blog.body.content.split("\n").map((p, i) => (
+            <p key={i} className="mb-5">{p || <br />}</p>
+          ))}
+        </div>
       </div>
 
-      {/* Comment Section */}
-      <div className="px-5 lg:px-15 py-12">
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 lg:gap-20 gap-10">
+      {/* COMMENTS SECTION */}
+      <div className="px-5 py-16 bg-gray-50">
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-10">
+          
           {/* Comments List */}
-          <div className="bg-[#C97BB7] rounded-2xl p-6 shadow-md">
-            <h3 className="text-xl font-semibold text-black mb-4">
-              Comments
-            </h3>
-            {comments.length === 0 ? (
-              <p className="text-white italic">No comments yet. Be the first!</p>
+          <div className="bg-[#C97BB7] rounded-3xl p-4 md:p-6 shadow-xl">
+            <h3 className="text-2xl font-bold text-black mb-6">Comments ({comments.length})</h3>
+
+            {loadingComments ? (
+              <div className="text-center py-8">
+                <div className="inline-block animate-spin rounded-full h-10 w-10 border-4 border-white border-t-transparent"></div>
+              </div>
+            ) : comments.length === 0 ? (
+              <p className="text-white italic text-center py-8">No comments yet. Be the first!</p>
             ) : (
               <div
-                className="space-y-4 max-h-[280px] overflow-y-auto pr-2"
-                style={{
-                  scrollbarWidth: "none",
-                  msOverflowStyle: "none",
-                }}
+                className="space-y-5 h-74 md:h-86 overflow-y-auto pr-3"
+                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
               >
-                {/* Hide scrollbar for Chrome, Safari, Edge */}
-                <style>
-                  {`
-                    div::-webkit-scrollbar {
-                      display: none;
-                    }
-                  `}
-                </style>
+                <style>{`div::-webkit-scrollbar { display: none; }`}</style>
 
                 {comments.map((c) => (
                   <div
                     key={c.id}
-                    className="bg-white rounded-lg p-4 shadow-sm border border-gray-200"
+                    className="bg-white rounded-2xl p-6 shadow-md border border-gray-100 relative"
                   >
-                    <div className="">
-                      <h4 className="font-medium text-gray-900">{c.name}</h4>
-                     
-                    </div>
-                    <div className="flex justify-between items-start mt-2">
-                      <p className="text-gray-700 text-sm leading-snug">{c.text}</p>
-                     <span className="text-xs text-gray-500">
-                        {c.timestamp}
-                      </span>
-                    </div>
+                    <h4 className="font-bold text-gray-900 text-lg pr-32">
+                      {c.name}
+                    </h4>
+                    <p className="text-gray-700 leading-relaxed mt-2">
+                      {c.text}
+                    </p>
+                    {/* DATE & TIME — BOTTOM RIGHT */}
+                    <span className="absolute bottom-4 right-6 text-xs text-gray-500">
+                      {new Date(c.created_at).toLocaleString("en-GB", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                        hour: "numeric",
+                        minute: "2-digit",
+                      })}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -142,43 +190,44 @@ const BlogDetails: React.FC = () => {
           </div>
 
           {/* Comment Form */}
-          <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">
-              Drop your comment
-            </h3>
-            <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100">
+            <h3 className="text-2xl font-bold text-gray-800 mb-6">Drop your comment</h3>
+            <form onSubmit={handleSubmit} className="space-y-6">
               <input
                 type="text"
                 placeholder="Full name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] transition"
                 required
+                className="w-full px-5 py-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] transition text-base"
               />
               <textarea
                 placeholder="Write your comment..."
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                rows={4}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] transition resize-none"
+                rows={5}
                 required
+                className="w-full px-5 py-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] transition resize-none text-base"
               />
               <button
                 type="submit"
-                className="w-full bg-[var(--primary-color)] text-white font-medium py-3 rounded-lg hover:bg-opacity-90 transition"
+                disabled={submitting}
+                className="w-full bg-[var(--primary-color)] text-white font-bold py-4 rounded-xl hover:opacity-90 transition shadow-lg disabled:opacity-60"
               >
-                Submit Comment
+                {submitting ? "Posting..." : "Submit Comment"}
               </button>
             </form>
           </div>
-          <div className="mt-8">
-              <Link
-                to="/blog"
-                className=" text-center border-[var(--primary-color)] text-[var(--primary-color)] font-semibold p-3 rounded-lg border border-[var(--primary-color)] hover:bg-[var(--primary-color)] hover:text-white transition-colors"
-              >
-                Back to Blog
-              </Link>
-            </div>
+
+          {/* Back Button */}
+          <div className="lg:col-span-2 text-center mt-10">
+            <Link
+              to="/blog"
+              className="inline-block px-10 py-4 border-2 border-[var(--primary-color)] text-[var(--primary-color)] font-bold rounded-xl hover:bg-[var(--primary-color)] hover:text-white transition text-lg"
+            >
+              Back to Blog
+            </Link>
+          </div>
         </div>
       </div>
     </div>

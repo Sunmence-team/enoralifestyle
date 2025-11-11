@@ -58,23 +58,15 @@ const Login: React.FC = () => {
       <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 w-full max-w-md border border-black/10">
         {/* Logo */}
         <div className="text-center mb-8">
-          <img
-            src={assets.logo || assets.hero}
-            alt="Enoralifestyle Spa"
-            className="w-12 mx-auto rounded-full"
-          />
+          <img src={assets.logo || assets.hero} alt="Enoralifestyle Spa" className="w-12 mx-auto rounded-full" />
           <h1 className="text-3xl font-bold mt-4">Welcome Back</h1>
-          <p className="text-gray-600 text-sm mt-2">
-            Login to book your spa session
-          </p>
+          <p className="text-gray-600 text-sm mt-2">Login to book your spa session</p>
         </div>
 
         <form onSubmit={formik.handleSubmit} className="space-y-6">
           {/* Email */}
           <div>
-            <label className="block text-gray-800 font-medium mb-2">
-              Email
-            </label>
+            <label className="block text-gray-800 font-medium mb-2">Email</label>
             <input
               type="email"
               name="login"
@@ -95,9 +87,7 @@ const Login: React.FC = () => {
 
           {/* Password */}
           <div>
-            <label className="block text-gray-800 font-medium mb-2">
-              Password
-            </label>
+            <label className="block text-gray-800 font-medium mb-2">Password</label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
@@ -121,9 +111,7 @@ const Login: React.FC = () => {
               </button>
             </div>
             {formik.touched.password && formik.errors.password && (
-              <p className="text-red-500 text-xs mt-1">
-                {formik.errors.password}
-              </p>
+              <p className="text-red-500 text-xs mt-1">{formik.errors.password}</p>
             )}
           </div>
 
@@ -139,10 +127,7 @@ const Login: React.FC = () => {
 
         <p className="text-center text-gray-600 mt-6 text-sm">
           Don’t have an account?{" "}
-          <Link
-            to="/register"
-            className="text-[var(--primary-color)] font-bold hover:underline"
-          >
+          <Link to="/register" className="text-[var(--primary-color)] font-bold hover:underline">
             Register here
           </Link>
         </p>

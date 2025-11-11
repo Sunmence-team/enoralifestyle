@@ -4,12 +4,12 @@ import { formatterUtility } from '../../utilities/formatterutility';
 import { useCartStore } from '../../store/cartStore';
 
 interface ServiceCardProps {
-  id: string;
-  index: number;
-  title: string;
-  description: string;
-  image: string;
-  price: number;
+    id: string;
+    index: number;
+    title: string;
+    description: string;
+    image: string;
+    price: number;
 }
 
 const ServiceCard = (item: ServiceCardProps) => {
@@ -48,9 +48,9 @@ const ServiceCard = (item: ServiceCardProps) => {
                     alt={item.title}
                     className="w-full h-[250px] object-cover rounded-t-lg mb-4"
                 />
-                <div className="px-5 flex flex-col justify-between h-full">
+                <div className="px-5 w-full flex flex-col justify-between h-full">
                     <div className="">
-                        <h2 className="text-[22px] font-semibold! text-(--accent-color) line-clamp-1">
+                        <h2 className="capitalize text-[22px] font-semibold! text-(--accent-color) line-clamp-1">
                             {item.title}
                         </h2>
                         <p className="text-gray-600 mt-2 text-sm font-[inter]! line-clamp-3">{item.description}</p>

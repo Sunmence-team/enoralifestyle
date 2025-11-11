@@ -6,7 +6,7 @@ import { GoArrowLeft } from "react-icons/go";
 import Footer from "../components/Footer";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-const IMAGE_URL = import.meta.env.VITE_API_IMAGE_URL;
+const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
 
 interface Blog {
   id: number;
@@ -54,7 +54,21 @@ export default function BlogDetails() {
     fetchBlog();
   }, [id]);
 
-  // Fetch comments
+  // FETCH COMMENTS
+  const fetchComments = async () => {
+    if (!id) return;
+    setLoadingComments(true);
+    try {
+      const res = await axios.get(`${API_URL}/blogs/${id}/comments?per_page=20`);
+      const data = res.data?.data || [];
+      setComments(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Failed to load comments");
+    } finally {
+      setLoadingComments(false);
+    }
+  };
+
   useEffect(() => {
     const fetchComments = async () => {
       if (!id) return;
@@ -79,7 +93,7 @@ export default function BlogDetails() {
 
     setSubmitting(true);
     try {
-      const res = await axios.post(`${API_URL}/blogs/${id}/comments`, {
+      await axios.post(`${API_URL}/blogs/${id}/comments`, {
         name: name.trim(),
         text: comment.trim(),
       });

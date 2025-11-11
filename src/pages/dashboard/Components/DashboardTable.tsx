@@ -59,7 +59,7 @@ export default function DashboardTable<T extends { id: number }>({
               {columns.map((col) => (
                 <th
                   key={col.key as string}
-                  className="py-3 px-6 uppercase tracking-wider text-sm font-semibold text-gray-700"
+                  className="py-6 px-6 uppercase tracking-wider text-sm font-semibold text-gray-700"
                 >
                   {col.header}
                 </th>
@@ -82,7 +82,7 @@ export default function DashboardTable<T extends { id: number }>({
                       <img
                         src={
                           (item as any).image
-                            ? `${import.meta.env.VITE_API_IMAGE_URL}${(item as any).image.replace(/^public\//, "")}`
+                            ? `${import.meta.env.VITE_IMAGE_BASE_URL}/${(item as any).image.replace(/^public\//, "")}`
                             : "/placeholder.jpg"
                         }
                         alt="img"

@@ -4,6 +4,7 @@ import { MdBathroom } from "react-icons/md";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { IoIosCreate } from "react-icons/io";
 import { NavLink } from 'react-router-dom';
+import { MessageSquareMore } from 'lucide-react';
 // import { href } from 'react-router-dom';
 
 export default function Sidebar() {
@@ -12,6 +13,7 @@ export default function Sidebar() {
     { name: "Appointment", href: '/dashboard/appointments', icon: <MdBathroom size={30} className='text-(--primary-color) ' /> },
     { name: "Upload Blog", href: '/dashboard/blogUpload', icon: <FaCloudUploadAlt size={30} className='text-(--primary-color) ' /> },
     { name: "Create Package", href: '/dashboard/package', icon: <IoIosCreate size={30} className='text-(--primary-color) ' /> },
+    { name: "Manage Contact", href: '/dashboard/contacts', icon: <MessageSquareMore size={30} className='text-(--primary-color) ' /> },
   ];
 
   return (

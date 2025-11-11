@@ -1,96 +1,75 @@
-import React from 'react'
-// import Bloghero from '../components/Bloghero'
+// src/pages/Blog.tsx
+import React, { useState, useEffect } from "react";
 import { assets } from "../assets/assests";
-// import Blogpost from '../components/Blogpost';
-import { Link } from "react-router-dom";
 import HeroSection from "../components/herosections/Herosection";
+import BlogCard from "../components/cards/BlogCard";
+import axios from "axios";
 
-const blogs = [
-  {
-    id: "1",
-    title: "Anti-Aging Facials: Do They Really Make You Look Younger?",
-    description:
-      "You need your face to be amazing and lovely and you need to read this blog to get better abeg",
-    image: assets.blog1,
-  },
-  {
-    id: "2",
-    title: "Why Your Skin Isn’t Glowing, 5 Mistakes to Avoid",
-    description:
-      "You need your face to be amazing and lovely and you need to read this blog to get better abeg",
-    image: assets.blog2,
-  },
-  {
-    id: "3",
-    title: "Why Self-Care Is Not a Luxury but a Necessity",
-    description:
-      "You need your face to be amazing and lovely and you need to read this blog to get better abeg",
-    image: assets.blog3,
-  },
-];
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+const IMAGE_URL = import.meta.env.VITE_API_IMAGE_URL;
+
+interface Blog {
+  id: number;
+  title: string;
+  short_description: string;
+  cover_image: string | null;
+  created_at: string;
+}
 
 export default function Blog() {
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  // Fetch all blogs – Public API
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await axios.get(`${API_URL}blogs`);
+        const data = response.data?.data?.data || response.data?.data || [];
+        setBlogs(Array.isArray(data) ? data : []);
+      } catch (err: any) {
+        console.error("Failed to fetch blogs:", err);
+        setError("Failed to load blogs. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
   return (
-    <div>
+    <div className="min-h-screen bg-gray-50">
       {/* HERO SECTION */}
       <HeroSection
         title="Blogs"
         backgroundImage={assets.newblog}
-        height="lg:h-[65vh] h-[35vh]"
+        height="lg:h-[65vh] h-[40vh]"
       />
-
       <div className="bg-white mt-16 lg:px-10 px-5">
-        <h1 className="md:text-[48px] text-[30px] text-center font-semibold">
-          Blog{" "}
-          <span className="text-[var(--primary-color)]">
-            News
-          </span>
-        </h1>
+      <h1 className="md:text-[48px] text-[30px] text-center font-semibold">
+        Blog <span className="text-(--primary-color)">News</span>
+      </h1>
 
-      <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+      <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {blogs.map((blog, index) => (
-          <div
-            key={index}
-            className="relative bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col text-center border border-black/10 overflow-hidden"
-          >
-            {/* Text before image */}
-            <div className="px-5 pt-6 text-start">
-              <h2 className="text-[20px] font-semibold text-black mb-2">
-                {blog.title}
-              </h2>
-              <p className="text-gray-600 text-sm mb-4">{blog.description}</p>
-            </div>
-
-            {/* Blog image with smooth concave bottom */}
-            <div className="relative overflow-hidden border-4 border-red-600 p-5">
-              <img
-                src={blog.image}
-                alt={blog.title}
-                className="w-full h-[300px] object-cover rounded-t-3xl border"
-              />
-
-              {/* Smooth concave curve */}
-              {/* <svg
-                className="absolute inset-x-0 bottom-0 w-full h-16 fill-amber-700"
-                viewBox="0 0 1200 120"
-                preserveAspectRatio="none"
-                aria-hidden="true"
-              >
-                <path d="M0,0 Q600,70 1200,0 L1200,120 L0,120 Z" fill="red" />
-              </svg> */}
-            </div>
-
-            {/* Read more link */}
-            <Link
-              to={`/blog/${blog?.id}`}
-              className="text-[var(--primary-color)] font-semibold hover:text-black transition-colors block text-center mt-4 pb-6"
-            >
-              Read more &gt;&gt;&gt;
-            </Link>
+          <div className="md:min-w-[340px] min-w-[320px]" key={index}>
+            <BlogCard
+              id={blog.id}
+              title={blog.title}
+              description={blog.description}
+              image={blog.image}
+            />
           </div>
         ))}
       </div>
     </div>
     </div>
   );
-};
+}

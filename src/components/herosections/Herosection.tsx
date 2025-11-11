@@ -42,14 +42,16 @@ const HeroSection: React.FC<HeroSectionProps> = ({
         )}
         <div className="flex justify-center gap-4">
           {button1Text && (
-            <Link className="bg-[#a1007e] text-white px-10 py-2 rounded-full hover:bg-[#820065] transition cursor-pointer">
+            <Link 
+              to="/services"
+              className="bg-[#a1007e] text-white px-10 py-2 rounded-sm hover:bg-[#820065] transition cursor-pointer">
               {button1Text}
             </Link>
           )}
           {button2Text && (
             <Link
               to="/services"
-              className="border border-white px-6 py-2 rounded-full hover:bg-white hover:text-black transition cursor-pointer"
+              className="border-2 border-white px-6 py-2 rounded-lg hover:bg-white hover:text-black transition cursor-pointer"
             >
               {button2Text}
             </Link>

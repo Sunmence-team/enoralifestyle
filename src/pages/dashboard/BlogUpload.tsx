@@ -1,4 +1,4 @@
-// src/pages/UploadBlog.tsx
+// src/pages/dashboard/BlogUpload.tsx
 import React, { useState, useEffect } from "react";
 import { IoIosNotifications } from "react-icons/io";
 import { FaRegUserCircle, FaTimes } from "react-icons/fa";
@@ -16,26 +16,33 @@ interface Blog {
   title: string;
   cover_image: string | null;
   short_description: string;
-  body: {
-    content: string;
-  };
+  body: { content: string };
   created_at: string;
   updated_at: string;
 }
 
-export default function UploadBlog() {
+interface Comment {
+  id: number;
+  name: string;
+  text: string;
+  created_at: string;
+}
+
+export default function BlogUpload() {
   const navigate = useNavigate();
 
   // Form States
   const [title, setTitle] = useState("");
-  const [article, setArticle] = useState(""); // short_description
-  const [blogPost, setBlogPost] = useState(""); // body.content
+  const [article, setArticle] = useState("");
+  const [blogPost, setBlogPost] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-  // Data & UI
+  // Table & Pagination
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
   const [submitting, setSubmitting] = useState(false);
 
   // Edit & Delete
@@ -44,6 +51,26 @@ export default function UploadBlog() {
   const [deleteModal, setDeleteModal] = useState(false);
   const [deletingBlog, setDeletingBlog] = useState<Blog | null>(null);
 
+  // View Modal + Comments
+  const [viewModal, setViewModal] = useState(false);
+  const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [commentLoading, setCommentLoading] = useState(false);
+  const [editingComment, setEditingComment] = useState<Comment | null>(null);
+  const [editText, setEditText] = useState("");
+
+  // LOCK BACKGROUND SCROLL WHEN MODALS ARE OPEN
+  useEffect(() => {
+    if (viewModal || deleteModal) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [viewModal, deleteModal]);
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -51,21 +78,18 @@ export default function UploadBlog() {
       navigate("/login");
       return;
     }
-    fetchBlogs(); // GET /blogs?per_page=100
-  }, [navigate]);
+    fetchBlogs();
+  }, [navigate, page]);
 
-  // ──────────────────────────────────────────────────────────────
-  // FETCH ALL BLOGS
-  // ──────────────────────────────────────────────────────────────
   const fetchBlogs = async () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get(`${API_URL}blogs?per_page=100`, {
+      const res = await axios.get(`${API_URL}blogs?page=${page}&per_page=10`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const data = res.data?.data?.data || [];
-      setBlogs(Array.isArray(data) ? data : []);
+      setBlogs(res.data.data?.data || []);
+      setTotal(res.data.data?.total || 0);
     } catch (err: any) {
       toast.error("Failed to load blogs");
       if (err.response?.status === 401) {
@@ -85,9 +109,6 @@ export default function UploadBlog() {
     }
   };
 
-  // ──────────────────────────────────────────────────────────────
-  // CREATE OR UPDATE BLOG
-  // ──────────────────────────────────────────────────────────────
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!image && !isEditing) return toast.error("Please upload a cover image");
@@ -101,28 +122,18 @@ export default function UploadBlog() {
 
     try {
       const token = localStorage.getItem("token");
-
       if (isEditing && editingId) {
-        // POST /blogs/{id} (Laravel spoofing for PUT)
         formData.append("_method", "PUT");
         await axios.post(`${API_URL}blogs/${editingId}`, formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
+          headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
         });
         toast.success("Blog updated!");
       } else {
-        // POST /blogs
         await axios.post(`${API_URL}blogs`, formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
+          headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
         });
         toast.success("Blog uploaded!");
       }
-
       resetForm();
       fetchBlogs();
     } catch (err: any) {
@@ -152,14 +163,9 @@ export default function UploadBlog() {
     setTitle(blog.title);
     setArticle(blog.short_description);
     setBlogPost(blog.body.content);
-    setImage(null);
-    setImagePreview(
-      blog.cover_image
-        ? `${IMAGE_URL}${blog.cover_image.replace(/^public\//, "")}`
-        : null
-    );
+    setImagePreview(blog.cover_image ? `${IMAGE_URL}${blog.cover_image.replace(/^public\//, "")}` : null);
     window.scrollTo({ top: 0, behavior: "smooth" });
-    toast.success(`Editing: ${blog.title}`);
+    toast.success("Editing: " + blog.title);
   };
 
   const openDeleteModal = (blog: Blog) => {
@@ -167,14 +173,10 @@ export default function UploadBlog() {
     setDeleteModal(true);
   };
 
-  // ──────────────────────────────────────────────────────────────
-  // DELETE BLOG
-  // ──────────────────────────────────────────────────────────────
   const confirmDelete = async () => {
     if (!deletingBlog) return;
     try {
       const token = localStorage.getItem("token");
-      // DELETE /blogs/{id}
       await axios.delete(`${API_URL}blogs/${deletingBlog.id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -187,41 +189,107 @@ export default function UploadBlog() {
     }
   };
 
+  const openViewModal = async (blog: Blog) => {
+    setSelectedBlog(blog);
+    setViewModal(true);
+    setCommentLoading(true);
+    setComments([]);
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get(`${API_URL}blogs/${blog.id}/comments?per_page=20`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setComments(res.data.data || []);
+    } catch {
+      toast.error("Failed to load comments");
+    } finally {
+      setCommentLoading(false);
+    }
+  };
+
+  const deleteComment = async (commentId: number) => {
+    if (!confirm("Delete this comment?")) return;
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`${API_URL}comments/${commentId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      toast.success("Comment deleted");
+      setComments(comments.filter((c) => c.id !== commentId));
+    } catch {
+      toast.error("Delete failed");
+    }
+  };
+
+  const saveCommentEdit = async () => {
+    if (!editingComment || !editText.trim()) return;
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put(
+        `${API_URL}comments/${editingComment.id}`,
+        { text: editText },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      toast.success("Comment updated");
+      setComments(
+        comments.map((c) =>
+          c.id === editingComment.id ? { ...c, text: editText } : c
+        )
+      );
+      setEditingComment(null);
+      setEditText("");
+    } catch {
+      toast.error("Update failed");
+    }
+  };
+
   return (
-    <div>
+    <div className="min-h-screen pb-20">
       {/* Header */}
-      <div className="flex justify-between items-center w-full mb-3">
-        <h2 className="font-bold text-2xl">Upload Blog</h2>
-        <div className="flex gap-3">
+      <div className="flex justify-between items-center w-full mb-8 px-4 lg:px-0">
+        <h2 className="font-bold text-3xl text-gray-800">Upload Blog</h2>
+        <div className="flex gap-4">
           <div className="p-3 rounded-full bg-[var(--pink-color)]">
-            <IoIosNotifications size={25} className="text-[var(--primary-color)]" />
+            <IoIosNotifications size={28} className="text-[var(--primary-color)]" />
           </div>
           <div className="p-3 rounded-full bg-[var(--pink-color)]">
-            <FaRegUserCircle size={25} className="text-[var(--primary-color)]" />
+            <FaRegUserCircle size={28} className="text-[var(--primary-color)]" />
           </div>
         </div>
       </div>
 
-      {/* Form – Your EXACT Design */}
-      <div className="bg-white rounded-md p-6 mb-8">
-        <h2 className="font-bold mb-4 text-2xl">Upload Blog</h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="mb-5">
-            <label className="block text-sm text-gray-700 mb-2">Post Title</label>
+      {/* Form */}
+      <div className="bg-white rounded-2xl shadow-xl p-8 mb-10 mx-4 lg:mx-0">
+        <h2 className="font-bold text-2xl mb-8">Upload Blog</h2>
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Title */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Post Title
+            </label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="E.g Anti-Aging Facials: Do They Really Make You Look Younger?"
               required
-              className="w-full border border-[var(--primary-color)] rounded-lg p-3 text-sm placeholder:text-[var(--primary-color)] bg-[var(--light-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+              placeholder="E.g Anti-Aging Facials: Do They Really Make You Look Younger?"
+              className="w-full border-2 border-[var(--primary-color)] rounded-xl p-4 text-base placeholder:text-[var(--primary-color)/70] bg-[var(--light-primary)] focus:outline-none focus:ring-4 focus:ring-[var(--primary-color)/20]"
             />
+            {error && !blogDetails.title && error.from === "title" ? (
+              <span className="text-base mt-6 font-semibold text-red-700">
+                {error.errorMessage}
+              </span>
+            ) : null}
           </div>
 
-          {/* Image Upload */}
-          <div className="w-full mb-5">
-            <label className="mb-4 block">Image</label>
-            <div className="border border-dashed border-[var(--primary-color)] rounded-lg p-6 text-center hover:border-[var(--primary-color)] bg-[var(--light-primary)] transition-colors">
+          {/* Image */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Cover Image
+            </label>
+            <div className="border-2 border-dashed border-[var(--primary-color)] rounded-2xl p-10 text-center bg-[var(--light-primary)] hover:border-solid transition">
               <input
                 type="file"
                 accept="image/*"
@@ -229,26 +297,28 @@ export default function UploadBlog() {
                 className="hidden"
                 id="image-upload"
               />
-              <label htmlFor="image-upload" className="cursor-pointer flex flex-col items-center gap-2">
+              <label htmlFor="image-upload" className="cursor-pointer">
                 {imagePreview ? (
-                  <img src={imagePreview} alt="Preview" className="max-h-40 rounded" />
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="mx-auto max-h-24 rounded-xl shadow-lg"
+                  />
                 ) : (
-                  <>
-                    <div className="w-10 h-10 flex items-center justify-center">
-                      <BiImageAlt className="w-10 h-10 text-[var(--primary-color)]" />
-                    </div>
-                    <div className="flex items-center gap-3 mt-2">
-                      <div className="text-sm rounded-full px-2 py-0.5 border border-[var(--primary-color)]">
+                  <div className="space-y-4">
+                    <BiImageAlt className="mx-auto w-16 h-16 text-[var(--primary-color)]" />
+                    <div className="text-sm">
+                      <span className="inline-block px-4 py-2 bg-white border-2 border-[var(--primary-color)] rounded-full font-medium">
                         Choose File
-                      </div>
-                      <div className="text-xs">No file chosen</div>
+                      </span>
+                      <p className="mt-2 text-gray-500">No file chosen</p>
                     </div>
-                  </>
+                  </div>
                 )}
               </label>
             </div>
             {isEditing && imagePreview && !image && (
-              <p className="text-xs text-green-600 mt-2 text-center">
+              <p className="text-sm text-green-600 text-center mt-3">
                 Current image loaded. Upload new to replace.
               </p>
             )}
@@ -256,36 +326,40 @@ export default function UploadBlog() {
 
           {/* Short Description */}
           <div>
-            <label htmlFor="description" className="block mb-2">Short Description</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Short Description
+            </label>
             <textarea
               value={article}
               onChange={(e) => setArticle(e.target.value)}
-              placeholder="A brief summary of the article"
-              rows={3}
               required
-              className="w-full border border-[var(--primary-color)] rounded-lg p-3 text-sm placeholder:text-[var(--primary-color)] bg-[var(--light-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--primary-color)]"
+              rows={3}
+              placeholder="A brief summary..."
+              className="w-full border-2 border-[var(--primary-color)] rounded-xl p-4 bg-[var(--light-primary)] focus:outline-none focus:ring-4 focus:ring-[var(--primary-color)/20]"
             />
           </div>
 
-          {/* Body Text */}
+          {/* Body */}
           <div>
-            <label htmlFor="description" className="block mb-2">Body Text</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Body Text
+            </label>
             <textarea
               value={blogPost}
               onChange={(e) => setBlogPost(e.target.value)}
-              placeholder="Write your blog post here..."
-              rows={6}
               required
-              className="w-full border border-[var(--primary-color)] rounded-lg p-3 text-sm placeholder:text-[var(--primary-color)] bg-[var(--light-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--primary-color)]"
+              rows={8}
+              placeholder="Write your blog post here..."
+              className="w-full border-2 border-[var(--primary-color)] rounded-xl p-4 bg-[var(--light-primary)] focus:outline-none focus:ring-4 focus:ring-[var(--primary-color)/20]"
             />
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex gap-4">
             {isEditing && (
               <button
                 type="button"
                 onClick={resetForm}
-                className="px-6 py-3 border-2 border-red-300 text-red-600 rounded-lg hover:bg-red-50 font-medium"
+                className="px-8 py-4 border-2 border-red-500 text-red-600 rounded-xl font-bold hover:bg-red-50 transition"
               >
                 Cancel
               </button>
@@ -293,39 +367,42 @@ export default function UploadBlog() {
             <button
               type="submit"
               disabled={submitting}
-              className="flex-1 bg-[var(--primary-color)] text-white font-medium py-3 rounded-lg cursor-pointer transition hover:opacity-90 disabled:opacity-60"
+              className="flex-1 bg-[var(--primary-color)] text-white font-bold py-4 rounded-xl hover:opacity-90 disabled:opacity-60 transition shadow-lg"
             >
-              {submitting ? "Uploading..." : isEditing ? "Update Blog" : "Upload Blog"}
+              {submitting ? "Saving..." : isEditing ? "Update Blog" : "Upload Blog"}
             </button>
           </div>
         </form>
       </div>
 
-      {/* Reusable DashboardTable */}
-      <div className="bg-white rounded-xl shadow-xl overflow-hidden">
+      {/* Table */}
+      <div className="bg-white rounded-2xl shadow-2xl overflow-hidden mx-4 lg:mx-0">
         <div className="px-8 py-6 bg-[var(--primary-color)]">
-          <h2 className="text-2xl font-bold text-white">All Blogs</h2>
+          <h2 className="text-3xl font-bold text-white">All Blogs</h2>
         </div>
-
         <DashboardTable
           data={blogs}
           loading={loading}
+          total={total}
+          currentPage={page}
+          perPage={10}
+          onPageChange={setPage}
+          onView={openViewModal}
           onEdit={startEdit}
           onDelete={openDeleteModal}
           columns={[
             {
               key: "cover_image",
               header: "IMAGE",
-              render: (blog: any) => (
+              render: (b: any) => (
                 <img
                   src={
-                    blog.cover_image
-                      ? `${IMAGE_URL}${blog.cover_image.replace(/^public\//, "")}`
+                    b.cover_image
+                      ? `${IMAGE_URL}${b.cover_image.replace(/^public\//, "")}`
                       : "/placeholder.jpg"
                   }
-                  alt={blog.title}
-                  className="w-8 h-8 object-cover rounded-lg shadow"
-                  onError={(e) => ((e.target as HTMLImageElement).src = "/placeholder.jpg")}
+                  alt=""
+                  className="w-12 h-12 object-cover rounded-xl shadow"
                 />
               ),
             },
@@ -333,47 +410,177 @@ export default function UploadBlog() {
             {
               key: "short_description",
               header: "SUMMARY",
-              render: (blog: any) => (
-                <div className="max-w-xs text-sm text-gray-600">
-                  {blog.short_description?.slice(0, 80)}...
+              render: (b: any) => (
+                <div className="max-w-md text-sm text-gray-600 line-clamp-2">
+                  {b.short_description}
                 </div>
               ),
             },
             {
               key: "created_at",
               header: "DATE",
-              render: (blog: any) =>
-                new Date(blog.created_at).toLocaleDateString("en-GB"),
+              render: (b: any) =>
+                new Date(b.created_at).toLocaleDateString("en-GB"),
             },
             { key: "actions", header: "ACTIONS" },
           ]}
         />
       </div>
 
-      {/* Delete Modal */}
-      {deleteModal && deletingBlog && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
-            <div className="flex justify-between items-start mb-6">
-              <h3 className="text-2xl font-bold text-gray-800">Delete Blog?</h3>
-              <button onClick={() => setDeleteModal(false)} className="p-2 hover:bg-gray-100 rounded-lg">
-                <FaTimes className="text-gray-500" />
+      {/* VIEW MODAL - NO BACKGROUND SCROLL */}
+      {viewModal && selectedBlog && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 overscroll-contain">
+          <div className="bg-white rounded-3xl shadow-2xl w-full md:w-[70%] max-h-[95vh] overflow-y-auto overscroll-contain scrollbar-thin scrollbar-thumb-[var(--primary-color)] scrollbar-track-gray-100">
+            <div className="sticky top-0 bg-white border-b-2 border-gray-200 p-6 flex justify-between items-center z-10">
+              <h2 className="text-3xl font-bold text-gray-800 pr-10">
+                {selectedBlog.title}
+              </h2>
+              <button
+                onClick={() => {
+                  setViewModal(false);
+                  setEditingComment(null);
+                  setEditText("");
+                }}
+                className="p-3 hover:bg-gray-100 rounded-full transition"
+              >
+                <FaTimes size={24} />
               </button>
             </div>
-            <p className="text-gray-600 mb-8 text-lg">
-              Permanently delete <span className="font-bold text-pink-600">"{deletingBlog.title}"</span>?
-              This action <span className="font-bold text-red-600">cannot</span> be undone.
+
+            <div className="p-8">
+              {selectedBlog.cover_image && (
+                <img
+                  src={`${IMAGE_URL}${selectedBlog.cover_image.replace(
+                    /^public\//,
+                    ""
+                  )}`}
+                  alt={selectedBlog.title}
+                  className="w-full h-96 object-cover rounded-2xl mb-8 shadow-xl"
+                />
+              )}
+              <p className="text-xl text-gray-700 font-medium mb-8 leading-relaxed">
+                {selectedBlog.short_description}
+              </p>
+              <div className="prose prose-lg max-w-none text-gray-800 whitespace-pre-line mb-12">
+                {selectedBlog.body.content}
+              </div>
+
+              <div className="border-t-2 pt-10">
+                <h3 className="text-2xl font-bold mb-8">
+                  Comments ({comments.length})
+                </h3>
+                {commentLoading ? (
+                  <p className="text-center py-10">Loading comments...</p>
+                ) : comments.length === 0 ? (
+                  <p className="text-center py-10 text-gray-500 italic">
+                    No comments yet.
+                  </p>
+                ) : (
+                  <div className="space-y-6">
+                    {comments.map((c) => (
+                      <div
+                        key={c.id}
+                        className="bg-gray-50 rounded-2xl p-6 border border-gray-200"
+                      >
+                        {editingComment?.id === c.id ? (
+                          <div className="space-y-4">
+                            <textarea
+                              value={editText}
+                              onChange={(e) => setEditText(e.target.value)}
+                              className="w-full p-4 border-2 border-[var(--primary-color)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)/30]"
+                              rows={4}
+                            />
+                            <div className="flex gap-3">
+                              <button
+                                onClick={saveCommentEdit}
+                                className="px-6 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition"
+                              >
+                                Save
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setEditingComment(null);
+                                  setEditText("");
+                                }}
+                                className="px-6 py-3 bg-gray-500 text-white rounded-xl font-bold hover:bg-gray-600 transition"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="flex justify-between items-start mb-3">
+                              <h4 className="text-xl font-bold text-gray-900">
+                                {c.name}
+                              </h4>
+                              <div className="flex gap-4 text-sm">
+                                <button
+                                  onClick={() => {
+                                    setEditingComment(c);
+                                    setEditText(c.text);
+                                  }}
+                                  className="text-blue-600 hover:underline font-medium"
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  onClick={() => deleteComment(c.id)}
+                                  className="text-red-600 hover:underline font-medium"
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </div>
+                            <p className="text-gray-700 leading-relaxed mb-3">
+                              {c.text}
+                            </p>
+                            <span className="text-sm text-gray-500">
+                              {new Date(c.created_at).toLocaleString("en-GB", {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                                hour: "numeric",
+                                minute: "2-digit",
+                              })}
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* DELETE MODAL */}
+      {deleteModal && deletingBlog && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 overscroll-contain">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-10">
+            <h3 className="text-3xl font-bold text-gray-800 mb-6">
+              Delete Blog?
+            </h3>
+            <p className="text-lg text-gray-600 mb-10">
+              Permanently delete{" "}
+              <span className="font-bold text-pink-600">
+                "{deletingBlog.title}"
+              </span>
+              ? This action{" "}
+              <span className="font-bold text-red-600">cannot</span> be undone.
             </p>
-            <div className="flex gap-4 justify-end">
+            <div className="flex justify-end gap-4">
               <button
                 onClick={() => setDeleteModal(false)}
-                className="px-8 py-3 border-2 border-gray-300 rounded-xl font-semibold hover:bg-gray-50"
+                className="px-8 py-4 border-2 border-gray-300 rounded-xl font-bold hover:bg-gray-50"
               >
                 Cancel
               </button>
               <button
                 onClick={confirmDelete}
-                className="px-10 py-3 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700"
+                className="px-10 py-4 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700"
               >
                 Yes, Delete
               </button>
@@ -381,6 +588,27 @@ export default function UploadBlog() {
           </div>
         </div>
       )}
+
+      {/* Custom Scrollbar */}
+      <style jsx global>{`
+        .scrollbar-thin {
+          scrollbar-width: thin;
+        }
+        .scrollbar-thin::-webkit-scrollbar {
+          width: 8px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 10px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+          background: var(--primary-color);
+          border-radius: 10px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+          background: #9f5f91;
+        }
+      `}</style>
     </div>
   );
 }

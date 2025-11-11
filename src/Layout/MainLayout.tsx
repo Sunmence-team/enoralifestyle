@@ -1,6 +1,6 @@
-import React  from "react";
+import React from "react";
 import type { ReactNode } from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/navs/Navbar";
 import Footer from "../components/Footer";
 
 interface MainLayoutProps {
@@ -16,9 +16,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
       </div>
 
       {/* Main Content (adds top padding to clear navbar height) */}
-      <main className="flex-1">
-        {children}
-      </main>
+      <main className="flex-1">{children}</main>
 
       {/* Footer */}
       <Footer />

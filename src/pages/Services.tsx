@@ -1,74 +1,57 @@
-import React, { useState } from "react";
+// src/pages/Services.tsx
+import React, { useEffect, useState } from "react";
 import HeroSection from "../components/herosections/Herosection";
 import { assets } from "../assets/assests";
-import { FiShoppingCart, FiArrowRight, FiX } from "react-icons/fi";
+import ServiceCard from "../components/cards/ServiceCard";
+import axios from "axios";
+
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+const IMAGE_URL = import.meta.env.VITE_API_IMAGE_URL;
+
+interface Service {
+  id: number;
+  name: string;
+  description: string;
+  price: string;
+  image: string | null;
+  created_at: string;
+  type: "service" | "package"; // Add type field
+}
 
 const Services = () => {
-  const [selectedService, setSelectedService] = useState<any>(null);
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // --- Array of services ---
-  const services = [
-    {
-      title: "Soaks & Bath",
-      description:
-        "Choose from options like lavender/green tea/oat/goat milk etc. Please check whatsapp link for detailed options.",
-      price: "₦30,000",
-      image: assets.ser1,
-    },
-    {
-      title: "Cupping Massage Therapy",
-      description:
-        "This massage is ideal for pain management, improves blood circulation, relieves tension and promotes healing.",
-      price: "₦35,000",
-      image: assets.ser2,
-    },
-    {
-      title: "Blissful Me",
-      description: "Treatments include Pedicure/Manicure with Swedish Massage.",
-      price: "₦40,000",
-      image: assets.ser3,
-    },
-    {
-      title: "Soaks & Bath",
-      description:
-        "Choose from options like lavender/green tea/oat/goat milk etc. Please check whatsapp link for detailed options.",
-      price: "₦30,000",
-      image: assets.ser1,
-    },
-    {
-      title: "Cupping Massage Therapy",
-      description:
-        "This massage is ideal for pain management, improves blood circulation, relieves tension and promotes healing.",
-      price: "₦35,000",
-      image: assets.ser2,
-    },
-    {
-      title: "Blissful Me",
-      description: "Treatments include Pedicure/Manicure with Swedish Massage.",
-      price: "₦40,000",
-      image: assets.ser3,
-    },
-    {
-      title: "Soaks & Bath",
-      description:
-        "Choose from options like lavender/green tea/oat/goat milk etc. Please check whatsapp link for detailed options.",
-      price: "₦30,000",
-      image: assets.ser1,
-    },
-    {
-      title: "Cupping Massage Therapy",
-      description:
-        "This massage is ideal for pain management, improves blood circulation, relieves tension and promotes healing.",
-      price: "₦35,000",
-      image: assets.ser2,
-    },
-    {
-      title: "Blissful Me",
-      description: "Treatments include Pedicure/Manicure with Swedish Massage.",
-      price: "₦40,000",
-      image: assets.ser3,
-    },
-  ];
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.title = "Services - Enora Lifestyle And Spa";
+  }, []);
+
+  // FETCH ALL SERVICES FROM API
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const res = await axios.get(`${API_URL}services`);
+        const rawData = res.data.data?.data || [];
+
+        // Filter only services and sort by latest
+        const sorted = rawData
+          .filter((item: any) => item.type === "service") // Fixed: item.type
+          .sort((a: Service, b: Service) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          );
+
+        setServices(sorted);
+      } catch (err) {
+        console.error("Failed to load services:", err);
+        setServices([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchServices();
+  }, []);
 
   return (
     <div>
@@ -81,95 +64,34 @@ const Services = () => {
 
       {/* SERVICES GRID */}
       <div className="mt-20 lg:px-10 px-5">
-
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {services.map((item, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-3xl pb-5 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col items-center text-start"
-            >
-              <img
-                src={item.image}
-                alt={item.title}
-                className="w-full h-[300px] object-cover rounded-t-2xl mb-4"
-              />
-              <div className="px-5">
-                <h2 className="text-[22px] font-semibold text-black">
-                  {item.title}
-                </h2>
-                <p className="text-gray-600 mt-2 text-sm">{item.description}</p>
-                <h2 className="mt-3 font-semibold text-black/80 md:text-[24px] text-[21px]">
-                  {item.price}
-                </h2>
-
-                <div className="flex gap-3 mt-10">
-                  {/* Add to Cart Button */}
-                  <button className="flex items-center justify-center gap-2 bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-white font-medium px-6 py-3 rounded-md transition-colors duration-200 shadow-sm">
-                    <FiShoppingCart className="w-5 h-5" />
-                    Add to Cart
-                  </button>
-
-                  {/* View Details Button */}
-                  <button
-                    onClick={() => setSelectedService(item)}
-                    className="flex items-center justify-center gap-1 bg-transparent hover:bg-gray-200 text-[var(--primary-color)] font-medium px-6 py-3 rounded-md transition-colors duration-200 border border-[var(--primary-color)]"
-                  >
-                    View Details
-                    <FiArrowRight className="w-4 h-4 ml-1" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* MODAL */}
-      {selectedService && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-5">
-          <div className="bg-white rounded-3xl max-w-lg w-full relative shadow-2xl overflow-hidden animate-fadeIn">
-            {/* Close Button */}
-            <button
-              onClick={() => setSelectedService(null)}
-              className="absolute top-4 right-4 bg-gray-200 hover:bg-gray-300 text-gray-600 p-2 rounded-full transition-all"
-            >
-              <FiX size={20} />
-            </button>
-
-            {/* Modal Content */}
-            <img
-              src={selectedService.image}
-              alt={selectedService.title}
-              className="w-full h-[300px] object-cover rounded-t-3xl"
-            />
-
-            <div className="p-6">
-              <h2 className="text-[24px] font-semibold text-black mb-2">
-                {selectedService.title}
-              </h2>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                {selectedService.description}
-              </p>
-              <p className="mt-4 text-[20px] font-semibold text-black/80">
-                Price:{" "}
-                <span className="text-[var(--primary-color)]">
-                  {selectedService.price}
-                </span>
-              </p>
-
-              <div className="mt-6 flex justify-end">
-                {/* <button
-                  onClick={() => setSelectedService(null)}
-                  className="bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-white px-6 py-2 rounded-md font-medium transition-all"
-                >
-                  Close
-                </button> */}
-              </div>
-            </div>
+        {loading ? (
+          <div className="text-center py-20 text-gray-500 text-xl">
+            Loading services...
           </div>
-        </div>
-      )}
+        ) : services.length === 0 ? (
+          <div className="text-center py-20 text-gray-500">
+            No services available at the moment.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8">
+            {services.map((item, index) => (
+              <ServiceCard
+                key={item.id}
+                id={item.id.toString()}
+                index={index}
+                title={item.name}
+                price={parseFloat(item.price)}
+                description={item.description}
+                image={
+                  item.image
+                    ? `${IMAGE_URL}${item.image.replace(/^public\//, "")}`
+                    : assets.ser1
+                }
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

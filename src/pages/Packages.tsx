@@ -1,58 +1,76 @@
-import React, { useState } from "react";
-import Packagehero from '../components/Packagehero'
+// src/pages/Packages.tsx
+import React, { useEffect, useState } from "react";
 import { assets } from "../assets/assests";
-import PackageList from '../components/PackageList';
 import HeroSection from "../components/herosections/Herosection";
-import { FiShoppingCart, FiArrowRight, FiX } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
+import PackageCard from "../components/cards/PackageCard";
+import axios from "axios";
+
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+const IMAGE_URL = import.meta.env.VITE_API_IMAGE_URL;
+
+interface Package {
+  id: number;
+  name: string;
+  description: string;
+  price: string;
+  image: string | null;
+  created_at: string;
+  type: "package" | "service";
+}
+
+interface SelectedPackage {
+  title: string;
+  description: string;
+  price: string;
+  image: string;
+}
 
 const Packages = () => {
-  const [selectedPackage, setSelectedPackage] = useState<any>(null);
+  const [packages, setPackages] = useState<Package[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedPackage, setSelectedPackage] = useState<SelectedPackage | null>(null);
 
-  // --- Array of packages ---
-  const packages = [
-    {
-      title: "Manicure & Pedicure",
-      description:
-        "Manicure is for general hand care. Our classic pedicure includes nail painting/leg reflexology. Ideal for encouraging blood circulation.",
-      price: "₦15,000",
-      image: assets.our1,
-    },
-    {
-      title: "Facial & Waxing",
-      description:
-        "Specialized facials for acne, anti-aging, and skin rejuvenation, plus expert waxing services. We also offer personalized skin consultations.",
-      price: "₦12,000",
-      image: assets.our2,
-    },
-    {
-      title: "Body Scrub & Polish",
-      description:
-        "Is your skin dull and dehydrated? Get Enora Brightening Scrub, Polish, Moroccan Hammam Scrub or Enora Glow Bath.",
-      price: "₦18,000",
-      image: assets.our3,
-    },
-    {
-      title: "Manicure & Pedicure",
-      description:
-        "Manicure is for general hand care. Our classic pedicure includes nail painting/leg reflexology. Ideal for encouraging blood circulation.",
-      price: "₦15,000",
-      image: assets.our1,
-    },
-    {
-      title: "Facial & Waxing",
-      description:
-        "Specialized facials for acne, anti-aging, and skin rejuvenation, plus expert waxing services. We also offer personalized skin consultations.",
-      price: "₦12,000",
-      image: assets.our2,
-    },
-    {
-      title: "Body Scrub & Polish",
-      description:
-        "Is your skin dull and dehydrated? Get Enora Brightening Scrub, Polish, Moroccan Hammam Scrub or Enora Glow Bath.",
-      price: "₦18,000",
-      image: assets.our3,
-    },
-  ];
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.title = "Packages - Enora Lifestyle And Spa";
+  }, []);
+
+  // FETCH ALL PACKAGES FROM API
+  useEffect(() => {
+    const fetchPackages = async () => {
+      try {
+        const res = await axios.get(`${API_URL}packages`);
+        const rawData = res.data.data?.data || [];
+
+        // Filter only packages and sort by latest
+        const sorted = rawData
+          .filter((item: any) => item.type === "package")
+          .sort((a: Package, b: Package) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          );
+
+        setPackages(sorted);
+      } catch (err) {
+        console.error("Failed to load packages:", err);
+        setPackages([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPackages();
+  }, []);
+
+  // Open modal with selected package
+  const openModal = (pkg: Package) => {
+    setSelectedPackage({
+      title: pkg.name,
+      description: pkg.description,
+      price: pkg.price,
+      image: pkg.image ? `${IMAGE_URL}${pkg.image.replace(/^public\//, "")}` : assets.our1,
+    });
+  };
 
   return (
     <div>
@@ -65,52 +83,35 @@ const Packages = () => {
 
       {/* PACKAGES GRID */}
       <div className="mt-20 lg:px-10 px-5">
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {packages.map((item, index) => (
-            <div key={index} className="relative flex justify-center">
-              {/* Purple bar slightly showing behind card */}
-              <div
-                className={`absolute ${
-                  index % 2 === 0 ? "-top-2" : "-bottom-2"
-                } w-[100%] h-13 bg-[var(--primary-color)] rounded-full z-0`}
-              ></div>
-
-              {/* Card content */}
-              <div className="bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-5 flex flex-col items-center text-center relative z-10">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-[180px] h-[180px] object-cover rounded-full mb-4"
+        {loading ? (
+          <div className="text-center py-20 text-gray-500 text-xl">
+            Loading packages...
+          </div>
+        ) : packages.length === 0 ? (
+          <div className="text-center py-20 text-gray-500">
+            No packages available at the moment.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8">
+            {packages.map((item, index) => (
+              <div key={item.id} onClick={() => openModal(item)} className="cursor-pointer">
+                <PackageCard
+                  id={item.id.toString()}
+                  index={index}
+                  title={item.name}
+                  description={item.description}
+                  price={parseFloat(item.price)}
+                  image={
+                    item.image
+                      ? `${IMAGE_URL}${item.image.replace(/^public\//, "")}`
+                      : assets.our1
+                  }
+                  showMidLine={false}
                 />
-                <h2 className="text-[22px] font-semibold text-[var(--primary-color)]">
-                  {item.title}
-                </h2>
-                <p className="text-gray-600 mt-2">{item.description}</p>
-                <h2 className="mt-3 font-semibold text-black/80 md:text-[24px] text-[21px]">
-                  {item.price}
-                </h2>
-
-                <div className="flex gap-3 mt-10">
-                  {/* Add to Cart Button */}
-                  <button className="flex items-center justify-center gap-2 bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-white font-medium px-6 py-3 rounded-md transition-colors duration-200 shadow-sm">
-                    <FiShoppingCart className="w-5 h-5" />
-                    Add to Cart
-                  </button>
-
-                  {/* View Details Button */}
-                  <button
-                    onClick={() => setSelectedPackage(item)}
-                    className="flex items-center justify-center gap-1 bg-transparent hover:bg-gray-200 text-[var(--primary-color)] font-medium px-6 py-3 rounded-md transition-colors duration-200 border border-[var(--primary-color)]"
-                  >
-                    View Details
-                    <FiArrowRight className="w-4 h-4 ml-1" />
-                  </button>
-                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* MODAL */}
@@ -142,17 +143,12 @@ const Packages = () => {
               <p className="mt-4 text-[20px] font-semibold text-black/80">
                 Price:{" "}
                 <span className="text-[var(--primary-color)]">
-                  {selectedPackage.price}
+                  ₦{Number(selectedPackage.price).toLocaleString()}
                 </span>
               </p>
 
               <div className="mt-6 flex justify-end">
-                {/* <button
-                  onClick={() => setSelectedPackage(null)}
-                  className="bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-white px-6 py-2 rounded-md font-medium transition-all"
-                >
-                  Close
-                </button> */}
+                {/* Optional: Add "Book Now" button later */}
               </div>
             </div>
           </div>

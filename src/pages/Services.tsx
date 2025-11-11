@@ -3,8 +3,15 @@ import HeroSection from "../components/herosections/Herosection";
 import { assets } from "../assets/assests";
 import { FiShoppingCart, FiArrowRight, FiX } from "react-icons/fi";
 
+interface SelectedService {
+  title: string;
+  description: string;
+  price: string;
+  image: string;
+}
+
 const Services = () => {
-  const [selectedService, setSelectedService] = useState<any>(null);
+  const [selectedService, setSelectedService] = useState<SelectedService | null>(null);
 
   // --- Array of services ---
   const services = [
@@ -105,7 +112,7 @@ const Services = () => {
 
                 <div className="flex gap-3 mt-10">
                   {/* Add to Cart Button */}
-                  <button className="flex items-center justify-center gap-2 bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-white font-medium px-6 py-3 rounded-md transition-colors duration-200 shadow-sm">
+                  <button className="flex items-center justify-center gap-2 bg-(--primary-color) hover:bg-(--primary-color) text-white font-medium px-6 py-3 rounded-md transition-colors duration-200 shadow-sm">
                     <FiShoppingCart className="w-5 h-5" />
                     Add to Cart
                   </button>
@@ -113,7 +120,7 @@ const Services = () => {
                   {/* View Details Button */}
                   <button
                     onClick={() => setSelectedService(item)}
-                    className="flex items-center justify-center gap-1 bg-transparent hover:bg-gray-200 text-[var(--primary-color)] font-medium px-6 py-3 rounded-md transition-colors duration-200 border border-[var(--primary-color)]"
+                    className="flex items-center justify-center gap-1 bg-transparent hover:bg-gray-200 text-(--primary-color) font-medium px-6 py-3 rounded-md transition-colors duration-200 border border-(--primary-color)"
                   >
                     View Details
                     <FiArrowRight className="w-4 h-4 ml-1" />
@@ -153,7 +160,7 @@ const Services = () => {
               </p>
               <p className="mt-4 text-[20px] font-semibold text-black/80">
                 Price:{" "}
-                <span className="text-[var(--primary-color)]">
+                <span className="text-(--primary-color)">
                   {selectedService.price}
                 </span>
               </p>
@@ -161,7 +168,7 @@ const Services = () => {
               <div className="mt-6 flex justify-end">
                 {/* <button
                   onClick={() => setSelectedService(null)}
-                  className="bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-white px-6 py-2 rounded-md font-medium transition-all"
+                  className="bg-(--primary-color) hover:bg-(--primary-color) text-white px-6 py-2 rounded-md font-medium transition-all"
                 >
                   Close
                 </button> */}

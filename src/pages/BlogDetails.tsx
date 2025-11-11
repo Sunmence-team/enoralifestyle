@@ -1,33 +1,21 @@
 // src/pages/BlogDetails.tsx
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
-import { assets } from "../assets/assests";
-import HeroSection from "../components/herosections/Herosection";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { GoArrowLeft } from "react-icons/go";
+import Footer from "../components/Footer";
 
-const blogs = [
-  {
-    id: 1,
-    title: "Anti-Aging Facials: Do They Really Make You Look Younger?",
-    heading:
-      "Discover how anti-aging facials work, what makes them effective, and whether they truly help your skin look younger and more radiant over time.",
-    image: assets.blog1,
-    content: `Aging is a natural and beautiful process, but it’s okay to want your skin to stay youthful, firm, and glowing... lasting radiance.`,
-  },
-  {
-    id: 2,
-    title: "Why Your Skin Isn't Glowing, 5 Mistakes to Avoid",
-    heading: "Learn how to fix dull skin and regain your natural glow.",
-    image: assets.blog1,
-    content: `Many people make small skincare mistakes that steal their glow... lasting radiance.`,
-  },
-  {
-    id: 3,
-    title: "Why Self-Care Is Not a Luxury but a Necessity",
-    heading: "Self-care isn’t selfish — it’s essential for your wellbeing.",
-    image: assets.blog1,
-    content: `Taking care of yourself helps you give your best to others... lasting radiance.`,
-  },
-];
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+const IMAGE_URL = import.meta.env.VITE_API_IMAGE_URL;
+
+interface Blog {
+  id: number;
+  title: string;
+  content: string;
+  short_description: string;
+  cover_image: string | null;
+  created_at: string;
+}
 
 interface Comment {
   id: number;
@@ -36,34 +24,29 @@ interface Comment {
   created_at: string;
 }
 
-const BlogDetails: React.FC = () => {
+export default function BlogDetails() {
   const { id } = useParams<{ id: string }>();
-  const blog = blogs.find((b) => b.id.toString() === id);
+  const navigate = useNavigate();
 
-  const [comments, setComments] = useState<Comment[]>([]);
+  const [blog, setBlog] = useState<Blog | null>(null);
   const [loading, setLoading] = useState(true);
-  const [loadingComments, setLoadingComments] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [comments, setComments] = useState<Comment[]>([]);
   const [name, setName] = useState("");
   const [comment, setComment] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [loadingComments, setLoadingComments] = useState(true);
 
+  // Fetch blog
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = `${blog?.title} - Enora Lifestyle And Spa`;
-  }, []);
-
-  // FETCH BLOG
-  useEffect(() => {
     const fetchBlog = async () => {
-      if (!id) return setError("Invalid blog ID");
-
       try {
         const res = await axios.get(`${API_URL}/blogs/${id}`);
         setBlog(res.data?.data || res.data);
       } catch (err) {
-        setError("Blog not found.");
+        setError("Failed to load blog details. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -71,40 +54,38 @@ const BlogDetails: React.FC = () => {
     fetchBlog();
   }, [id]);
 
-  // FETCH COMMENTS
-  const fetchComments = async () => {
-    if (!id) return;
-    setLoadingComments(true);
-    try {
-      const res = await axios.get(`${API_URL}blogs/${id}/comments?per_page=20`);
-      const data = res.data?.data || [];
-      setComments(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error("Failed to load comments");
-    } finally {
-      setLoadingComments(false);
-    }
-  };
-
+  // Fetch comments
   useEffect(() => {
-    if (blog) fetchComments();
-  }, [blog]);
+    const fetchComments = async () => {
+      if (!id) return;
+      setLoadingComments(true);
+      try {
+        const res = await axios.get(`${API_URL}/blogs/${id}/comments`);
+        const data = res.data?.data || [];
+        setComments(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error("Failed to load comments");
+      } finally {
+        setLoadingComments(false);
+      }
+    };
+    fetchComments();
+  }, [id]);
 
-  // POST COMMENT
+  // Post new comment
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !comment.trim() || !id) return;
 
     setSubmitting(true);
     try {
-      await axios.post(`${API_URL}blogs/${id}/comments`, {
+      const res = await axios.post(`${API_URL}/blogs/${id}/comments`, {
         name: name.trim(),
         text: comment.trim(),
       });
-
+      setComments((prev) => [res.data.data, ...prev]);
       setName("");
       setComment("");
-      fetchComments();
     } catch (err: any) {
       alert(err.response?.data?.message || "Failed to post comment");
     } finally {
@@ -123,54 +104,73 @@ const BlogDetails: React.FC = () => {
   if (error || !blog) {
     return (
       <div className="text-center py-32 bg-white">
-        <p className="text-2xl text-red-600 mb-6">Blog not found</p>
-        <Link to="/blog" className="px-8 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:opacity-90">
+        <p className="text-2xl text-red-600 mb-6">{error || "Blog not found"}</p>
+        <button
+          onClick={() => navigate("/blog")}
+          className="px-8 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:opacity-90 transition"
+        >
           Back to Blogs
-        </Link>
+        </button>
       </div>
     );
   }
 
-  // Filter other blogs for "More Blog Posts"
-  const otherBlogs = blogs.filter((b) => b.id !== blog.id);
-
   return (
-    <div>
-      {/* Hero Section */}
-      <HeroSection
-        title={blog.title}
-        backgroundImage={assets.dets}
-        height="lg:h-[65vh] h-[35vh]"
-      />
+    <div className="min-h-screen bg-white flex flex-col justify-between">
+      {/* Back Button */}
+      <div className="flex items-center gap-3 px-5 lg:px-10 pt-8">
+        <button
+          onClick={() => navigate("/blog")}
+          className="flex items-center gap-1 text-[var(--primary-color)] hover:text-black transition"
+        >
+          <GoArrowLeft size={30} />
+          <span className="font-medium text-lg"></span>
+        </button>
+      </div>
+
+      {/* Blog Title */}
+      <div className="px-5 lg:px-10 mt-6">
+        <h1 className="text-2xl lg:text-3xl font-semibold text-gray-900 leading-snug">
+          {blog.title}
+        </h1>
+      </div>
+
+      {/* Blog Image */}
+      {blog.cover_image && (
+        <div className="px-5 lg:px-10 mt-6">
+          <img
+            src={`${IMAGE_URL}${blog.cover_image.replace(/^public\//, "")}`}
+            alt={blog.title}
+            className="w-full max-h-[450px] object-cover rounded-2xl shadow-md"
+          />
+        </div>
+      )}
 
       {/* Blog Content */}
-      <div className="px-5 lg:px-20 py-10">
-        {blog.heading && (
-          <h1 className="text-2xl lg:text-3xl font-semibold mb-6 text-gray-800">
-            {blog.heading}
-          </h1>
-        )}
-        <p className="text-gray-700 text-lg leading-relaxed whitespace-pre-line">
-          {blog.content}
+      <div className="px-5 lg:px-10 py-10">
+        <p className="text-gray-700 text-[16px] leading-relaxed whitespace-pre-line">
+          {blog.content || blog.short_description}
         </p>
       </div>
 
       {/* Comment Section */}
-      <div className="px-5 lg:px-15 py-12">
+      <div className="px-5 lg:px-10 py-12">
         <div className="max-w-6xl mx-auto grid lg:grid-cols-2 lg:gap-20 gap-10">
           {/* Comments List */}
           <div className="bg-[#C97BB7] rounded-2xl p-6 shadow-md">
-            <h3 className="text-xl font-semibold text-black mb-4">
-              Comments
-            </h3>
-            {comments.length === 0 ? (
+            <p className="text-xl font-semibold text-black mb-4">Comments</p>
+            {loadingComments ? (
+              <p className="text-white italic">Loading comments...</p>
+            ) : comments.length === 0 ? (
               <p className="text-white italic">No comments yet. Be the first!</p>
             ) : (
               <div
-                className="space-y-5 h-74 md:h-86 overflow-y-auto pr-3"
-                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                className="space-y-4 max-h-[280px] overflow-y-auto pr-2"
+                style={{
+                  scrollbarWidth: "none",
+                  msOverflowStyle: "none",
+                }}
               >
-                {/* Hide scrollbar for Chrome, Safari, Edge */}
                 <style>
                   {`
                     div::-webkit-scrollbar {
@@ -178,20 +178,16 @@ const BlogDetails: React.FC = () => {
                     }
                   `}
                 </style>
-
                 {comments.map((c) => (
                   <div
                     key={c.id}
-                    className="bg-white rounded-2xl p-6 shadow-md border border-gray-100 relative"
+                    className="bg-white rounded-lg p-4 shadow-sm border border-gray-200"
                   >
-                    <div className="">
-                      <h4 className="font-medium text-gray-900">{c.name}</h4>
-                     
-                    </div>
+                    <h4 className="font-medium text-gray-900">{c.name}</h4>
                     <div className="flex justify-between items-start mt-2">
                       <p className="text-gray-700 text-sm leading-snug">{c.text}</p>
-                     <span className="text-xs text-gray-500">
-                        {c.timestamp}
+                      <span className="text-xs text-gray-500">
+                        {new Date(c.created_at).toLocaleString()}
                       </span>
                     </div>
                   </div>
@@ -201,50 +197,39 @@ const BlogDetails: React.FC = () => {
           </div>
 
           {/* Comment Form */}
-          <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">
-              Drop your comment
-            </h3>
+          <div className="p-6">
+            <p className="text-xl font-medium text-gray-800 mb-5">Drop your comment</p>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"
                 placeholder="Full name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] transition"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]/20 transition"
                 required
-                className="w-full px-5 py-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] transition text-base"
               />
               <textarea
                 placeholder="Drop your Enquires here"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 rows={4}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] transition resize-none"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]/20 transition resize-none"
                 required
-                className="w-full px-5 py-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] transition resize-none text-base"
               />
               <button
                 type="submit"
+                className="w-full bg-[var(--primary-color)] text-white font-medium py-3 rounded-lg hover:bg-opacity-90 transition"
                 disabled={submitting}
-                className="w-full bg-[var(--primary-color)] text-white font-bold py-4 rounded-xl hover:opacity-90 transition shadow-lg disabled:opacity-60"
               >
                 {submitting ? "Posting..." : "Submit Comment"}
               </button>
             </form>
           </div>
-          <div className="mt-8">
-              <Link
-                to="/blog"
-                className=" text-center border-[var(--primary-color)] text-[var(--primary-color)] font-semibold p-3 rounded-lg border border-[var(--primary-color)] hover:bg-[var(--primary-color)] hover:text-white transition-colors"
-              >
-                Back to Blog
-              </Link>
-            </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
-};
-
-export default BlogDetails;
+}

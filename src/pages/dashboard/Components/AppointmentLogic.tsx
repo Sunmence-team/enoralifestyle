@@ -41,6 +41,12 @@ export default function Appointments() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
 
+  // Stats (for cards)
+  const [totalAppointment, setTotalAppointment] = useState("0");
+  const [pending, setPending] = useState("0");
+  const [completed, setCompleted] = useState("0");
+  const [Cancelled, setCancelled] = useState("0");
+
   // Data
   const [stats, setStats] = useState<BookingStats | null>(null);
   const [statsLoading, setStatsLoading] = useState(true);
@@ -77,7 +83,14 @@ export default function Appointments() {
       const { data } = await axios.get(`${API_URL}bookings/stats`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setStats(data.data);
+      const statsData = data.data;
+      setStats(statsData);
+
+      // Update card values
+      setTotalAppointment(String(statsData.total_bookings));
+      setPending(String(statsData.bookings_by_status.pending));
+      setCompleted(String(statsData.bookings_by_status.confirmed));
+      setCancelled(String(statsData.bookings_by_status.attended));
     } catch (err: any) {
       toast.error(err.response?.data?.message || "Failed to load stats");
       if (err.response?.status === 401) {
@@ -247,25 +260,26 @@ export default function Appointments() {
         </div>
       </div>
 
+      {/* Stats Cards - YOUR DESIGN */}
       <div className='grid grid-cols-1 md:grid-cols-4 gap-4 mt-3'>
         <div className='bg-[var(--primary-color)] text-white p-6 rounded-xl flex flex-col items-start justify-center h-26'>
           <span className='text-sm'>Total Appointment</span>
-          <p className='text-2xl font-[Raleway]! font-bold!'>{totalAppointment}</p>
+          <p className='text-2xl font-[Raleway]! font-bold!'>{statsLoading ? "..." : totalAppointment}</p>
         </div>
 
         <div className='bg-[#ffff] p-6 rounded-xl flex flex-col items-start justify-center h-26'>
           <span className='text-sm text-gray-500'>Pending</span>
-          <p className='text-2xl font-[Raleway]! font-bold! text-[#00382B]'>{pending}</p>
+          <p className='text-2xl font-[Raleway]! font-bold! text-[#00382B]'>{statsLoading ? "..." : pending}</p>
         </div>
 
         <div className='bg-[var(--color-green)] p-6 rounded-xl flex flex-col items-start justify-center h-26'>
           <span className='text-sm text-black'>Completed</span>
-          <p className='text-2xl font-[Raleway]! font-bold! text-black'>{completed}</p>
+          <p className='text-2xl font-[Raleway]! font-bold! text-black'>{statsLoading ? "..." : completed}</p>
         </div>
 
         <div className='bg-[var(--cancelled-color)] p-6 rounded-xl flex flex-col items-start justify-center h-26'>
           <span className='text-sm text-black'>Cancelled</span>
-          <p className='text-2xl font-[Raleway]! font-bold! text-black'>{Cancelled}</p>
+          <p className='text-2xl font-[Raleway]! font-bold! text-black'>{statsLoading ? "..." : Cancelled}</p>
         </div>
       </div>
 
@@ -278,7 +292,7 @@ export default function Appointments() {
           total={total}
           currentPage={currentPage}
           perPage={perPage}
-          onPageChange={fetchBookings} // <-- Backend handles page change
+          onPageChange={fetchBookings}
           onView={handleView}
           onEdit={handleEdit}
           onDelete={(b) => setDeleteId(b.id)}

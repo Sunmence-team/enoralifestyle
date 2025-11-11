@@ -5,9 +5,10 @@ import HeroSection from "../components/herosections/Herosection";
 import { FiX } from "react-icons/fi";
 import PackageCard from "../components/cards/PackageCard";
 import axios from "axios";
+import PackageCardSkeleton from "../components/skeletons/PackageCardSkeleton";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-const IMAGE_URL = (import.meta.env.VITE_IMAGE_BASE_URL || "").replace(/\/?$/, "/");
+const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
 
 interface Package {
   id: number;
@@ -29,6 +30,8 @@ interface SelectedPackage {
 const Packages = () => {
   const [packages, setPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage, setlastPage] = useState(1);
   const [selectedPackage, setSelectedPackage] = useState<SelectedPackage | null>(null);
 
   useEffect(() => {
@@ -40,17 +43,24 @@ const Packages = () => {
   useEffect(() => {
     const fetchPackages = async () => {
       try {
-        const res = await axios.get(`${API_URL}/packages`);
-        const rawData = res.data.data?.data || [];
+        const response = await axios.get(`${API_URL}/packages`);
+        console.log("response", response);
+
+        if (response.status === 200) {
+          const { data, current_page, last_page } = response.data.data;
+          setPackages(data);
+          setCurrentPage(current_page);
+          setlastPage(last_page);
+        }
 
         // Filter only packages and sort by latest
-        const sorted = rawData
-          .filter((item: any) => item.type === "package")
-          .sort((a: Package, b: Package) =>
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-          );
+        // const sorted = rawData
+        //   .filter((item: any) => item.type === "package")
+        //   .sort((a: Package, b: Package) =>
+        //     new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        //   );
 
-        setPackages(sorted);
+        // setPackages(sorted);
       } catch (err) {
         console.error("Failed to load packages:", err);
         setPackages([]);
@@ -84,8 +94,12 @@ const Packages = () => {
       {/* PACKAGES GRID */}
       <div className="mt-20 lg:px-10 px-5">
         {loading ? (
-          <div className="text-center py-20 text-gray-500 text-xl">
-            Loading packages...
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8">
+            {Array(9).fill(0).map((_, index) => (
+              <div className="w-full" key={index}>
+                <PackageCardSkeleton />
+              </div>
+            ))}
           </div>
         ) : packages.length === 0 ? (
           <div className="text-center py-20 text-gray-500">
@@ -94,18 +108,14 @@ const Packages = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8">
             {packages.map((item, index) => (
-              <div key={item.id} onClick={() => openModal(item)} className="cursor-pointer">
+              <div key={item?.id} onClick={() => openModal(item)} className="cursor-pointer">
                 <PackageCard
-                  id={item.id.toString()}
+                  id={item?.id.toString()}
                   index={index}
-                  title={item.name}
-                  description={item.description}
-                  price={parseFloat(item.price)}
-                  image={
-                    item.image
-                      ? `${IMAGE_URL}${item.image.replace(/^public\//, "")}`
-                      : assets.our1
-                  }
+                  title={item?.name}
+                  description={item?.description}
+                  price={parseFloat(item?.price)}
+                  image={`${IMAGE_URL}/${item?.image}`}
                   showMidLine={false}
                 />
               </div>

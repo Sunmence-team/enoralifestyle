@@ -36,6 +36,11 @@ const BlogDetails: React.FC = () => {
   const [name, setName] = useState("");
   const [comment, setComment] = useState("");
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.title = `${blog?.title} - Enora Lifestyle And Spa`;
+  }, []);
+
   // FETCH BLOG
   useEffect(() => {
     const fetchBlog = async () => {

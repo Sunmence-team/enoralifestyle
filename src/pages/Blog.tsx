@@ -4,9 +4,10 @@ import { assets } from "../assets/assests";
 import HeroSection from "../components/herosections/Herosection";
 import BlogCard from "../components/cards/BlogCard";
 import axios from "axios";
+import BlogCardSkeleton from "../components/skeletons/BlogCardSkeleton";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-const IMAGE_URL = import.meta.env.VITE_API_IMAGE_URL;
+const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
 
 interface Blog {
   id: number;
@@ -28,12 +29,11 @@ export default function Blog() {
     window.scrollTo(0, 0);
   }, []);
 
-  // Fetch all blogs – Public API
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
         const response = await axios.get(`${API_URL}/blogs`);
-        console.log("response", response)
+        // console.log("response", response)
         if (response.status === 200) {
           const { data, current_page, last_page } = response.data.data;
           setBlogs(data);
@@ -44,7 +44,9 @@ export default function Blog() {
         console.error("Failed to fetch blogs:", err);
         setError("Failed to load blogs. Please try again later.");
       } finally {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 2000);
       }
     };
 
@@ -61,7 +63,7 @@ export default function Blog() {
       />
 
       {/* MAIN CONTENT */}
-      <section className="bg-white py-16 lg:py-24 px-4 sm:px-6 lg:px-8">
+      <section className="bg-white py-16 lg:pt-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Title */}
           <h1 className="text-center font-semibold! text-3xl sm:text-4xl md:text-5xl lg:text-[48px] text-gray-900 mb-4">
@@ -73,8 +75,12 @@ export default function Blog() {
 
           {/* Loading State */}
           {loading && (
-            <div className="flex justify-center items-center py-32">
-              <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-pink-500 border-t-transparent"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8">
+              {
+                Array(18).fill(0).map((_, index) => (
+                  <BlogCardSkeleton key={index} />
+                ))
+              }
             </div>
           )}
 
@@ -106,27 +112,15 @@ export default function Blog() {
 
           {/* Blog Grid – Ultra Responsive */}
           {!loading && !error && blogs.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 xl:gap-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8">
               {blogs.map((blog) => (
-                <div
+                <BlogCard
                   key={blog.id}
-                  className="flex justify-center"
-                >
-                  <div className="w-full max-w-sm">
-                    <BlogCard
-                      id={String(blog.id)}
-                      title={blog.title}
-                      description={
-                        blog.short_description || "Discover amazing skincare insights and tips."
-                      }
-                      image={
-                        blog.cover_image
-                          ? `${IMAGE_URL}${blog.cover_image.replace(/^public\//, "")}`
-                          : assets.blog1
-                      }
-                    />
-                  </div>
-                </div>
+                  id={String(blog.id)}
+                  title={blog.title}
+                  description={blog.short_description}
+                  image={`${IMAGE_URL}/${blog?.cover_image}`}
+                />
               ))}
             </div>
           )}

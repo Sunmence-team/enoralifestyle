@@ -247,23 +247,25 @@ export default function Appointments() {
         </div>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-3">
-        <div className="bg-[var(--primary-color)] text-white p-3 rounded-xl flex flex-col">
-          <span className="text-sm">Total Appointments</span>
-          <p className="text-2xl font-bold">{statsLoading ? "..." : stats?.total_bookings || 0}</p>
+      <div className='grid grid-cols-1 md:grid-cols-4 gap-4 mt-3'>
+        <div className='bg-[var(--primary-color)] text-white p-6 rounded-xl flex flex-col items-start justify-center h-26'>
+          <span className='text-sm'>Total Appointment</span>
+          <p className='text-2xl font-[Raleway]! font-bold!'>{totalAppointment}</p>
         </div>
-        <div className="bg-white p-3 rounded-xl flex flex-col border">
-          <span className="text-sm text-gray-500">Pending</span>
-          <p className="text-2xl font-bold text-[#00382B]">{statsLoading ? "..." : stats?.bookings_by_status.pending || 0}</p>
+
+        <div className='bg-[#ffff] p-6 rounded-xl flex flex-col items-start justify-center h-26'>
+          <span className='text-sm text-gray-500'>Pending</span>
+          <p className='text-2xl font-[Raleway]! font-bold! text-[#00382B]'>{pending}</p>
         </div>
-        <div className="bg-[var(--color-green)] p-3 rounded-xl flex flex-col">
-          <span className="text-sm text-black">Confirmed</span>
-          <p className="text-2xl font-bold text-black">{statsLoading ? "..." : stats?.bookings_by_status.confirmed || 0}</p>
+
+        <div className='bg-[var(--color-green)] p-6 rounded-xl flex flex-col items-start justify-center h-26'>
+          <span className='text-sm text-black'>Completed</span>
+          <p className='text-2xl font-[Raleway]! font-bold! text-black'>{completed}</p>
         </div>
-        <div className="bg-[var(--cancelled-color)] p-3 rounded-xl flex flex-col">
-          <span className="text-sm text-black">Attended</span>
-          <p className="text-2xl font-bold text-black">{statsLoading ? "..." : stats?.bookings_by_status.attended || 0}</p>
+
+        <div className='bg-[var(--cancelled-color)] p-6 rounded-xl flex flex-col items-start justify-center h-26'>
+          <span className='text-sm text-black'>Cancelled</span>
+          <p className='text-2xl font-[Raleway]! font-bold! text-black'>{Cancelled}</p>
         </div>
       </div>
 

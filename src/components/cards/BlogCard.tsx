@@ -40,9 +40,9 @@ const BlogCard = ({ id, title, description, image }: BlogCardProps) => {
             }}
           />
         </div>
-
-        {/* Read more link */}
-        <div className="text-[var(--primary-color)] font-semibold hover:text-black transition-colors text-center mt-4 pb-6 absolute z-99 bottom-0 left-1/2 -translate-x-1/2 flex items-center">
+        <div
+          className="text-(--primary-color) font-semibold hover:text-black transition-colors text-center mt-4 pb-6 absolute z-9 bottom-0 left-1/2 -translate-x-1/2 flex items-center"
+        >
           <span>Read more</span>
           <span className="flex mt-1">
             <GoChevronRight className="-me-1.5" />
@@ -50,6 +50,7 @@ const BlogCard = ({ id, title, description, image }: BlogCardProps) => {
             <GoChevronRight className="-me-1.5" />
           </span>
         </div>
+
       </div>
     </Link>
   );

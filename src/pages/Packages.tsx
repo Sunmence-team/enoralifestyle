@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { assets } from "../assets/assests";
 import HeroSection from "../components/herosections/Herosection";
-import { FiShoppingCart, FiArrowRight, FiX } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
+import PackageCard from "../components/cards/PackageCard";
 
 interface SelectedPackage {
   title: string;
@@ -13,48 +14,59 @@ interface SelectedPackage {
 const Packages = () => {
   const [selectedPackage, setSelectedPackage] = useState<SelectedPackage | null>(null);
 
+  useEffect(() => {
+    window.scroll(0, 0)
+    document.title = "Packages - Enora Lifestyle And Spa";
+  }, [])
+
   // --- Array of packages ---
   const packages = [
     {
+      id: "1",
       title: "Manicure & Pedicure",
       description:
         "Manicure is for general hand care. Our classic pedicure includes nail painting/leg reflexology. Ideal for encouraging blood circulation.",
-      price: "₦15,000",
+      price: 15_000,
       image: assets.our1,
     },
     {
+      id: "2",
       title: "Facial & Waxing",
       description:
         "Specialized facials for acne, anti-aging, and skin rejuvenation, plus expert waxing services. We also offer personalized skin consultations.",
-      price: "₦12,000",
+      price: 12_000,
       image: assets.our2,
     },
     {
+      id: "3",
       title: "Body Scrub & Polish",
       description:
         "Is your skin dull and dehydrated? Get Enora Brightening Scrub, Polish, Moroccan Hammam Scrub or Enora Glow Bath.",
-      price: "₦18,000",
+      price: 18_000,
       image: assets.our3,
     },
     {
+      id: "4",
       title: "Manicure & Pedicure",
       description:
         "Manicure is for general hand care. Our classic pedicure includes nail painting/leg reflexology. Ideal for encouraging blood circulation.",
-      price: "₦15,000",
+      price: 15_000,
       image: assets.our1,
     },
     {
+      id: "5",
       title: "Facial & Waxing",
       description:
         "Specialized facials for acne, anti-aging, and skin rejuvenation, plus expert waxing services. We also offer personalized skin consultations.",
-      price: "₦12,000",
+      price: 12_000,
       image: assets.our2,
     },
     {
+      id: "6",
       title: "Body Scrub & Polish",
       description:
         "Is your skin dull and dehydrated? Get Enora Brightening Scrub, Polish, Moroccan Hammam Scrub or Enora Glow Bath.",
-      price: "₦18,000",
+      price: 18_000,
       image: assets.our3,
     },
   ];
@@ -71,49 +83,17 @@ const Packages = () => {
       {/* PACKAGES GRID */}
       <div className="mt-20 lg:px-10 px-5">
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8">
           {packages.map((item, index) => (
-            <div key={index} className="relative flex justify-center">
-              {/* Purple bar slightly showing behind card */}
-              <div
-                className={`absolute ${
-                  index % 2 === 0 ? "-top-2" : "-bottom-2"
-                } w-[100%] h-13 bg-[var(--primary-color)] rounded-full z-0`}
-              ></div>
-
-              {/* Card content */}
-              <div className="bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 p-5 flex flex-col items-center text-center relative z-10">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-[180px] h-[180px] object-cover rounded-full mb-4"
-                />
-                <h2 className="text-[22px] font-semibold text-[var(--primary-color)]">
-                  {item.title}
-                </h2>
-                <p className="text-gray-600 mt-2">{item.description}</p>
-                <p className="mt-3 font-bold text-black/80 md:text-[24px] text-[20px]">
-                  {item.price}
-                </p>
-
-                <div className="flex gap-3 mt-10">
-                  {/* Add to Cart Button */}
-                  <button className="flex items-center justify-center gap-2 bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-white font-medium px-6 py-3 rounded-md transition-colors duration-200 shadow-sm">
-                    <FiShoppingCart className="w-5 h-5" />
-                    Add to Cart
-                  </button>
-
-                  {/* View Details Button */}
-                  <button
-                    onClick={() => setSelectedPackage(item)}
-                    className="flex items-center justify-center gap-1 bg-transparent hover:bg-gray-200 text-[var(--primary-color)] font-medium px-6 py-3 rounded-md transition-colors duration-200 border border-[var(--primary-color)]"
-                  >
-                    View Details
-                    <FiArrowRight className="w-4 h-4 ml-1" />
-                  </button>
-                </div>
-              </div>
-            </div>
+            <PackageCard 
+              id={item.id}
+              index={index}
+              title={item.title}
+              description={item.description}
+              price={item.price}
+              image={item.image}
+              showMidLine={false}
+            />
           ))}
         </div>
       </div>

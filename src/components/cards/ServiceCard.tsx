@@ -4,12 +4,12 @@ import { formatterUtility } from '../../utilities/formatterutility';
 import { useCartStore } from '../../store/cartStore';
 
 interface ServiceCardProps {
-  id: string;
-  index: number;
-  title: string;
-  description: string;
-  image: string;
-  price: number;
+    id: string;
+    index: number;
+    title: string;
+    description: string;
+    image: string;
+    price: number;
 }
 
 const ServiceCard = (item: ServiceCardProps) => {
@@ -25,7 +25,7 @@ const ServiceCard = (item: ServiceCardProps) => {
             image: item.image,
         });
     };
-    
+
     return (
         <div
             className="bg-white rounded-3xl pb-5 shadow-sm hover:shadow-md transition-all duration-300  flex flex-col items-center text-start"
@@ -36,7 +36,7 @@ const ServiceCard = (item: ServiceCardProps) => {
                 className="w-full h-[250px] object-cover rounded-t-2xl mb-4"
             />
             <div className="px-5 flex flex-col justify-between h-full">
-               <div className="">
+                <div className="">
                     <h2 className="text-[22px] font-semibold! text-(--accent-color) line-clamp-1">
                         {item.title}
                     </h2>
@@ -44,24 +44,24 @@ const ServiceCard = (item: ServiceCardProps) => {
                     <p className="mt-3 font-bold text-black/80 md:text-[24px] text-[20px]">
                         Price: {formatterUtility(Number(item.price))}
                     </p>
-               </div>
+                </div>
 
-                <div className="flex gap-3 mt-8">
+                <div className="flex gap-3 mt-10">
                     {/* Add to Cart Button */}
-                    <button 
+                    <button
                         onClick={handleAddToCart}
-                        className="w-1/2 cursor-pointer flex items-center justify-center gap-2 bg-(--primary-color) hover:bg-(--primary-color) text-white font-medium px-3 py-3 rounded-sm transition-colors duration-200 shadow-sm"
+                        className="cursor-pointer flex items-center justify-center gap-2 bg-(--primary-color) hover:bg-(--primary-color) text-white font-medium px-3 py-3 rounded-sm transition-colors duration-200 shadow-sm"
                     >
-                    <FiShoppingCart className="w-5 h-5" />
-                    Add to Cart
+                        <FiShoppingCart className="w-5 h-5" />
+                        Add to Cart
                     </button>
 
                     {/* View Details Button */}
-                    <button 
-                        className="w-1/2 cursor-pointer flex items-center justify-center gap-1 bg-transparent text-(--primary-color) font-medium px-3 py-3 transition-colors duration-200 border border-(--primary-color)"
+                    <button
+                        className="cursor-pointer flex items-center justify-center gap-1 bg-transparent text-(--primary-color) font-medium px-3 py-3 transition-colors duration-200 border border-(--primary-color)"
                     >
-                    View Details
-                    <FiArrowRight className="w-4 h-4 ml-1" />
+                        View Details
+                        <FiArrowRight className="w-4 h-4 ml-1" />
                     </button>
                 </div>
             </div>

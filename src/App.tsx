@@ -13,7 +13,6 @@ import Appointments from "./pages/dashboard/Appointments";
 import BlogUpload from "./pages/dashboard/BlogUpload";
 import Package from "./pages/dashboard/Package";
 import BlogDetails from "./pages/BlogDetails";
-import BookAppointment from "./pages/BookAppointment";
 import  Login  from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Packages from "./pages/Packages";

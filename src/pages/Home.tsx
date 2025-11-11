@@ -1,111 +1,112 @@
-import React, { useEffect } from "react";
+// src/pages/Home.tsx
+import React, { useEffect, useState } from "react";
 import { assets } from "../assets/assests";
 import { Link } from "react-router-dom";
 import { BiSolidQuoteSingleLeft } from "react-icons/bi";
 import HeroSection from "../components/herosections/Herosection";
 import { IoIosArrowRoundForward } from "react-icons/io";
-import BlogCard from "../components/cards/BlogCard"
+import BlogCard from "../components/cards/BlogCard";
 import PackageCard from "../components/cards/PackageCard";
 import ServiceCard from "../components/cards/ServiceCard";
+import axios from "axios";
+
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+const IMAGE_URL = import.meta.env.VITE_API_IMAGE_URL;
+
+interface ApiItem {
+  id: number;
+  name: string;
+  description: string;
+  type: "package" | "service";
+  image: string | null;
+  price: string;
+  created_at: string;
+}
 
 const Home = () => {
   useEffect(() => {
-    window.scroll(0, 0)
+    window.scrollTo(0, 0);
     document.title = "Home - Enora Lifestyle And Spa";
-  }, [])
+  }, []);
 
-  // --- Array of packages ---
-  const packages = [
-    {
-      id: "1",
-      title: "Manicure & Pedicure",
-      description:
-        "Manicure is for general hand care. Our classic pedicure includes nail painting/leg reflexology. Ideal for encouraging blood circulation.",
-      price: 15_000,
-      image: assets.our1,
-    },
-    {
-      id: "2",
-      title: "Facial & Waxing",
-      description:
-        "Specialized facials for acne, anti-aging, and skin rejuvenation, plus expert waxing services. We also offer personalized skin consultations.",
-      price: 12_000,
-      image: assets.our2,
-    },
-    {
-      id: "3",
-      title: "Body Scrub & Polish",
-      description:
-        "Is your skin dull and dehydrated? Get Enora Brightening Scrub, Polish, Moroccan Hammam Scrub or Enora Glow Bath.",
-      price: 18_000,
-      image: assets.our3,
-    },
-  ];
+  const [allItems, setAllItems] = useState<ApiItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // --- Array of services (NEW) ---
-  const services = [
-    {
-      id: "1",
-      title: "Soaks & Bath",
-      description:
-        "Choose from options like lavender/green tea/oat/goat milk etc. Please check whatsapp link for detailed options.",
-      price: 30_000,
-      image: assets.ser1,
-    },
-    {
-      id: "2",
-      title: "Cupping Massage Therapy",
-      description:
-        "This massage is ideal for pain management, improves blood circulation, relieves tension and promotes healing.",
-      price: 35_000,
-      image: assets.ser2,
-    },
-    {
-      id: "3",
-      title: "Blissful Me",
-      description: "Treatments include Pedicure/Manicure with Swedish Massage.",
-      price: 40_000,
-      image: assets.ser3,
-    },
-  ];
+  // FETCH FROM /services (which returns both packages & services)
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`${API_URL}services`);
+        const rawData = res.data.data?.data || [];
 
-  // --- Array of blogs (NEW) ---
+        console.log("RAW API DATA FROM /services:", rawData);
+
+        // Sort by latest first
+        const sorted = rawData.sort((a: ApiItem, b: ApiItem) => 
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+
+        setAllItems(sorted);
+
+        // FILTER & LOG
+        const packages = sorted.filter((i: ApiItem) => i.type === "package").slice(0, 3);
+        const services = sorted.filter((i: ApiItem) => i.type === "service").slice(0, 3);
+
+        console.log("PACKAGES (latest 3):", packages);
+        console.log("SERVICES (latest 3):", services);
+      } catch (err) {
+        console.error("API FAILED:", err);
+        setAllItems([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Filter latest 3 packages
+  const packages = allItems
+    .filter(item => item.type === "package")
+    .slice(0, 3);
+
+  // Filter latest 3 services
+  const services = allItems
+    .filter(item => item.type === "service")
+    .slice(0, 3);
+
+  // Hardcoded blogs (as before)
   const blogs = [
     {
       id: "1",
       title: "Anti-Aging Facials: Do They Really Make You Look Younger?",
-      description:
-        "You need your face to be amazing and lovely and you need to read this blog to get better abeg",
-      image: assets.blog1,
+      short_description: "You need your face to be amazing and lovely and you need to read this blog to get better abeg",
+      cover_image: null,
     },
     {
       id: "2",
       title: "Why Your Skin Isn’t Glowing, 5 Mistakes to Avoid",
-      description:
-        "You need your face to be amazing and lovely and you need to read this blog to get better abeg",
-      image: assets.blog2,
+      short_description: "You need your face to be amazing and lovely and you need to read this blog to get better abeg",
+      cover_image: null,
     },
     {
       id: "3",
       title: "Why Self-Care Is Not a Luxury but a Necessity",
-      description:
-        "You need your face to be amazing and lovely and you need to read this blog to get better abeg",
-      image: assets.blog3,
+      short_description: "You need your face to be amazing and lovely and you need to read this blog to get better abeg",
+      cover_image: null,
     },
     {
       id: "4",
       title: "Why Self-Care Is Not a Luxury but a Necessity",
-      description:
-        "You need your face to be amazing and lovely and you need to read this blog to get better abeg",
-      image: assets.blog3,
+      short_description: "You need your face to be amazing and lovely and you need to read this blog to get better abeg",
+      cover_image: null,
     },
   ];
 
   const reviews = [
     {
       iconColor: "#000000CC",
-      reviewText:
-        "I struggled with hormonal acne for years and nothing worked until I found this spa. Their acne facial plan cleared my skin in just 4 weeks. Highly recommended!",
+      reviewText: "I struggled with hormonal acne for years and nothing worked until I found this spa. Their acne facial plan cleared my skin in just 4 weeks. Highly recommended!",
       profileImage: assets.banker,
       name: "Sarah Johnson",
       role: "Banker",
@@ -113,8 +114,7 @@ const Home = () => {
     },
     {
       iconColor: "#C97BB7",
-      reviewText:
-        "I used to think facials were just for women until I tried their deep cleansing facial. My skin feels fresh and clean, and my beard bumps reduced. I’m definitely coming back.",
+      reviewText: "I used to think facials were just for women until I tried their deep cleansing facial. My skin feels fresh and clean, and my beard bumps reduced. I’m definitely coming back.",
       profileImage: assets.soft,
       name: "Michael Peters",
       role: "Software Engineer",
@@ -122,8 +122,7 @@ const Home = () => {
     },
     {
       iconColor: "#000000CC",
-      reviewText:
-        "I came for a skin consultation and left with so much knowledge. They actually understood my skin and recommended the right products. My dark spots are fading already.",
+      reviewText: "I came for a skin consultation and left with so much knowledge. They actually understood my skin and recommended the right products. My dark spots are fading already.",
       profileImage: assets.desi,
       name: "Jennifer Okeke",
       role: "Digital Marketer",
@@ -149,20 +148,19 @@ const Home = () => {
           Blog <span className="text-(--primary-color)">News</span>
         </h1>
 
-          <div className="mt-10 flex overflow-x-scroll gap-4 no-scrollbar pb-2">
-            {blogs.map((blog, index) => (
-              <div className="md:min-w-[340px] min-w-[320px]" key={index}>
-                <BlogCard
-                  id={blog.id}
-                  title={blog.title}
-                  description={blog.description}
-                  image={blog.image}
-                />
-              </div>
-            ))}
-          </div>
+        <div className="mt-10 flex overflow-x-scroll gap-4 no-scrollbar pb-2">
+          {blogs.map((blog, index) => (
+            <div className="md:min-w-[340px] min-w-[320px]" key={index}>
+              <BlogCard
+                id={blog.id}
+                title={blog.title}
+                description={blog.short_description}
+                image={blog.cover_image ? `${IMAGE_URL}${blog.cover_image.replace(/^public\//, "")}` : assets.blog1}
+              />
+            </div>
+          ))}
+        </div>
 
-        {/* See more */}
         <div className="flex justify-end mt-10">
           <Link
             to="/blog"
@@ -176,7 +174,6 @@ const Home = () => {
 
       {/* ABOUT SECTION */}
       <section className="relative w-full bg-white mt-10 lg:px-10 px-5 md:pb-60">
-        {/* Background Image */}
         <div className="relative h-[350px] overflow-hidden rounded-[20px] md:block hidden">
           <img
             src={assets.newabout}
@@ -185,7 +182,6 @@ const Home = () => {
           />
         </div>
 
-        {/* Text Card Overlay */}
         <div className="md:absolute inset-0 h-max md:top-30 bottom-5 left-1/2 transform md:-translate-x-1/2 md:translate-y-10 bg-[#fff9f7] shadow-lg rounded-2xl w-full md:w-5/6 lg:w-5/6 p-6 md:p-10 text-center">
           <h2 className="text-3xl md:text-4xl font-semibold mb-4">
             <span className="text-[#b23a8a] font-semibold!">About</span>{" "}
@@ -229,20 +225,25 @@ const Home = () => {
           </h1>
         </div>
 
-        {/* Display packages */}
         <div className="mt-10 lg:grid grid-cols-3 md:gap-6 gap-4 flex lg:overflow-auto overflow-x-scroll no-scrollbar py-4">
-          {packages.map((item, index) => (
-            <div className="lg:w-full md:min-w-[370px] min-w-[330px]" key={index}>
-              <PackageCard
-                id={item.id}
-                index={index}
-                title={item.title}
-                description={item.description}
-                price={item.price}
-                image={item.image}
-              />
-            </div>
-          ))}
+          {loading ? (
+            <div className="w-full text-center py-20 text-gray-500 text-xl">Loading packages...</div>
+          ) : packages.length === 0 ? (
+            <div className="w-full text-center py-20 text-gray-500">No packages available</div>
+          ) : (
+            packages.map((item, index) => (
+              <div className="w-full" key={item.id}>
+                <PackageCard
+                  id={item.id.toString()}
+                  index={index}
+                  title={item.name}
+                  description={item.description}
+                  price={parseFloat(item.price)}
+                  image={item.image ? `${IMAGE_URL}${item.image}` : assets.our1}
+                />
+              </div>
+            ))
+          )}
         </div>
 
         <div className="flex flex-row-reverse mt-10">
@@ -256,7 +257,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* services SECTION */}
+      {/* SERVICES SECTION */}
       <div className="bg-(--secondary-color) mt-10 lg:px-10 px-5 py-10">
         <div>
           <h1 className="md:text-[48px] text-[30px] text-center font-semibold! text-(--accent-color)">
@@ -264,18 +265,24 @@ const Home = () => {
           </h1>
         </div>
 
-        {/* Display services */}
         <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((item, index) => (
-            <ServiceCard 
-              id={item.id}
-              index={index}
-              title={item.title}
-              price={item.price}
-              description={item.description}
-              image={item.image}
-            />
-          ))}
+          {loading ? (
+            <div className="col-span-full text-center py-20 text-gray-500 text-xl">Loading services...</div>
+          ) : services.length === 0 ? (
+            <div className="col-span-full text-center py-20 text-gray-500">No services available</div>
+          ) : (
+            services.map((item, index) => (
+              <ServiceCard
+                key={item.id}
+                id={item.id.toString()}
+                index={index}
+                title={item.name}
+                price={parseFloat(item.price)}
+                description={item.description}
+                image={item.image ? `${IMAGE_URL}${item.image}` : assets.ser1}
+              />
+            ))
+          )}
         </div>
 
         <div className="flex flex-row-reverse mt-10">
@@ -289,6 +296,7 @@ const Home = () => {
         </div>
       </div>
 
+      {/* EBOOK SECTION */}
       <div className="mt-10 lg:px-10 px-5 py-10 grid md:grid-cols-2 grid-cols-1 gap-12 items-center">
         <div className="rounded-md overflow-hidden md:h-80">
           <img
@@ -303,9 +311,9 @@ const Home = () => {
             Our <span className="text-(--primary-color)">Ebook</span>
           </h1>
           <p className="md:text-start text-center font-[inter]! text-sm">
-            This course is designed to simplify weight loss cutting through the jargon and confusion, so you can  achieve results that fit seamlessly into your busy lifestyle. With practical strategies, time-saving hacks, and expert guidance, you’ll learn how to lose weight  easily. This program provides the tools, structure, and motivation you need to succeed. By the end, you’ll have built lasting healthy habits that not only help you manage your weight but also  boost your overall health. Disease free, no waste of money on hospital rounds, fake medications and  unethical doctors.
+            This course is designed to simplify weight loss cutting through the jargon and confusion, so you can achieve results that fit seamlessly into your busy lifestyle...
           </p>
-          <div className="mt-10 flex md:justify-start justify-center ">
+          <div className="mt-10 flex md:justify-start justify-center">
             <button className="flex items-center justify-center gap-2 bg-(--primary-color) hover:bg-(--primary-color) text-white font-medium! px-6 py-3 rounded-sm transition-colors duration-200 shadow-sm">
               Buy Now
             </button>
@@ -320,7 +328,7 @@ const Home = () => {
           <span className="text-(--primary-color)">Asked Questions</span>
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8  mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mx-auto">
           {[
             {
               num: "01",
@@ -357,7 +365,6 @@ const Home = () => {
               key={idx}
               className="relative bg-white rounded-2xl px-6 py-8 border border-black/20 hover:shadow-lg transition-shadow duration-300 flex gap-4"
             >
-              {/* Pink circle with number */}
               <div className="shrink-0 md:w-15 md:h-15 w-12 h-12 bg-[#C97BB7] text-white rounded-full flex items-center justify-center text-2xl font-bold!">
                 {faq.num}
               </div>
@@ -372,14 +379,13 @@ const Home = () => {
           ))}
         </div>
       </section>
-      
+
       {/* REVIEW SECTION */}
       <div className="mt-10 px-5 lg:px-10">
         <h1 className="md:text-[48px] text-[30px] text-center font-semibold lg:mb-25 mb-10">
           <span className="text-(--primary-color)">Client’s Review</span>
         </h1>
 
-        {/* Scrollable container for sm & md; static grid on lg */}
         <div className="flex gap-6 overflow-x-auto styled-scrollbar lg:overflow-x-visible lg:justify-center pb-5 snap-x snap-mandatory lg:flex-row lg:flex-wrap">
           {reviews.map((review, index) => (
             <div
@@ -391,7 +397,6 @@ const Home = () => {
                 ${index % 2 !== 0 && "lg:-translate-y-14"}
               `}
             >
-              {/* Top section (review content) */}
               <div className="border border-black/10 rounded-t-2xl px-4 py-8 flex-1 flex flex-col bg-white">
                 <div className="flex items-center gap-1">
                   <BiSolidQuoteSingleLeft
@@ -411,7 +416,6 @@ const Home = () => {
                 </div>
               </div>
 
-              {/* Bottom section (profile) */}
               <div
                 className="p-3 rounded-b-2xl"
                 style={{ backgroundColor: review.bgColor }}

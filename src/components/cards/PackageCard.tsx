@@ -38,7 +38,7 @@ const PackageCard = (item: PackageCardProps) => {
         ></div>
 
         {/* Card content */}
-        <div className="bg-white border border-black/5 rounded-3xl shadow-sm hover:shadow-md transition-all duration-300 p-5 flex flex-col items-center text-center relative z-10">
+        <div className="w-full bg-white border border-black/5 rounded-3xl shadow-sm hover:shadow-md transition-all duration-300 p-5 flex flex-col items-center text-center relative z-10">
             <img
                 src={item.image}
                 alt={item.title}

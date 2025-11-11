@@ -277,6 +277,11 @@ export default function BlogUpload() {
               placeholder="E.g Anti-Aging Facials: Do They Really Make You Look Younger?"
               className="w-full border-2 border-[var(--primary-color)] rounded-xl p-4 text-base placeholder:text-[var(--primary-color)/70] bg-[var(--light-primary)] focus:outline-none focus:ring-4 focus:ring-[var(--primary-color)/20]"
             />
+            {error && !blogDetails.title && error.from === "title" ? (
+              <span className="text-base mt-6 font-semibold text-red-700">
+                {error.errorMessage}
+              </span>
+            ) : null}
           </div>
 
           {/* Image */}

@@ -1,6 +1,6 @@
 import React from "react";
 
-const BlogCardSkeleton = () => {
+const BlogCardSkeleton : React.FC = () => {
   return (
     <div
       className="relative bg-white rounded-3xl shadow flex flex-col gap-2 justify-between border border-black/10 overflow-hidden animate-pulse"

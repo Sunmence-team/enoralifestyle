@@ -1,5 +1,4 @@
-// src/pages/Services.tsx
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import HeroSection from "../components/herosections/Herosection";
 import { assets } from "../assets/assests";
 import ServiceCard from "../components/cards/ServiceCard";
@@ -22,8 +21,8 @@ interface Service {
 const Services = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [lastPage, setlastPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [lastPage, setlastPage] = useState(1);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -37,10 +36,12 @@ const Services = () => {
 
         console.log("response", response);
         if (response.status === 200) {
-          const { data, current_page, last_page } = response.data.data;
+          const { data, 
+            // current_page, last_page 
+          } = response.data.data;
           setServices(data);
-          setCurrentPage(current_page);
-          setlastPage(last_page);
+          // setCurrentPage(current_page);
+          // setlastPage(last_page);
         }
 
         // const sorted = rawData

@@ -5,9 +5,8 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import { IoIosCreate } from "react-icons/io";
 import { NavLink } from 'react-router-dom';
 import { MessageSquareMore } from 'lucide-react';
-// import { href } from 'react-router-dom';
 
-export default function Sidebar() {
+const Sidebar : React.FC = () => {
   const barLinks = [
     { name: "Add Service", href: '/dashboard/overview', icon: <LuPackagePlus size={30} className='text-(--primary-color) ' /> },
     { name: "Appointment", href: '/dashboard/appointments', icon: <MdBathroom size={30} className='text-(--primary-color) ' /> },
@@ -37,3 +36,5 @@ export default function Sidebar() {
     </div>
   )
 }
+
+export default Sidebar;

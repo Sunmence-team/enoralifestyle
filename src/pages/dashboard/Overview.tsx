@@ -1,15 +1,16 @@
 // src/pages/Overview.tsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { IoIosNotifications } from "react-icons/io";
 import { FaRegUserCircle, FaTimes } from "react-icons/fa";
 import { BiImageAlt } from "react-icons/bi";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import DashboardTable from "./Components/DashboardTable";
+import { formatterUtility } from "../../utilities/formatterutility";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-const IMAGE_URL = import.meta.env.VITE_API_IMAGE_URL;
+const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
 
 interface Service {
   id: number;
@@ -20,6 +21,13 @@ interface Service {
   type: string;
   created_at: string;
   updated_at: string;
+}
+
+interface ApiResponse {
+  data: Service[];
+  total: number;
+  per_page: number;
+  current_page: number;
 }
 
 export default function Overview() {
@@ -36,11 +44,42 @@ export default function Overview() {
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
+  // Pagination States
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
+  const [total, setTotal] = useState(0);
+
   // Edit & Delete
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deletingService, setDeletingService] = useState<Service | null>(null);
+
+  const fetchServices = useCallback(async (page: number) => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get<ApiResponse>(`${API_URL}/services?page=${page}&per_page=${perPage}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const { data, total, per_page, current_page } = response.data || {};
+      setServices(Array.isArray(data) ? data : []);
+      setTotal(total || 0);
+      setPerPage(per_page || 10);
+      setCurrentPage(current_page || 1);
+    } catch (err) {
+      const error = err as AxiosError<{ message: string; errors: Record<string, string[]> }>;
+      console.error("Fetch error:", error.response?.data);
+      toast.error("Failed to load services");
+      if (error.response?.status === 401) {
+        localStorage.removeItem("token");
+        navigate("/login");
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [navigate, perPage]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -49,33 +88,8 @@ export default function Overview() {
       navigate("/login");
       return;
     }
-    fetchServices(); // ← GET /services?per_page=100
-  }, [navigate]);
-
-  // ──────────────────────────────────────────────────────────────
-  // FETCH ALL SERVICES (with per_page=100 to get everything)
-  // ──────────────────────────────────────────────────────────────
-  const fetchServices = async () => {
-    setLoading(true);
-    try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get(`${API_URL}services?per_page=100`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      const servicesArray = response.data?.data?.data || [];
-      setServices(Array.isArray(servicesArray) ? servicesArray : []);
-    } catch (err: any) {
-      console.error("Fetch error:", err.response?.data);
-      toast.error("Failed to load services");
-      if (err.response?.status === 401) {
-        localStorage.removeItem("token");
-        navigate("/login");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+    fetchServices(currentPage);
+  }, [navigate, currentPage, fetchServices]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -108,25 +122,26 @@ export default function Overview() {
 
       if (isEditing && editingId) {
         // PUT /services/{id}
-        await axios.put(`${API_URL}services/${editingId}`, formData, {
+        await axios.put(`${API_URL}/services/${editingId}`, formData, {
           headers: { Authorization: `Bearer ${token}` },
         });
         toast.success("Service updated successfully!");
       } else {
         // POST /services
-        await axios.post(`${API_URL}services`, formData, {
+        await axios.post(`${API_URL}/services`, formData, {
           headers: { Authorization: `Bearer ${token}` },
         });
         toast.success("Service created!");
       }
 
       resetForm();
-      fetchServices();
-    } catch (err: any) {
-      console.error("Operation failed:", err.response?.data);
-      const errors = err.response?.data?.errors;
-      if (errors) Object.values(errors).flat().forEach((msg: any) => toast.error(msg));
-      else toast.error(err.response?.data?.message || "Operation failed");
+      fetchServices(currentPage);
+    } catch (err) {
+      const error = err as AxiosError<{ message: string; errors: Record<string, string[]> }>;
+      console.error("Operation failed:", error.response?.data);
+      const errors = error.response?.data?.errors;
+      if (errors) Object.values(errors).flat().forEach((msg: string) => toast.error(msg));
+      else toast.error(error.response?.data?.message || "Operation failed");
     } finally {
       setSubmitting(false);
     }
@@ -153,7 +168,7 @@ export default function Overview() {
     setImage(null);
 
     const imageUrl = service.image
-      ? `${IMAGE_URL}${service.image.replace(/^public\//, "")}`
+      ? `${IMAGE_URL}/${service.image.replace(/^public\//, "")}`
       : null;
     setImagePreview(imageUrl);
 
@@ -175,7 +190,7 @@ export default function Overview() {
       const token = localStorage.getItem("token");
       // POST /services/{id} with _method=DELETE
       await axios.post(
-        `${API_URL}services/${deletingService.id}`,
+        `${API_URL}/services/${deletingService.id}`,
         { _method: "DELETE" },
         {
           headers: {
@@ -187,7 +202,7 @@ export default function Overview() {
       toast.success("Deleted successfully");
       setDeleteModal(false);
       setDeletingService(null);
-      fetchServices();
+      fetchServices(currentPage);
     } catch {
       toast.error("Delete failed");
     }
@@ -310,23 +325,27 @@ export default function Overview() {
             {
               key: "price",
               header: "PRICE",
-              render: (service: any) => (
+              render: (service: Service) => (
                 <span className="font-bold text-pink-600 text-xl">
-                  ₦{parseFloat(service.price).toLocaleString()}
+                  {formatterUtility(Number(service.price))}
                 </span>
               ),
             },
             {
               key: "description",
               header: "DESCRIPTION",
-              render: (service: any) => (
-                <div className="max-w-md text-gray-600">
+              render: (service: Service) => (
+                <div className="md:max-w-md max-w-lg text-gray-600 line-clamp-3">
                   {service.description || <span className="text-gray-400 italic">No description</span>}
                 </div>
               ),
             },
             { key: "actions", header: "ACTIONS" },
           ]}
+          total={total}
+          currentPage={currentPage}
+          perPage={perPage}
+          onPageChange={(page) => setCurrentPage(page)}
         />
       </div>
 

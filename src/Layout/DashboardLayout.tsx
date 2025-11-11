@@ -21,7 +21,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         className={`transition-all duration-500 h-full overflow-y-auto no-scrollbar md:p-6 p-4 ${
           isExpanded
             ? "lg:w-[calc(80%)] md:w-[calc(100%-25%)] w-1/4"
-            : "w-[calc(100%-80px)]"
+            : "md:w-[calc(100%-80px)] w-full"
         }`}
       >
         {children}

@@ -1,4 +1,3 @@
-// src/pages/Reservation.tsx
 import React, { useEffect, useState, useRef } from 'react';
 import HeroSection from '../components/herosections/Herosection';
 import { assets } from '../assets/assests';
@@ -10,7 +9,7 @@ import { toast } from 'sonner';
 import { CheckCircle, Copy, Upload, X, CreditCard, BanknoteArrowUp } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-const IMAGE_URL = import.meta.env.VITE_API_IMAGE_URL;
+const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
 
 interface ServiceItem {
   id: number;
@@ -36,7 +35,7 @@ const Reservation = () => {
   }, []);
 
   const { items, setItems, clearCart } = useCartStore();
-  const [allServices, setAllServices] = useState<ServiceItem[]>([]);
+  // const [allServices, setAllServices] = useState<ServiceItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Modal
@@ -51,10 +50,10 @@ const Reservation = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const res = await axios.get(`${API_URL}services`);
+        const res = await axios.get(`${API_URL}/services`);
         const data = res.data.data?.data || [];
 
-        setAllServices(data);
+        // setAllServices(data);
 
         const defaultItems = data.slice(0, 2).map((item: ServiceItem) => ({
           id: item.id.toString(),
@@ -97,7 +96,7 @@ const Reservation = () => {
       };
 
       try {
-        const response = await axios.post(`${API_URL}bookings`, payload);
+        const response = await axios.post(`${API_URL}/bookings`, payload);
         setBookingId(response.data.data.id);
         setShowPaymentModal(true);
         toast.success("Booking created! Complete payment.");
@@ -115,7 +114,7 @@ const Reservation = () => {
     if (!bookingId) return;
 
     try {
-      const res = await axios.post(`${API_URL}bookings/${bookingId}/transactions`, {
+      const res = await axios.post(`${API_URL}/bookings/${bookingId}/transactions`, {
         payment_type: "online",
         amount: 5000,
       });
@@ -149,7 +148,7 @@ const Reservation = () => {
 
     setUploading(true);
     try {
-      await axios.post(`${API_URL}bookings/${bookingId}/transactions`, formData, {
+      await axios.post(`${API_URL}/bookings/${bookingId}/transactions`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

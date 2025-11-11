@@ -8,8 +8,8 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import DashboardTable from "./Components/DashboardTable";
 
-const API_URL = import.meta.env.VITE_API_BASE_URL;
-const IMAGE_URL = import.meta.env.VITE_API_IMAGE_URL;
+const API_URL = import.meta.env.VITE_API_BASE_URL || "";
+const IMAGE_URL = (import.meta.env.VITE_IMAGE_BASE_URL || "").replace(/\/?$/, "/");
 
 interface Blog {
   id: number;
@@ -59,6 +59,9 @@ export default function BlogUpload() {
   const [editingComment, setEditingComment] = useState<Comment | null>(null);
   const [editText, setEditText] = useState("");
 
+  // Validation Error
+  const [error, setError] = useState<{ from: string; errorMessage: string } | null>(null);
+
   // LOCK BACKGROUND SCROLL WHEN MODALS ARE OPEN
   useEffect(() => {
     if (viewModal || deleteModal) {
@@ -85,7 +88,7 @@ export default function BlogUpload() {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get(`${API_URL}blogs?page=${page}&per_page=10`, {
+      const res = await axios.get(`${API_URL}/blogs?page=${page}&per_page=10`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBlogs(res.data.data?.data || []);
@@ -111,7 +114,16 @@ export default function BlogUpload() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!image && !isEditing) return toast.error("Please upload a cover image");
+    setError(null);
+
+    if (!title.trim()) {
+      setError({ from: "title", errorMessage: "Title is required" });
+      return;
+    }
+    if (!image && !isEditing) {
+      toast.error("Please upload a cover image");
+      return;
+    }
 
     setSubmitting(true);
     const formData = new FormData();
@@ -124,13 +136,19 @@ export default function BlogUpload() {
       const token = localStorage.getItem("token");
       if (isEditing && editingId) {
         formData.append("_method", "PUT");
-        await axios.post(`${API_URL}blogs/${editingId}`, formData, {
-          headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
+        await axios.post(`${API_URL}/blogs/${editingId}`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
         });
         toast.success("Blog updated!");
       } else {
-        await axios.post(`${API_URL}blogs`, formData, {
-          headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" },
+        await axios.post(`${API_URL}/blogs`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
         });
         toast.success("Blog uploaded!");
       }
@@ -138,8 +156,11 @@ export default function BlogUpload() {
       fetchBlogs();
     } catch (err: any) {
       const errors = err.response?.data?.errors;
-      if (errors) Object.values(errors).flat().forEach((msg: any) => toast.error(msg));
-      else toast.error(err.response?.data?.message || "Upload failed");
+      if (errors) {
+        Object.values(errors).flat().forEach((msg: any) => toast.error(msg));
+      } else {
+        toast.error(err.response?.data?.message || "Upload failed");
+      }
     } finally {
       setSubmitting(false);
     }
@@ -153,6 +174,7 @@ export default function BlogUpload() {
     setImagePreview(null);
     setIsEditing(false);
     setEditingId(null);
+    setError(null);
     const input = document.getElementById("image-upload") as HTMLInputElement;
     if (input) input.value = "";
   };
@@ -163,7 +185,14 @@ export default function BlogUpload() {
     setTitle(blog.title);
     setArticle(blog.short_description);
     setBlogPost(blog.body.content);
-    setImagePreview(blog.cover_image ? `${IMAGE_URL}${blog.cover_image.replace(/^public\//, "")}` : null);
+    setImage(null);
+    setError(null);
+
+    const imageUrl = blog.cover_image
+      ? `${IMAGE_URL}${blog.cover_image.replace(/^public\//, "")}`
+      : null;
+    setImagePreview(imageUrl);
+
     window.scrollTo({ top: 0, behavior: "smooth" });
     toast.success("Editing: " + blog.title);
   };
@@ -177,7 +206,7 @@ export default function BlogUpload() {
     if (!deletingBlog) return;
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`${API_URL}blogs/${deletingBlog.id}`, {
+      await axios.delete(`${API_URL}/blogs/${deletingBlog.id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Blog deleted");
@@ -196,7 +225,7 @@ export default function BlogUpload() {
     setComments([]);
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get(`${API_URL}blogs/${blog.id}/comments?per_page=20`, {
+      const res = await axios.get(`${API_URL}/blogs/${blog.id}/comments?per_page=20`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setComments(res.data.data || []);
@@ -211,7 +240,7 @@ export default function BlogUpload() {
     if (!confirm("Delete this comment?")) return;
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`${API_URL}comments/${commentId}`, {
+      await axios.delete(`${API_URL}/comments/${commentId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Comment deleted");
@@ -226,7 +255,7 @@ export default function BlogUpload() {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `${API_URL}comments/${editingComment.id}`,
+        `${API_URL}/comments/${editingComment.id}`,
         { text: editText },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -272,16 +301,19 @@ export default function BlogUpload() {
             <input
               type="text"
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => {
+                setTitle(e.target.value);
+                setError(null);
+              }}
               required
               placeholder="E.g Anti-Aging Facials: Do They Really Make You Look Younger?"
               className="w-full border-2 border-[var(--primary-color)] rounded-xl p-4 text-base placeholder:text-[var(--primary-color)/70] bg-[var(--light-primary)] focus:outline-none focus:ring-4 focus:ring-[var(--primary-color)/20]"
             />
-            {error && !blogDetails.title && error.from === "title" ? (
-              <span className="text-base mt-6 font-semibold text-red-700">
+            {error && error.from === "title" && (
+              <span className="text-base mt-2 font-semibold text-red-700 block">
                 {error.errorMessage}
               </span>
-            ) : null}
+            )}
           </div>
 
           {/* Image */}
@@ -303,6 +335,7 @@ export default function BlogUpload() {
                     src={imagePreview}
                     alt="Preview"
                     className="mx-auto max-h-24 rounded-xl shadow-lg"
+                    onError={() => setImagePreview("/placeholder.jpg")}
                   />
                 ) : (
                   <div className="space-y-4">
@@ -403,6 +436,7 @@ export default function BlogUpload() {
                   }
                   alt=""
                   className="w-12 h-12 object-cover rounded-xl shadow"
+                  onError={(e) => (e.currentTarget.src = "/placeholder.jpg")}
                 />
               ),
             },
@@ -427,10 +461,10 @@ export default function BlogUpload() {
         />
       </div>
 
-      {/* VIEW MODAL - NO BACKGROUND SCROLL */}
+      {/* VIEW MODAL */}
       {viewModal && selectedBlog && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 overscroll-contain">
-          <div className="bg-white rounded-3xl shadow-2xl w-full md:w-[70%] max-h-[95vh] overflow-y-auto overscroll-contain scrollbar-thin scrollbar-thumb-[var(--primary-color)] scrollbar-track-gray-100">
+          <div className="bg-white rounded-3xl shadow-2xl w-full md:w-[70%] max-h-[95vh] overflow-y-auto overscroll-contain styled-scrollbar">
             <div className="sticky top-0 bg-white border-b-2 border-gray-200 p-6 flex justify-between items-center z-10">
               <h2 className="text-3xl font-bold text-gray-800 pr-10">
                 {selectedBlog.title}
@@ -456,6 +490,7 @@ export default function BlogUpload() {
                   )}`}
                   alt={selectedBlog.title}
                   className="w-full h-96 object-cover rounded-2xl mb-8 shadow-xl"
+                  onError={(e) => (e.currentTarget.src = "/placeholder.jpg")}
                 />
               )}
               <p className="text-xl text-gray-700 font-medium mb-8 leading-relaxed">
@@ -589,26 +624,7 @@ export default function BlogUpload() {
         </div>
       )}
 
-      {/* Custom Scrollbar */}
-      <style jsx global>{`
-        .scrollbar-thin {
-          scrollbar-width: thin;
-        }
-        .scrollbar-thin::-webkit-scrollbar {
-          width: 8px;
-        }
-        .scrollbar-thin::-webkit-scrollbar-track {
-          background: #f1f1f1;
-          border-radius: 10px;
-        }
-        .scrollbar-thin::-webkit-scrollbar-thumb {
-          background: var(--primary-color);
-          border-radius: 10px;
-        }
-        .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-          background: #9f5f91;
-        }
-      `}</style>
+
     </div>
   );
 }

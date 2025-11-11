@@ -1,8 +1,8 @@
-import React, { FC, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { CheckCircle2, XCircle } from "lucide-react";
 
-const PaymentStatus: FC = () => {
+const PaymentStatus: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 

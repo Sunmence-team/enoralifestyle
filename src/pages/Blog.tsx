@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { assets } from "../assets/assests";
 import HeroSection from "../components/herosections/Herosection";
-import BlogCard from "../components/cards/BlogCard";
-import axios from "axios";
+import BlogCard from "../components/cards/Blogcard";
+import axios, { AxiosError } from "axios";
 import BlogCardSkeleton from "../components/skeletons/BlogCardSkeleton";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
@@ -17,12 +17,10 @@ interface Blog {
   created_at: string;
 }
 
-export default function Blog() {
+const Blog: React.FC = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [lastPage, setLastPage] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
 
   // Scroll to top on mount
   useEffect(() => {
@@ -35,13 +33,12 @@ export default function Blog() {
         const response = await axios.get(`${API_URL}/blogs`);
         // console.log("response", response)
         if (response.status === 200) {
-          const { data, current_page, last_page } = response.data.data;
+          const { data } = response.data.data;
           setBlogs(data);
-          setCurrentPage(current_page);
-          setLastPage(last_page);
         }
-      } catch (err: any) {
-        console.error("Failed to fetch blogs:", err);
+      } catch (err) {
+        const error = err as AxiosError;
+        console.error("Failed to fetch blogs:", error);
         setError("Failed to load blogs. Please try again later.");
       } finally {
         setTimeout(() => {
@@ -129,3 +126,5 @@ export default function Blog() {
     </div>
   );
 }
+
+export default Blog;

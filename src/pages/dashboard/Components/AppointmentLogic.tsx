@@ -10,17 +10,6 @@ import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-
-interface BookingStats {
-  total_bookings: number;
-  bookings_by_status: {
-    pending: number;
-    confirmed: number;
-    attended: number;
-  };
-  total_revenue: string;
-}
-
 interface Booking {
   id: number;
   name: string;
@@ -34,7 +23,7 @@ interface Booking {
   updated_at: string;
 }
 
-export default function Appointments() {
+const Appointments : React.FC = () => {
   const navigate = useNavigate();
 
   // UI
@@ -48,7 +37,7 @@ export default function Appointments() {
   const [Cancelled, setCancelled] = useState("0");
 
   // Data
-  const [stats, setStats] = useState<BookingStats | null>(null);
+  // const [stats, setStats] = useState<BookingStats | null>(null);
   const [statsLoading, setStatsLoading] = useState(true);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [tableLoading, setTableLoading] = useState(true);
@@ -80,17 +69,17 @@ export default function Appointments() {
 
     try {
       setStatsLoading(true);
-      const { data } = await axios.get(`${API_URL}bookings/stats`, {
+      const { data } = await axios.get(`${API_URL}/bookings/stats`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const statsData = data.data;
-      setStats(statsData);
+      // setStats(statsData);
 
       // Update card values
-      setTotalAppointment(String(statsData.total_bookings));
-      setPending(String(statsData.bookings_by_status.pending));
-      setCompleted(String(statsData.bookings_by_status.confirmed));
-      setCancelled(String(statsData.bookings_by_status.attended));
+      setTotalAppointment(String(statsData.total_bookings) ?? 0);
+      setPending(String(statsData.bookings_by_status.pending) ?? 0);
+      setCompleted(String(statsData.bookings_by_status.confirmed) ?? 0);
+      setCancelled(String(statsData.bookings_by_status.attended) ?? 0);
     } catch (err: any) {
       toast.error(err.response?.data?.message || "Failed to load stats");
       if (err.response?.status === 401) {
@@ -110,7 +99,7 @@ export default function Appointments() {
 
       try {
         setTableLoading(true);
-        const { data } = await axios.get(`${API_URL}bookings`, {
+        const { data } = await axios.get(`${API_URL}/bookings`, {
           params: { page, per_page: perPage },
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -136,7 +125,7 @@ export default function Appointments() {
     if (!token) return;
 
     try {
-      const { data } = await axios.get(`${API_URL}bookings/${booking.id}`, {
+      const { data } = await axios.get(`${API_URL}/bookings/${booking.id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setViewBooking(data.data);
@@ -154,7 +143,7 @@ export default function Appointments() {
     if (!token) return;
 
     try {
-      await axios.put(`${API_URL}bookings/${editBooking.id}`, editBooking, {
+      await axios.put(`${API_URL}/bookings/${editBooking.id}`, editBooking, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Booking updated");
@@ -172,7 +161,7 @@ export default function Appointments() {
     if (!token) return;
 
     try {
-      await axios.delete(`${API_URL}bookings/${deleteId}`, {
+      await axios.delete(`${API_URL}/bookings/${deleteId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Booking deleted");
@@ -206,9 +195,9 @@ export default function Appointments() {
       header: "Status",
       render: (b: Booking) => (
         <span
-          className={`px-3 py-1 rounded-full text-xs font-medium ${
+          className={`px-4 py-2 rounded-full text-sm font-bold ${
             b.status === "pending"
-              ? "bg-yellow-100 text-yellow-800"
+              ? "bg-gray-300 text-black/50"
               : b.status === "confirmed"
               ? "bg-blue-100 text-blue-800"
               : "bg-green-100 text-green-800"
@@ -264,22 +253,22 @@ export default function Appointments() {
       <div className='grid grid-cols-1 md:grid-cols-4 gap-4 mt-3'>
         <div className='bg-[var(--primary-color)] text-white p-6 rounded-xl flex flex-col items-start justify-center h-26'>
           <span className='text-sm'>Total Appointment</span>
-          <p className='text-2xl font-[Raleway]! font-bold!'>{statsLoading ? "..." : totalAppointment}</p>
+          <p className='text-2xl font-[Raleway]! font-bold!'>{statsLoading ? "..." : (totalAppointment ?? 0)}</p>
         </div>
 
         <div className='bg-[#ffff] p-6 rounded-xl flex flex-col items-start justify-center h-26'>
           <span className='text-sm text-gray-500'>Pending</span>
-          <p className='text-2xl font-[Raleway]! font-bold! text-[#00382B]'>{statsLoading ? "..." : pending}</p>
+          <p className='text-2xl font-[Raleway]! font-bold! text-[#00382B]'>{statsLoading ? "..." : (pending ?? 0)}</p>
         </div>
 
         <div className='bg-[var(--color-green)] p-6 rounded-xl flex flex-col items-start justify-center h-26'>
           <span className='text-sm text-black'>Completed</span>
-          <p className='text-2xl font-[Raleway]! font-bold! text-black'>{statsLoading ? "..." : completed}</p>
+          <p className='text-2xl font-[Raleway]! font-bold! text-black'>{statsLoading ? "..." : (completed ?? 0)}</p>
         </div>
 
         <div className='bg-[var(--cancelled-color)] p-6 rounded-xl flex flex-col items-start justify-center h-26'>
           <span className='text-sm text-black'>Cancelled</span>
-          <p className='text-2xl font-[Raleway]! font-bold! text-black'>{statsLoading ? "..." : Cancelled}</p>
+          <p className='text-2xl font-[Raleway]! font-bold! text-black'>{statsLoading ? "..." : (Cancelled ?? 0)}</p>
         </div>
       </div>
 
@@ -378,3 +367,5 @@ export default function Appointments() {
     </div>
   );
 }
+
+export default Appointments

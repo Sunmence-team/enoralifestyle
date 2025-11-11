@@ -4,7 +4,7 @@ import { assets } from "../assets/assests";
 import HeroSection from "../components/herosections/Herosection";
 import { FiX } from "react-icons/fi";
 import PackageCard from "../components/cards/PackageCard";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import PackageCardSkeleton from "../components/skeletons/PackageCardSkeleton";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
@@ -27,11 +27,9 @@ interface SelectedPackage {
   image: string;
 }
 
-const Packages = () => {
+const Packages : React.FC = () => {
   const [packages, setPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [lastPage, setlastPage] = useState(1);
   const [selectedPackage, setSelectedPackage] = useState<SelectedPackage | null>(null);
 
   useEffect(() => {
@@ -47,10 +45,8 @@ const Packages = () => {
         console.log("response", response);
 
         if (response.status === 200) {
-          const { data, current_page, last_page } = response.data.data;
+          const { data } = response.data.data;
           setPackages(data);
-          setCurrentPage(current_page);
-          setlastPage(last_page);
         }
 
         // Filter only packages and sort by latest
@@ -62,7 +58,8 @@ const Packages = () => {
 
         // setPackages(sorted);
       } catch (err) {
-        console.error("Failed to load packages:", err);
+        const error = err as AxiosError;
+        console.error("Failed to load packages:", error);
         setPackages([]);
       } finally {
         setLoading(false);
@@ -114,7 +111,7 @@ const Packages = () => {
                   index={index}
                   title={item?.name}
                   description={item?.description}
-                  price={parseFloat(item?.price)}
+                  price={item?.price}
                   image={`${IMAGE_URL}/${item?.image}`}
                   showMidLine={false}
                 />

@@ -9,7 +9,7 @@ interface PackageCardProps {
   title: string;
   description: string;
   image: string;
-  price: number;
+  price: string;
   showMidLine?: boolean;
 }
 
@@ -23,7 +23,7 @@ const PackageCard = (item: PackageCardProps) => {
         addToCart({
             id: item.id,
             title: item.title,
-            price: item.price,
+            price: Number(item.price),
             image: item.image,
         });
     };
@@ -52,7 +52,7 @@ const PackageCard = (item: PackageCardProps) => {
             ></div>
 
             {/* Card content */}
-            <div className="bg-white w-full border border-black/5 rounded-3xl shadow-sm hover:shadow-md transition-all duration-300 p-5 flex flex-col items-center text-center relative z-10">
+            <div className="bg-white h-[440px] w-full border border-black/5 rounded-3xl shadow-sm hover:shadow-md transition-all duration-300 p-5 flex flex-col items-center text-center relative z-10">
                 <img
                     src={item.image}
                     alt={item.title}
@@ -66,7 +66,7 @@ const PackageCard = (item: PackageCardProps) => {
                     Price: {formatterUtility(Number(item.price))}
                 </p>
 
-                <div className="flex gap-3 mt-10">
+                <div className="flex gap-3 mt-auto">
                     {/* Add to Cart Button */}
                     <button 
                         onClick={handleAddToCart}

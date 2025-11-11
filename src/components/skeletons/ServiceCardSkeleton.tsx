@@ -2,7 +2,7 @@ import React from 'react'
 import { FiArrowRight, FiShoppingCart } from 'react-icons/fi';
 
 // Renamed for clarity as a skeleton component
-const ServiceCardSkeleton = () => {
+const ServiceCardSkeleton : React.FC = () => {
     // State, effects, and function handlers are removed in the skeleton.
 
     return (

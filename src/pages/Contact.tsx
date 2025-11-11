@@ -3,13 +3,17 @@ import Contacthero from '../components/herosections/Contacthero'
 import { assets } from "../assets/assests";
 import { toast } from "sonner";
 
+interface ContactResponse {
+  message: string;
+}
+
 const Contact = () => {
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [message, setMessage] = React.useState("");
   const [postingMessage, setPostingMessage] = useState(false);
 
-  const postContact = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const postContact = async (e: React.FormEvent) => {
     e.preventDefault();
     setPostingMessage(true);
     try {
@@ -28,20 +32,21 @@ const Contact = () => {
         },
         body: JSON.stringify(reqBody),
       });
-      const data: any = await res.json();
+      const data: ContactResponse = await res.json();
       if (res.ok) {
         toast.success("Your message has been sent successfully");
       } else {
         toast.error(`Failed to send message. ${data.message}.`);
       }
-    } catch (error: any) {
+    } catch (error) {
+      const err = error as Error;
       if (
-        error?.message?.includes("Unexpected token '<'") ||
-        error?.message === "Failed to fetch"
+        err?.message?.includes("Unexpected token '<'") ||
+        err?.message === "Failed to fetch"
       ) {
         return toast.error("An uexpected error occured while sending message");
       } else {
-        toast.error(error?.message || "Error sending message");
+        toast.error(err?.message || "Error sending message");
       }
     } finally {
       setPostingMessage(false);

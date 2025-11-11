@@ -9,7 +9,7 @@ import CartCard from "../cards/CartCard";
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-const IMAGE_URL = import.meta.env.VITE_API_IMAGE_URL;
+const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
 
 interface ServiceItem {
   id: number;
@@ -42,7 +42,7 @@ const Navbar: React.FC = () => {
 
   const [isOpen, setIsOpen] = useState({ sidebar: false, cart: false });
   const [isScrolled, setIsScrolled] = useState(false);
-  const { items, setItems, clearCart } = useCartStore();
+  const { items, setItems } = useCartStore();
 
   const navLinks = [
     { path: "/", name: "Home" },

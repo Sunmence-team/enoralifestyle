@@ -129,6 +129,7 @@ const Home = () => {
   ];
 
   const initializePayment = async (userDetails: UserDetails) => {
+    setInitializingPayment(true);
     const loading = toast.loading("Initializing payment");
     try {
       const reqBody = {
@@ -149,8 +150,8 @@ const Home = () => {
         );
         toast.dismiss(loading);
         setIsModalOpen(false);
-        console.log(data)
-        window.open(data., "_blank");
+        console.log(data);
+        window.open(data.authorization_url, "_blank");
       } else {
         toast.error(`Failed to initialize payment. ${data.message}.`);
       }

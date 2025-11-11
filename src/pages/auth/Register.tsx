@@ -34,7 +34,7 @@ const Register: React.FC = () => {
     }),
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        const response = await axios.post(`${API_URL}auth/register`, values, {
+        const response = await axios.post(`${API_URL}/auth/register`, values, {
           headers: { "Content-Type": "application/json" },
         });
 

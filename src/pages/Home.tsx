@@ -393,6 +393,38 @@ const Home = () => {
           )}
         </div>
 
+          {/* Text Card Overlay */}
+          <div className="absolute inset-0 h-max md:top-30 bottom-5 left-1/2 transform -translate-x-1/2 translate-y-10 bg-[#fff9f7] shadow-lg rounded-2xl w-[90%] md:w-5/6 lg:w-5/6 p-6 md:p-10 text-center">
+            <h2 className="text-3xl md:text-4xl font-semibold mb-4">
+              <span className="text-[#b23a8a] font-semibold!">About</span>{" "}
+              <span className="text-(--accent-color)">Us</span>
+            </h2>
+
+          <div className="text-gray-700 leading-relaxed space-y-4 text-xs md:text-sm lg:text-base">
+            <p className="font-[inter]!">
+              At Enoralifestyle Spa, we believe self-care is not a luxury—it is
+              a lifestyle.
+            </p>
+            <p className="font-[inter]!">
+              We are a world-class spa destination offering a full range of
+              wellness and beauty treatments designed to relax your body,
+              refresh your mind, and restore your natural glow.
+            </p>
+            <p className="font-[inter]!">
+              Our mission is to promote total body wellness through personalized
+              therapies that relieve pain, reduce stress, and enhance overall
+              health. Each session is thoughtfully crafted to balance your body
+              and mind while reviving your inner calm.
+            </p>
+            <p className="font-[inter]!">
+              Step into our serene environment where expert hands, soothing
+              aromas, and natural products come together to create an experience
+              of true relaxation and renewal.
+            </p>
+            <p className="font-[inter]!">
+              At Enoralifestyle Spa, your well-being is our priority—because you
+              deserve to feel your best, inside and out.
+            </p>
         <div className="flex justify-end mt-10">
           <Link
             to="/packages"
@@ -471,7 +503,8 @@ const Home = () => {
               Buy Now
             </button>
           </div>
-        </section>
+        </div>
+      </section>
 
         {/* PACKAGES SECTION */}
         <div className="Our bg-white mt-10 lg:px-10 px-5 py-10">

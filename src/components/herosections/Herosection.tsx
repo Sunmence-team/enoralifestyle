@@ -51,7 +51,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           {button2Text && (
             <Link
               to="/services"
-              className="border-2 border-white px-6 py-2 rounded-sm hover:bg-white hover:text-black transition cursor-pointer"
+              className="border-2 border-white px-6 py-2 rounded-lg hover:bg-white hover:text-black transition cursor-pointer"
             >
               {button2Text}
             </Link>

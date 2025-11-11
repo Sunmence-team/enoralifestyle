@@ -6,7 +6,7 @@ import BlogCard from "../components/cards/BlogCard";
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-const IMAGE_URL = import.meta.env.VITE_API_IMAGE_URL;
+const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
 
 interface Blog {
   id: number;
@@ -30,7 +30,7 @@ export default function Blog() {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await axios.get(`${API_URL}blogs`);
+        const response = await axios.get(`${API_URL}/blogs`);
         const data = response.data?.data?.data || response.data?.data || [];
         setBlogs(Array.isArray(data) ? data : []);
       } catch (err: any) {

@@ -80,7 +80,7 @@ export default function Appointments() {
 
     try {
       setStatsLoading(true);
-      const { data } = await axios.get(`${API_URL}bookings/stats`, {
+      const { data } = await axios.get(`${API_URL}/bookings/stats`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const statsData = data.data;
@@ -110,7 +110,7 @@ export default function Appointments() {
 
       try {
         setTableLoading(true);
-        const { data } = await axios.get(`${API_URL}bookings`, {
+        const { data } = await axios.get(`${API_URL}/bookings`, {
           params: { page, per_page: perPage },
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -136,7 +136,7 @@ export default function Appointments() {
     if (!token) return;
 
     try {
-      const { data } = await axios.get(`${API_URL}bookings/${booking.id}`, {
+      const { data } = await axios.get(`${API_URL}/bookings/${booking.id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setViewBooking(data.data);
@@ -154,7 +154,7 @@ export default function Appointments() {
     if (!token) return;
 
     try {
-      await axios.put(`${API_URL}bookings/${editBooking.id}`, editBooking, {
+      await axios.put(`${API_URL}/bookings/${editBooking.id}`, editBooking, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Booking updated");
@@ -172,7 +172,7 @@ export default function Appointments() {
     if (!token) return;
 
     try {
-      await axios.delete(`${API_URL}bookings/${deleteId}`, {
+      await axios.delete(`${API_URL}/bookings/${deleteId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Booking deleted");

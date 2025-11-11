@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import DashboardTable from "./Components/DashboardTable";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-const IMAGE_URL = import.meta.env.VITE_API_IMAGE_URL;
+const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
 
 interface Service {
   id: number;
@@ -67,7 +67,7 @@ export default function Package() {
     try {
       const token = localStorage.getItem("token");
       // GET /services?per_page=100  → forces backend to return more items
-      const res = await axios.get(`${API_URL}services?per_page=100`, {
+      const res = await axios.get(`${API_URL}/services?per_page=100`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -94,7 +94,7 @@ export default function Package() {
     try {
       const token = localStorage.getItem("token");
       // GET /packages?per_page=100
-      const res = await axios.get(`${API_URL}packages?per_page=100`, {
+      const res = await axios.get(`${API_URL}/packages?per_page=100`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -147,13 +147,13 @@ export default function Package() {
 
       if (isEditing && editingId) {
         // PUT /packages/{id}
-        await axios.put(`${API_URL}packages/${editingId}`, formData, {
+        await axios.put(`${API_URL}/packages/${editingId}`, formData, {
           headers: { Authorization: `Bearer ${token}` },
         });
         toast.success("Package updated!");
       } else {
         // POST /packages
-        await axios.post(`${API_URL}packages`, formData, {
+        await axios.post(`${API_URL}/packages`, formData, {
           headers: { Authorization: `Bearer ${token}` },
         });
         toast.success("Package created!");
@@ -214,7 +214,7 @@ export default function Package() {
       const token = localStorage.getItem("token");
       // POST /packages/{id} with _method=DELETE
       await axios.post(
-        `${API_URL}packages/${deletingPackage.id}`,
+        `${API_URL}/packages/${deletingPackage.id}`,
         { _method: "DELETE" },
         {
           headers: {

@@ -27,7 +27,7 @@ const Login: React.FC = () => {
     }),
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        const response = await axios.post(`${API_URL}/auth/login`, values, {
+        const response = await axios.post(`${API_URL}//auth/login`, values, {
           headers: { "Content-Type": "application/json" },
         });
 

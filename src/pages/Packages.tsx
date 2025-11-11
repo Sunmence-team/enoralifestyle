@@ -7,7 +7,7 @@ import PackageCard from "../components/cards/PackageCard";
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-const IMAGE_URL = import.meta.env.VITE_API_IMAGE_URL;
+const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
 
 interface Package {
   id: number;
@@ -40,7 +40,7 @@ const Packages = () => {
   useEffect(() => {
     const fetchPackages = async () => {
       try {
-        const res = await axios.get(`${API_URL}packages`);
+        const res = await axios.get(`${API_URL}/packages`);
         const rawData = res.data.data?.data || [];
 
         // Filter only packages and sort by latest

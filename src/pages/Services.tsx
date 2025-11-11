@@ -6,7 +6,7 @@ import ServiceCard from "../components/cards/ServiceCard";
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-const IMAGE_URL = import.meta.env.VITE_API_IMAGE_URL;
+const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
 
 interface Service {
   id: number;
@@ -31,7 +31,7 @@ const Services = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const res = await axios.get(`${API_URL}services`);
+        const res = await axios.get(`${API_URL}/services`);
         const rawData = res.data.data?.data || [];
 
         // Filter only services and sort by latest

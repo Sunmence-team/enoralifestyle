@@ -82,7 +82,7 @@ export default function DashboardTable<T extends { id: number }>({
                       <img
                         src={
                           (item as any).image
-                            ? `${import.meta.env.VITE_API_IMAGE_URL}${(item as any).image.replace(/^public\//, "")}`
+                            ? `${import.meta.env.VITE_IMAGE_BASE_URL}/${(item as any).image.replace(/^public\//, "")}`
                             : "/placeholder.jpg"
                         }
                         alt="img"

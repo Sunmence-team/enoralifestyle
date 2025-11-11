@@ -6,7 +6,7 @@ import HeroSection from "../components/herosections/Herosection";
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-const IMAGE_URL = import.meta.env.VITE_API_IMAGE_URL;
+const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
 
 interface Blog {
   id: number;
@@ -42,7 +42,7 @@ const BlogDetails: React.FC = () => {
       if (!id) return setError("Invalid blog ID");
 
       try {
-        const res = await axios.get(`${API_URL}blogs/${id}`);
+        const res = await axios.get(`${API_URL}/blogs/${id}`);
         setBlog(res.data?.data || res.data);
       } catch (err) {
         setError("Blog not found.");
@@ -58,7 +58,7 @@ const BlogDetails: React.FC = () => {
     if (!id) return;
     setLoadingComments(true);
     try {
-      const res = await axios.get(`${API_URL}blogs/${id}/comments?per_page=20`);
+      const res = await axios.get(`${API_URL}/blogs/${id}/comments?per_page=20`);
       const data = res.data?.data || [];
       setComments(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -79,7 +79,7 @@ const BlogDetails: React.FC = () => {
 
     setSubmitting(true);
     try {
-      await axios.post(`${API_URL}blogs/${id}/comments`, {
+      await axios.post(`${API_URL}/blogs/${id}/comments`, {
         name: name.trim(),
         text: comment.trim(),
       });

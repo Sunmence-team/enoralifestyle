@@ -12,6 +12,10 @@ import Appointments from "./pages/dashboard/Appointments";
 import BlogUpload from "./pages/dashboard/BlogUpload";
 import Package from "./pages/dashboard/Package";
 import BlogDetails from "./pages/BlogDetails";
+import Packages from "./pages/Packages";
+import BookAppointment from "./pages/BookAppointment";
+import Register from "./pages/auth/Register";
+import Login from "./pages/auth/Login";
 
 
 const App: React.FC = () => {

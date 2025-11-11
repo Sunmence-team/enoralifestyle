@@ -38,7 +38,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
         {subtitle && (
           <p className="text-[14px] md:text-base mb-6 text-white">
             {subtitle}
-          </h5>
+          </p>
         )}
         <div className="flex justify-center gap-4">
           {button1Text && (

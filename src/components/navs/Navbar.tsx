@@ -63,7 +63,7 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const res = await axios.get(`${API_URL}services`);
+        const res = await axios.get(`${API_URL}/services`);
         const data: ServiceItem[] = res.data.data?.data || [];
 
         const cartItems = data.map((item) => ({

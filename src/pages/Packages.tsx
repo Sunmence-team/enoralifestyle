@@ -7,7 +7,7 @@ import PackageCard from "../components/cards/PackageCard";
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
+const IMAGE_URL = (import.meta.env.VITE_IMAGE_BASE_URL || "").replace(/\/?$/, "/");
 
 interface Package {
   id: number;

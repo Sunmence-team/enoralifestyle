@@ -10,8 +10,8 @@ import PackageCard from "../components/cards/PackageCard";
 import ServiceCard from "../components/cards/ServiceCard";
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_BASE_URL;
-const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
+const API_URL = import.meta.env.VITE_API_BASE_URL || "";
+const IMAGE_URL = (import.meta.env.VITE_IMAGE_BASE_URL || "").replace(/\/?$/, "/");
 
 interface ApiItem {
   id: number;
@@ -23,80 +23,103 @@ interface ApiItem {
   created_at: string;
 }
 
+interface Blog {
+  id: number;
+  title: string;
+  short_description: string;
+  cover_image: string | null;
+  created_at: string;
+}
+
 const Home = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Home - Enora Lifestyle And Spa";
   }, []);
 
-  const [allItems, setAllItems] = useState<ApiItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  // ────── Packages & Services ──────
+  const [packages, setPackages] = useState<ApiItem[]>([]);
+  const [services, setServices] = useState<ApiItem[]>([]);
+  const [itemsLoading, setItemsLoading] = useState(true);
 
-  // FETCH FROM /services (returns both packages & services)
+  // ────── Blogs ──────
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [blogsLoading, setBlogsLoading] = useState(true);
+
+  // ────── Fetch Packages (GET /packages) ──────
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchPackages = async () => {
       try {
-        const res = await axios.get(`${API_URL}/services`);
-        const rawData = res.data.data?.data || [];
-
-        // Sort by latest first
-        const sorted = rawData.sort((a: ApiItem, b: ApiItem) =>
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        );
-
-        setAllItems(sorted);
+        const res = await axios.get(`${API_URL}/packages`);
+        const raw = res.data?.data?.data || [];
+        const sorted = raw
+          .sort(
+            (a: ApiItem, b: ApiItem) =>
+              new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          )
+          .slice(0, 3);
+        setPackages(sorted);
       } catch (err) {
-        console.error("API FAILED:", err);
-        setAllItems([]);
+        console.error("Failed to fetch packages:", err);
+        setPackages([]);
       } finally {
-        setLoading(false);
+        setItemsLoading(false);
       }
     };
-
-    fetchData();
+    fetchPackages();
   }, []);
 
-  // Filter latest 3 packages & services
-  const packages = allItems
-    .filter((item) => item.type === "package")
-    .slice(0, 3);
+  // ────── Fetch Services (GET /services) ──────
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/services`);
+        const raw = res.data?.data?.data || [];
+        const filtered = raw.filter((i: any) => i.type === "service");
+        const sorted = filtered
+          .sort(
+            (a: ApiItem, b: ApiItem) =>
+              new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          )
+          .slice(0, 3);
+        setServices(sorted);
+      } catch (err) {
+        console.error("Failed to fetch services:", err);
+        setServices([]);
+      }
+    };
+    fetchServices();
+  }, []);
 
-  const services = allItems
-    .filter((item) => item.type === "service")
-    .slice(0, 3);
+  // ────── Fetch Latest 3 Blogs (GET /blogs) ──────
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/blogs`);
+        const raw = res.data?.data?.data || [];
+        const sorted = raw
+          .sort(
+            (a: Blog, b: Blog) =>
+              new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          )
+          .slice(0, 3);
+        setBlogs(sorted);
+      } catch (err) {
+        console.error("Failed to fetch blogs:", err);
+        setBlogs([]);
+      } finally {
+        setBlogsLoading(false);
+      }
+    };
+    fetchBlogs();
+  }, []);
 
-  // Hardcoded blogs
-  const blogs = [
-    {
-      id: "1",
-      title: "Anti-Aging Facials: Do They Really Make You Look Younger?",
-      short_description: "You need your face to be amazing and lovely and you need to read this blog to get better abeg",
-      cover_image: null,
-    },
-    {
-      id: "2",
-      title: "Why Your Skin Isn’t Glowing, 5 Mistakes to Avoid",
-      short_description: "You need your face to be amazing and lovely and you need to read this blog to get better abeg",
-      cover_image: null,
-    },
-    {
-      id: "3",
-      title: "Why Self-Care Is Not a Luxury but a Necessity",
-      short_description: "You need your face to be amazing and lovely and you need to read this blog to get better abeg",
-      cover_image: null,
-    },
-    {
-      id: "4",
-      title: "Why Self-Care Is Not a Luxury but a Necessity",
-      short_description: "You need your face to be amazing and lovely and you need to read this blog to get better abeg",
-      cover_image: null,
-    },
-  ];
-
+  // ────── Reviews (hardcoded) ──────
   const reviews = [
     {
       iconColor: "#000000CC",
-      reviewText: "I struggled with hormonal acne for years and nothing worked until I found this spa. Their acne facial plan cleared my skin in just 4 weeks. Highly recommended!",
+      reviewText:
+        "I struggled with hormonal acne for years and nothing worked until I found this spa. Their acne facial plan cleared my skin in just 4 weeks. Highly recommended!",
       profileImage: assets.banker,
       name: "Sarah Johnson",
       role: "Banker",
@@ -104,7 +127,8 @@ const Home = () => {
     },
     {
       iconColor: "#C97BB7",
-      reviewText: "I used to think facials were just for women until I tried their deep cleansing facial. My skin feels fresh and clean, and my beard bumps reduced. I’m definitely coming back.",
+      reviewText:
+        "I used to think facials were just for women until I tried their deep cleansing facial. My skin feels fresh and clean, and my beard bumps reduced. I’m definitely coming back.",
       profileImage: assets.soft,
       name: "Michael Peters",
       role: "Software Engineer",
@@ -112,7 +136,8 @@ const Home = () => {
     },
     {
       iconColor: "#000000CC",
-      reviewText: "I came for a skin consultation and left with so much knowledge. They actually understood my skin and recommended the right products. My dark spots are fading already.",
+      reviewText:
+        "I came for a skin consultation and left with so much knowledge. They actually understood my skin and recommended the right products. My dark spots are fading already.",
       profileImage: assets.desi,
       name: "Jennifer Okeke",
       role: "Digital Marketer",
@@ -138,17 +163,29 @@ const Home = () => {
           Blog <span className="text-[var(--primary-color)]">News</span>
         </h1>
 
-        <div className="mt-10 flex overflow-x-scroll gap-4 no-scrollbar pb-2">
-          {blogs.map((blog, index) => (
-            <div className="md:min-w-[340px] min-w-[320px]" key={index}>
-              <BlogCard
-                id={blog.id}
-                title={blog.title}
-                description={blog.short_description}
-                image={blog.cover_image ? `${IMAGE_URL}${blog.cover_image.replace(/^public\//, "")}` : assets.blog1}
-              />
+        <div className="mt-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 gap-6 justify-items-center">
+          {blogsLoading ? (
+            <div className="col-span-full flex items-center justify-center py-10">
+              <div className="animate-spin rounded-full h-10 w-10 border-4 border-pink-500 border-t-transparent"></div>
             </div>
-          ))}
+          ) : blogs.length === 0 ? (
+            <p className="col-span-full text-center py-10 text-gray-500">No blogs yet.</p>
+          ) : (
+            blogs.map((blog) => (
+              <div key={blog.id} className="w-full max-w-sm">
+                <BlogCard
+                  id={String(blog.id)}
+                  title={blog.title}
+                  description={blog.short_description || "Read more..."}
+                  image={
+                    blog.cover_image
+                      ? `${IMAGE_URL}${blog.cover_image.replace(/^public\//, "")}`
+                      : assets.blog1
+                  }
+                />
+              </div>
+            ))
+          )}
         </div>
 
         <div className="flex justify-end mt-10">
@@ -204,23 +241,30 @@ const Home = () => {
           Our <span className="text-black">Packages</span>
         </h1>
 
-        <div className="mt-10 lg:grid lg:grid-cols-3 md:gap-6 gap-4 flex lg:overflow-auto overflow-x-scroll no-scrollbar py-4">
-          {loading ? (
-            <div className="w-full text-center py-20 text-gray-500 text-xl">Loading packages...</div>
+        <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {itemsLoading ? (
+            <div className="w-full  text-center py-20 text-gray-500 text-xl">
+              Loading packages...
+            </div>
           ) : packages.length === 0 ? (
-            <div className="w-full text-center py-20 text-gray-500">No packages available</div>
+            <div className="w-full text-center py-20 text-gray-500">
+              No packages available
+            </div>
           ) : (
             packages.map((item, index) => (
-              <div className="w-full lg:w-auto" key={item.id}>
-                <PackageCard
-                  id={item.id.toString()}
-                  index={index}
-                  title={item.name}
-                  description={item.description}
-                  price={parseFloat(item.price)}
-                  image={item.image ? `${IMAGE_URL}${item.image}` : assets.our1}
-                />
-              </div>
+              <PackageCard
+                key={item.id}
+                id={item.id.toString()}
+                index={index}
+                title={item.name}
+                description={item.description}
+                price={parseFloat(item.price)}
+                image={
+                  item.image
+                    ? `${IMAGE_URL}${item.image.replace(/^public\//, "")}`
+                    : assets.our1
+                }
+              />
             ))
           )}
         </div>
@@ -243,10 +287,14 @@ const Home = () => {
         </h1>
 
         <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {loading ? (
-            <div className="col-span-full text-center py-20 text-gray-500 text-xl">Loading services...</div>
+          {itemsLoading ? (
+            <div className="col-span-full text-center py-20 text-gray-500 text-xl">
+              Loading services...
+            </div>
           ) : services.length === 0 ? (
-            <div className="col-span-full text-center py-20 text-gray-500">No services available</div>
+            <div className="col-span-full text-center py-20 text-gray-500">
+              No services available
+            </div>
           ) : (
             services.map((item, index) => (
               <ServiceCard
@@ -256,7 +304,11 @@ const Home = () => {
                 title={item.name}
                 price={parseFloat(item.price)}
                 description={item.description}
-                image={item.image ? `${IMAGE_URL}${item.image}` : assets.ser1}
+                image={
+                  item.image
+                    ? `${IMAGE_URL}${item.image.replace(/^public\//, "")}`
+                    : assets.ser1
+                }
               />
             ))
           )}
@@ -306,12 +358,36 @@ const Home = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mx-auto">
           {[
-            { num: "01", q: "What services does Enoralifestyle Spa offer?", a: "We offer facials, massages, body treatments, skincare therapy, pain management, and full spa access." },
-            { num: "02", q: "Do I need to book an appointment in advance?", a: "Yes, we recommend booking in advance to secure your preferred date, time, and therapist. Walk-ins are welcome when slots are available." },
-            { num: "03", q: "What should I expect during my first visit?", a: "You'll be welcomed by our team, guided through a short consultation, and introduced to your treatment space. Every session is customized to your needs and comfort." },
-            { num: "04", q: "What do I need to bring for my spa session?", a: "You don’t need to bring much — we provide robes, towels, and slippers. If you plan to use our pool or gym, simply come along with your swimwear and essentials." },
-            { num: "05", q: "Are your products suitable for sensitive skin?", a: "Absolutely. We use high-quality, dermatologist-tested products that are safe and effective for all skin types, including sensitive skin." },
-            { num: "06", q: "Do your spa packages include access to all facilities?", a: "Yes! Every spa package includes free access to our pool, sauna, gym, and relaxation rooms — so you can enjoy the full Enoralifestyle experience." },
+            {
+              num: "01",
+              q: "What services does Enoralifestyle Spa offer?",
+              a: "We offer facials, massages, body treatments, skincare therapy, pain management, and full spa access.",
+            },
+            {
+              num: "02",
+              q: "Do I need to book an appointment in advance?",
+              a: "Yes, we recommend booking in advance to secure your preferred date, time, and therapist. Walk-ins are welcome when slots are available.",
+            },
+            {
+              num: "03",
+              q: "What should I expect during my first visit?",
+              a: "You'll be welcomed by our team, guided through a short consultation, and introduced to your treatment space. Every session is customized to your needs and comfort.",
+            },
+            {
+              num: "04",
+              q: "What do I need to bring for my spa session?",
+              a: "You don’t need to bring much — we provide robes, towels, and slippers. If you plan to use our pool or gym, simply come along with your swimwear and essentials.",
+            },
+            {
+              num: "05",
+              q: "Are your products suitable for sensitive skin?",
+              a: "Absolutely. We use high-quality, dermatologist-tested products that are safe and effective for all skin types, including sensitive skin.",
+            },
+            {
+              num: "06",
+              q: "Do your spa packages include access to all facilities?",
+              a: "Yes! Every spa package includes free access to our pool, sauna, gym, and relaxation rooms — so you can enjoy the full Enoralifestyle experience.",
+            },
           ].map((faq, idx) => (
             <div
               key={idx}
@@ -350,8 +426,14 @@ const Home = () => {
             >
               <div className="border border-black/10 rounded-t-2xl px-4 py-8 flex-1 flex flex-col bg-white">
                 <div className="flex items-center gap-1">
-                  <BiSolidQuoteSingleLeft className="w-8 h-8 md:w-10 md:h-10" style={{ color: review.iconColor }} />
-                  <BiSolidQuoteSingleLeft className="w-8 h-8 md:w-10 md:h-10" style={{ color: review.iconColor }} />
+                  <BiSolidQuoteSingleLeft
+                    className="w-8 h-8 md:w-10 md:h-10"
+                    style={{ color: review.iconColor }}
+                  />
+                  <BiSolidQuoteSingleLeft
+                    className="w-8 h-8 md:w-10 md:h-10"
+                    style={{ color: review.iconColor }}
+                  />
                 </div>
                 <div className="text mt-5 flex-1">
                   <p className="text-gray-700 text-sm md:text-base leading-relaxed">
@@ -363,7 +445,11 @@ const Home = () => {
               <div className="p-3 rounded-b-2xl" style={{ backgroundColor: review.bgColor }}>
                 <div className="flex items-center gap-2">
                   <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden shrink-0">
-                    <img src={review.profileImage} alt={review.name} className="w-full h-full object-cover" />
+                    <img
+                      src={review.profileImage}
+                      alt={review.name}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <div>
                     <h4 className="font-semibold text-white text-sm md:text-base">{review.name}</h4>

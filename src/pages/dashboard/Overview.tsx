@@ -59,7 +59,7 @@ export default function Overview() {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`${API_URL}//services?per_page=100`, {
+      const response = await axios.get(`${API_URL}/services?per_page=100`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -108,13 +108,13 @@ export default function Overview() {
 
       if (isEditing && editingId) {
         // PUT /services/{id}
-        await axios.put(`${API_URL}//services/${editingId}`, formData, {
+        await axios.put(`${API_URL}/services/${editingId}`, formData, {
           headers: { Authorization: `Bearer ${token}` },
         });
         toast.success("Service updated successfully!");
       } else {
         // POST /services
-        await axios.post(`${API_URL}//services`, formData, {
+        await axios.post(`${API_URL}/services`, formData, {
           headers: { Authorization: `Bearer ${token}` },
         });
         toast.success("Service created!");
@@ -175,7 +175,7 @@ export default function Overview() {
       const token = localStorage.getItem("token");
       // POST /services/{id} with _method=DELETE
       await axios.post(
-        `${API_URL}//services/${deletingService.id}`,
+        `${API_URL}/services/${deletingService.id}`,
         { _method: "DELETE" },
         {
           headers: {

@@ -2,6 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { GoChevronRight } from "react-icons/go";
+import { assets } from "../../assets/assests";
 
 interface BlogCardProps {
   id: string;
@@ -16,7 +17,7 @@ const BlogCard = ({ id, title, description, image }: BlogCardProps) => {
   return (
     <Link
       to={`/blog/${id}`}
-      className="relative bg-white rounded-3xl shadow hover:shadow-md transition-all duration-300 flex flex-col gap-2 justify-between text-center border border-black/10 overflow-hidden block"
+      className="relative bg-white rounded-3xl shadow hover:shadow-md transition-all duration-300 flex flex-col gap-2 justify-between text-center border border-black/10 overflow-hidden"
     >
       {/* Text before image */}
       <div className="px-5 pt-6 text-start">
@@ -36,7 +37,7 @@ const BlogCard = ({ id, title, description, image }: BlogCardProps) => {
             alt={title}
             className="w-full h-full object-cover"
             onError={(e) => {
-              (e.target as HTMLImageElement).src = "/fallback-blog.jpg"; // optional fallback
+              (e.target as HTMLImageElement).src = assets.logo;
             }}
           />
         </div>

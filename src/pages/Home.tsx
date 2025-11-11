@@ -13,6 +13,7 @@ import UserDetailsModal from "../modals/UserDetailsModal";
 import BlogCardSkeleton from "../components/skeletons/BlogCardSkeleton";
 import ServiceCardSkeleton from "../components/skeletons/ServiceCardSkeleton";
 import PackageCardSkeleton from "../components/skeletons/PackageCardSkeleton";
+import TestimonialCardSkeleton from "../components/skeletons/TestimonialCardSkeleton";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
@@ -40,11 +41,8 @@ interface Blog {
   cover_image: string | null;
   created_at: string;
 }
-import TestimonialCardSkeleton from "../components/skeletons/TestimonialCardSkeleton";
-import type { testimonialProps } from "../utilities/sharedInterFaces";
 
 const Home = () => {
-
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Home - Enora Lifestyle And Spa";
@@ -54,9 +52,10 @@ const Home = () => {
   const [services, setServices] = useState<ApiItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [initializingPayment, setInitializingPayment] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [testimonials, setTestimonials] = useState<testimonialProps[]>([]);
   const [loadingTestimonials, setLoadingTestimonials] = useState(false);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [isLoadingBlogs, setIsLoadingBlogs] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -77,7 +76,7 @@ const Home = () => {
       }, 1000);
     }
   };
-  
+
   const fetchServices = async () => {
     try {
       const response = await axios.get(`${API_URL}/services`);
@@ -103,7 +102,7 @@ const Home = () => {
 
   useEffect(() => {
     const fetchBlogs = async () => {
-      setIsLoadingBlogs(true)
+      setIsLoadingBlogs(true);
       try {
         const response = await axios.get(`${API_URL}/blogs`);
         // console.log("response", response)
@@ -125,7 +124,8 @@ const Home = () => {
   const reviews = [
     {
       iconColor: "#000000CC",
-      reviewText: "I struggled with hormonal acne for years and nothing worked until I found this spa. Their acne facial plan cleared my skin in just 4 weeks. Highly recommended!",
+      reviewText:
+        "I struggled with hormonal acne for years and nothing worked until I found this spa. Their acne facial plan cleared my skin in just 4 weeks. Highly recommended!",
       profileImage: assets.banker,
       name: "Sarah Johnson",
       role: "Banker",
@@ -133,7 +133,8 @@ const Home = () => {
     },
     {
       iconColor: "#C97BB7",
-      reviewText: "I used to think facials were just for women until I tried their deep cleansing facial. My skin feels fresh and clean, and my beard bumps reduced. I’m definitely coming back.",
+      reviewText:
+        "I used to think facials were just for women until I tried their deep cleansing facial. My skin feels fresh and clean, and my beard bumps reduced. I’m definitely coming back.",
       profileImage: assets.soft,
       name: "Michael Peters",
       role: "Software Engineer",
@@ -141,7 +142,8 @@ const Home = () => {
     },
     {
       iconColor: "#000000CC",
-      reviewText: "I came for a skin consultation and left with so much knowledge. They actually understood my skin and recommended the right products. My dark spots are fading already.",
+      reviewText:
+        "I came for a skin consultation and left with so much knowledge. They actually understood my skin and recommended the right products. My dark spots are fading already.",
       profileImage: assets.desi,
       name: "Jennifer Okeke",
       role: "Digital Marketer",
@@ -180,7 +182,7 @@ const Home = () => {
       q: "Do your spa packages include access to all facilities?",
       a: "Yes! Every spa package includes free access to our pool, sauna, gym, and relaxation rooms — so you can enjoy the full Enoralifestyle experience.",
     },
-  ]
+  ];
 
   const initializePayment = async (userDetails: UserDetails) => {
     setInitializingPayment(true);
@@ -282,28 +284,27 @@ const Home = () => {
           </h1>
 
           <div className="mt-10 flex overflow-x-scroll gap-4 no-scrollbar pb-2">
-            {
-              isLoadingBlogs ? (
-                Array(5).fill(0).map((_, index) => (
-                  <div className="md:min-w-[340px] min-w-[320px]" key={index}>
-                    <BlogCardSkeleton />
-                  </div>
-                ))
-              ) : (
-                !isLoadingBlogs && !error && blogs.length > 0 && (
-                  blogs.slice(0, 6).map((blog, index) => (
+            {isLoadingBlogs
+              ? Array(5)
+                  .fill(0)
+                  .map((_, index) => (
                     <div className="md:min-w-[340px] min-w-[320px]" key={index}>
-                      <BlogCard
-                        id={String(blog?.id)}
-                        title={blog?.title}
-                        description={blog?.short_description}
-                        image={`${IMAGE_URL}/${blog?.cover_image}`}
-                      />
+                      <BlogCardSkeleton />
                     </div>
                   ))
-                )
-              )
-            }
+              : !isLoadingBlogs &&
+                !error &&
+                blogs.length > 0 &&
+                blogs.slice(0, 6).map((blog, index) => (
+                  <div className="md:min-w-[340px] min-w-[320px]" key={index}>
+                    <BlogCard
+                      id={String(blog?.id)}
+                      title={blog?.title}
+                      description={blog?.short_description}
+                      image={`${IMAGE_URL}/${blog?.cover_image}`}
+                    />
+                  </div>
+                ))}
           </div>
 
           <div className="flex justify-end mt-10">
@@ -372,13 +373,17 @@ const Home = () => {
             </h1>
             <div className="mt-10 lg:grid grid-cols-3 md:gap-6 gap-4 flex lg:overflow-auto overflow-x-scroll no-scrollbar py-4">
               {loading ? (
-                Array(3).fill(0).map((_, index) => (
-                  <div className="w-full" key={index}>
-                    <PackageCardSkeleton />
-                  </div>
-                ))
+                Array(3)
+                  .fill(0)
+                  .map((_, index) => (
+                    <div className="w-full" key={index}>
+                      <PackageCardSkeleton />
+                    </div>
+                  ))
               ) : packages.length === 0 ? (
-                <div className="w-full text-center py-20 text-gray-500">No packages available</div>
+                <div className="w-full text-center py-20 text-gray-500">
+                  No packages available
+                </div>
               ) : (
                 packages.map((item, index) => (
                   <div className="min-w-[340px]" key={index}>
@@ -388,12 +393,14 @@ const Home = () => {
                       title={item.name}
                       description={item.description}
                       price={parseFloat(item.price)}
-                      image={item.image ? `${IMAGE_URL}/${item.image}` : assets.our1}
+                      image={
+                        item.image ? `${IMAGE_URL}/${item.image}` : assets.our1
+                      }
                     />
                   </div>
                 ))
               )}
-          </div>
+            </div>
             <div className="flex flex-row-reverse mt-10">
               <Link
                 to="/packages"
@@ -416,11 +423,13 @@ const Home = () => {
 
           <div className="mt-10 lg:grid grid-cols-3 md:gap-6 gap-4 flex lg:overflow-auto overflow-x-scroll no-scrollbar py-4">
             {loading ? (
-              Array(3).fill(0).map((_, index) => (
-                <ServiceCardSkeleton key={index} />
-              ))
+              Array(3)
+                .fill(0)
+                .map((_, index) => <ServiceCardSkeleton key={index} />)
             ) : services.length === 0 ? (
-              <div className="col-span-full text-center py-20 text-gray-500">No services available</div>
+              <div className="col-span-full text-center py-20 text-gray-500">
+                No services available
+              </div>
             ) : (
               services.map((item, index) => (
                 <div className="min-w-[340px]" key={index}>
@@ -431,21 +440,23 @@ const Home = () => {
                     title={item.name}
                     price={parseFloat(item.price)}
                     description={item.description}
-                    image={item.image ? `${IMAGE_URL}/${item.image}` : assets.ser1}
+                    image={
+                      item.image ? `${IMAGE_URL}/${item.image}` : assets.ser1
+                    }
                   />
                 </div>
               ))
             )}
           </div>
           <div className="flex flex-row-reverse mt-10">
-              <Link
-                to="/services"
-                className="flex items-center text-(--accent-color) font-semibold transition-colors"
-              >
-                <span>See all</span>
-                <IoIosArrowRoundForward size={30} />
-              </Link>
-            </div>
+            <Link
+              to="/services"
+              className="flex items-center text-(--accent-color) font-semibold transition-colors"
+            >
+              <span>See all</span>
+              <IoIosArrowRoundForward size={30} />
+            </Link>
+          </div>
         </div>
 
         {/* EBOOK SECTION */}
@@ -463,10 +474,21 @@ const Home = () => {
               Our <span className="text-(--primary-color)">Ebook</span>
             </h1>
             <p className="md:text-start text-center font-[inter]! text-sm">
-              This course is designed to simplify weight loss cutting through the jargon and confusion, so you can  achieve results that fit seamlessly into your busy lifestyle. With practical strategies, time-saving hacks, and expert guidance, you’ll learn how to lose weight  easily. This program provides the tools, structure, and motivation you need to succeed. By the end, you’ll have built lasting healthy habits that not only help you manage your weight but also  boost your overall health. Disease free, no waste of money on hospital rounds, fake medications and  unethical doctors.
+              This course is designed to simplify weight loss cutting through
+              the jargon and confusion, so you can achieve results that fit
+              seamlessly into your busy lifestyle. With practical strategies,
+              time-saving hacks, and expert guidance, you’ll learn how to lose
+              weight easily. This program provides the tools, structure, and
+              motivation you need to succeed. By the end, you’ll have built
+              lasting healthy habits that not only help you manage your weight
+              but also boost your overall health. Disease free, no waste of
+              money on hospital rounds, fake medications and unethical doctors.
             </p>
             <div className="mt-6 flex md:justify-start justify-center">
-              <button className="flex items-center justify-center gap-2 bg-(--primary-color) hover:bg-(--primary-color) text-white font-medium! px-6 py-3 rounded-sm transition-colors duration-200 shadow-sm">
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="flex items-center justify-center gap-2 bg-(--primary-color) hover:bg-(--primary-color) text-white font-medium! px-6 py-3 rounded-sm transition-colors duration-200 shadow-sm cursor-pointer"
+              >
                 Buy Now
               </button>
             </div>
@@ -509,7 +531,7 @@ const Home = () => {
           </h1>
 
           {/* Scrollable container for sm & md; static grid on lg */}
-          <div className="flex h-max gap-6 overflow-x-auto lg:overflow-y-visible! overflow-y-hidden lg:overflow-x-visible lg:justify-center pb-5 snap-x snap-mandatory lg:flex-row lg:flex-wrap">
+          <div className="flex gap-6 overflow-x-auto overflow-y-hidden lg:overflow-x-visible lg:justify-center pb-5 snap-x snap-mandatory lg:flex-row lg:flex-wrap">
             {loadingTestimonials
               ? [1, 2, 3].map((s, idx) => <TestimonialCardSkeleton key={idx} />)
               : testimonials.length === 0
@@ -517,21 +539,20 @@ const Home = () => {
                   <div
                     key={index}
                     className={`
-                  flex flex-col shrink-0 w-[300px] h-[360px] snap-center 
-                  lg:flex-1 lg:min-w-[350px] lg:h-[380px]
-                  transition-all duration-300
-                  ${index % 2 !== 0 && "lg:-translate-y-14"}
-                `}
+          flex flex-col flex-shrink-0 w-[300px] h-[360px] snap-center 
+          lg:flex-1 lg:min-w-[350px] lg:h-[380px]
+          transition-all duration-300
+        `}
                   >
                     {/* Top section (review content) */}
                     <div className="border border-black/20 rounded-t-2xl px-4 py-8 flex-1 flex flex-col bg-white">
                       <div className="flex items-center gap-1">
                         <BiSolidQuoteSingleLeft
-                          className="size-8 md:size-10"
+                          className="w-8 h-8 md:w-10 md:h-10"
                           style={{ color: review.iconColor }}
                         />
                         <BiSolidQuoteSingleLeft
-                          className="size-8 md:size-10"
+                          className="w-8 h-8 md:w-10 md:h-10"
                           style={{ color: review.iconColor }}
                         />
                       </div>

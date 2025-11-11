@@ -8,7 +8,7 @@ import axios from "axios";
 import PackageCardSkeleton from "../components/skeletons/PackageCardSkeleton";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
+const IMAGE_URL = (import.meta.env.VITE_IMAGE_BASE_URL || "").replace(/\/?$/, "/");
 
 interface Package {
   id: number;
@@ -43,15 +43,8 @@ const Packages = () => {
   useEffect(() => {
     const fetchPackages = async () => {
       try {
-        const response = await axios.get(`${API_URL}/packages`);
-        console.log("response", response);
-
-        if (response.status === 200) {
-          const { data, current_page, last_page } = response.data.data;
-          setPackages(data);
-          setCurrentPage(current_page);
-          setlastPage(last_page);
-        }
+        const res = await axios.get(`${API_URL}/packages`);
+        const rawData = res.data.data?.data || [];
 
         // Filter only packages and sort by latest
         // const sorted = rawData

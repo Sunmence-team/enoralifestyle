@@ -7,7 +7,7 @@ import axios from "axios";
 import ServiceCardSkeleton from "../components/skeletons/ServiceCardSkeleton";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
+const IMAGE_URL = (import.meta.env.VITE_IMAGE_BASE_URL || "").replace(/\/?$/, "/");
 
 interface Service {
   id: number;
@@ -33,21 +33,15 @@ const Services = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await axios.get(`${API_URL}/services`);
+        const res = await axios.get(`${API_URL}/services`);
+        const rawData = res.data.data?.data || [];
 
-        console.log("response", response);
-        if (response.status === 200) {
-          const { data, current_page, last_page } = response.data.data;
-          setServices(data);
-          setCurrentPage(current_page);
-          setlastPage(last_page);
-        }
-
-        // const sorted = rawData
-        //   .filter((item: any) => item.type === "service")
-        //   .sort((a: Service, b: Service) =>
-        //     new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        //   );
+        // Filter only services and sort by latest
+        const sorted = rawData
+          .filter((item: any) => item.type === "service") // Fixed: item.type
+          .sort((a: Service, b: Service) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          );
 
         // setServices(sorted);
       } catch (err) {

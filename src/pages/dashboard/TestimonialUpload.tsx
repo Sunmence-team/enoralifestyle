@@ -121,7 +121,7 @@ export default function UploadTestimonial() {
           comment: "",
           image: "",
         });
-        fetchTestimonials()
+        fetchTestimonials();
         setPrevImage("");
       } else {
         toast.error(`Failed to create testimonial. ${data.message}.`);
@@ -142,7 +142,7 @@ export default function UploadTestimonial() {
     }
   };
 
-  async function fetchTestimonials  () {
+  async function fetchTestimonials() {
     setLoadingTestimonials(true);
     try {
       const baseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -182,7 +182,7 @@ export default function UploadTestimonial() {
     } finally {
       setLoadingTestimonials(false);
     }
-  };
+  }
 
   const handleDeleteTestimonial = async () => {
     setDeletingTestimonials(true);
@@ -448,7 +448,8 @@ export default function UploadTestimonial() {
         </div>
         {/*  */}
 
-        <div className="bg-white rounded-xl shadow border border-black/10 overflow-hidden">
+        <div className="bg-white rounded-xl shadow border border-black/10 overflow-hidden p-4 flex flex-col gap-4">
+          <h2 className="font-bold text-2xl">Manage Testimonials</h2>
           <table className="w-full text-left">
             <thead className="bg-gray-100 border-b">
               <tr>

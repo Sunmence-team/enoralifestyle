@@ -109,7 +109,7 @@ const ServiceCard = (item: ServiceCardProps) => {
                             </p>
                         </div>
 
-                        <div className="p-6 h-[40vh] overflow-y-auto styled-scrollbar">
+                        <div className="p-6 lg:h-[40vh] md:h-[30vh] h-[50vh] overflow-y-auto styled-scrollbar">
                             <h2 className="text-[24px] font-semibold text-black mb-2">
                                 {selectedService.title}
                             </h2>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { FaBars } from "react-icons/fa6";
 import { assets } from "../assets/assests";
+import { MdShoppingCart } from "react-icons/md";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,9 +11,9 @@ const Navbar: React.FC = () => {
   const navLinks = [
     { path: "/", name: "Home" },
     { path: "/services", name: "Services" },
-    { path: "/packages", name: "packages" },
+    { path: "/packages", name: "Packages" },
     { path: "/blog", name: "Blog" },
-    { path: "/appointment", name: "Appointment" },
+    { path: "/contact", name: "Contact Us" },
   ];
 
   // Detect scroll and change navbar background
@@ -44,7 +45,7 @@ const Navbar: React.FC = () => {
           <img
             src={assets.logo}
             alt="Logo"
-            className="w-12 h-12 md:w-16 md:h-16 object-contain"
+            className="w-12 h-12 md:w-14 md:h-14 object-cover"
           />
         </div>
 
@@ -57,10 +58,10 @@ const Navbar: React.FC = () => {
               className={({ isActive }) =>
                 `transition-colors duration-200 cursor-pointer ${
                   isActive
-                    ? "text-[var(--primary-color)] font-semibold"
+                    ? `${isScrolled ? "text-(--accent-color)" : "text-white"} font-semibold!`
                     : isScrolled
-                    ? "text-gray-800 hover:text-[var(--primary-color)]"
-                    : "text-white hover:text-[var(--primary-color)]"
+                    ? "text-(--accent-color)/90 hover:text-(--accent-color)"
+                    : "text-white/60 hover:text-white"
                 }`
               }
             >
@@ -72,20 +73,23 @@ const Navbar: React.FC = () => {
         {/* Desktop Button */}
         <Link
           to="/appointment"
-          className={`hidden lg:flex py-3 px-6 rounded-[10px]  text-sm font-medium transition-all duration-200 cursor-pointer hover:opacity-90 active:scale-95 ${
+          className={`hidden lg:inline-flex rounded-full text-2xl font-medium transition-all duration-200 cursor-pointer hover:opacity-90 relative ${
             isScrolled
-              ? "bg-[var(--primary-color)] text-white"
-              : "bg-[var(--primary-color)] text-white"
+              ? "text-(--primary-color)"
+              : "text-white"
           }`}
         >
-          Book Appointment
+          <MdShoppingCart />
+          <div className="absolute -top-2 -right-2 bg-(--primary-color) rounded-full text-white text-xs flex items-center justify-center w-5 h-5 border-2 border-white">
+            <span className="-mt-1">3</span>
+          </div>
         </Link>
 
         {/* Mobile Menu Button */}
         <button
           type="button"
           className={`lg:hidden block text-2xl cursor-pointer active:scale-90 transition-transform ${
-            isScrolled ? "text-gray-800" : "text-white"
+            isScrolled ? "text-(--accent-color)" : "text-white"
           }`}
           onClick={() => setIsOpen(true)}
         >
@@ -118,8 +122,8 @@ const Navbar: React.FC = () => {
               className={({ isActive }) =>
                 `transition-colors duration-200 cursor-pointer ${
                   isActive
-                    ? "text-[var(--primary-color)] font-bold"
-                    : "text-gray-700 hover:text-[var(--primary-color)]"
+                    ? "text-(--primary-color) font-bold"
+                    : "text-gray-700 hover:text-(--primary-color)"
                 }`
               }
             >
@@ -131,7 +135,7 @@ const Navbar: React.FC = () => {
           <Link
             to="/appointment"
             onClick={handleLinkClick}
-            className="bg-[var(--primary-color)] hover:opacity-90 active:scale-95 text-white py-3 px-5 rounded-2xl text-sm font-medium transition-all duration-200 cursor-pointer mt-6"
+            className="bg-[var(--primary-color)] hover:opacity-90 active:scale-95 text-white py-3 px-5 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer mt-6"
           >
             Book Appointment
           </Link>

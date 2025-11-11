@@ -1,33 +1,43 @@
+import React, { useEffect } from "react";
 import { assets } from "../assets/assests";
 import { Link } from "react-router-dom";
 import { FiShoppingCart, FiArrowRight } from "react-icons/fi";
 import { BiSolidQuoteSingleLeft } from "react-icons/bi";
 import HeroSection from "../components/herosections/Herosection";
 import { IoIosArrowRoundForward } from "react-icons/io";
-import BlogCard from "../components/cards/Blogcard";
+import { FaChevronRight } from "react-icons/fa6";
+import { GoChevronRight } from "react-icons/go";
 
 const Home = () => {
+  useEffect(() => {
+    window.scroll(0, 0)
+    document.title = "Home - Enora Lifestyle And Spa";
+  }, [])
+
   // --- Array of packages ---
   const packages = [
     {
+      id: "1",
       title: "Manicure & Pedicure",
       description:
         "Manicure is for general hand care. Our classic pedicure includes nail painting/leg reflexology. Ideal for encouraging blood circulation.",
-      price: "₦15,000",
+      price: 15_000,
       image: assets.our1,
     },
     {
+      id: "2",
       title: "Facial & Waxing",
       description:
         "Specialized facials for acne, anti-aging, and skin rejuvenation, plus expert waxing services. We also offer personalized skin consultations.",
-      price: "₦12,000",
+      price: 12_000,
       image: assets.our2,
     },
     {
+      id: "3",
       title: "Body Scrub & Polish",
       description:
         "Is your skin dull and dehydrated? Get Enora Brightening Scrub, Polish, Moroccan Hammam Scrub or Enora Glow Bath.",
-      price: "₦18,000",
+      price: 18_000,
       image: assets.our3,
     },
   ];
@@ -59,18 +69,28 @@ const Home = () => {
   // --- Array of blogs (NEW) ---
   const blogs = [
     {
+      id: "1",
       title: "Anti-Aging Facials: Do They Really Make You Look Younger?",
       description:
         "You need your face to be amazing and lovely and you need to read this blog to get better abeg",
       image: assets.blog1,
     },
     {
+      id: "2",
       title: "Why Your Skin Isn’t Glowing, 5 Mistakes to Avoid",
       description:
         "You need your face to be amazing and lovely and you need to read this blog to get better abeg",
       image: assets.blog2,
     },
     {
+      id: "3",
+      title: "Why Self-Care Is Not a Luxury but a Necessity",
+      description:
+        "You need your face to be amazing and lovely and you need to read this blog to get better abeg",
+      image: assets.blog3,
+    },
+    {
+      id: "4",
       title: "Why Self-Care Is Not a Luxury but a Necessity",
       description:
         "You need your face to be amazing and lovely and you need to read this blog to get better abeg",
@@ -78,8 +98,6 @@ const Home = () => {
     },
   ];
 
-  // --- Array of review (NEW) ---
-  // --- Array of client reviews (NEW) ---
   const reviews = [
     {
       iconColor: "#000000CC",
@@ -119,18 +137,54 @@ const Home = () => {
         button1Text="Book Now"
         button2Text="View Services"
         backgroundImage={assets.hero}
-        height="lg:h-[100vh] h-[80vh]"
+        height="lg:h-[100vh] h-[90vh]"
       />
 
       {/* BLOG SECTION */}
-      <div className="bg-white mt-16 lg:px-10 px-5">
-        <h1 className="md:text-[48px] text-[30px] text-center font-semibold">
-          Blog <span className="text-[var(--primary-color)]">News</span>
+      <section className="bg-white mt-16 lg:px-10 px-5">
+        <h1 className="md:text-[48px] text-[30px] text-center font-semibold! text-(--accent-color)">
+          Blog <span className="text-(--primary-color)">News</span>
         </h1>
 
-          <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div className="mt-10 flex overflow-x-scroll gap-4 no-scrollbar pb-2">
             {blogs.map((blog, index) => (
-             <BlogCard blog={blog} index={index} />
+              <div
+                key={index}
+                className="relative bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col justify-between text-center border border-black/10 overflow-hidden"
+              >
+                {/* Text before image */}
+                <div className="px-5 pt-6 text-start">
+                  <h2 className="text-[20px] font-semibold text-black mb-2">
+                    {blog.title}
+                  </h2>
+                  <p className="text-gray-600 text-sm">{blog.description}</p>
+                </div>
+
+                {/* Blog image with smooth concave bottom */}
+                <div className="relative overflow-hidden p-5">
+                  <div className="wave-div z-1 rounded-t-3xl h-[300px] overflow-hidden mb-8">
+                    <img
+                    src={blog.image}
+                    alt={blog.title}
+                    className="w-full h-full object-cover"
+                  />
+                  </div>
+                  <Link
+                    to={`/blog/${index + 1}`}
+                    className="text-[var(--primary-color)] font-semibold hover:text-black transition-colors text-center mt-4 pb-6 absolute z-99 bottom-0 left-1/2 -translate-x-1/2 flex items-center"
+                  >
+                    <span>Read more</span>
+                    <span className="flex mt-1">
+                      <GoChevronRight />
+                      <GoChevronRight />
+                      <GoChevronRight />
+                    </span>
+                  </Link>
+
+                </div>
+
+                {/* Read more link */}
+              </div>
             ))}
           </div>
 
@@ -138,18 +192,18 @@ const Home = () => {
         <div className="flex justify-end mt-10">
           <Link
             to="/blog"
-            className="flex items-center text-[var(--primary-color)] font-semibold hover:text-black transition-colors"
+            className="flex items-center text-(--primary-color) font-semibold hover:text-black transition-colors"
           >
             <span>See more</span>
             <IoIosArrowRoundForward size={30} />
           </Link>
         </div>
-      </div>
+      </section>
 
       {/* ABOUT SECTION */}
-      <section className="relative w-full bg-white mt-10 lg:px-10 px-5 pb-80 ">
+      <section className="relative w-full bg-white mt-10 lg:px-10 px-5 md:pb-60">
         {/* Background Image */}
-        <div className="relative h-[350px] overflow-hidden rounded-[20px]">
+        <div className="relative h-[350px] overflow-hidden rounded-[20px] md:block hidden">
           <img
             src={assets.newabout}
             alt="Spa background"
@@ -158,34 +212,34 @@ const Home = () => {
         </div>
 
         {/* Text Card Overlay */}
-        <div className="absolute lg:bottom-20 md:top-30 bottom-5 left-1/2 transform -translate-x-1/2 translate-y-10 bg-[#fff9f7] shadow-lg rounded-2xl w-[80%] md:w-5/6 lg:w-5/6 p-6  md:p-10 text-center">
+        <div className="md:absolute inset-0 h-max md:top-30 bottom-5 left-1/2 transform md:-translate-x-1/2 md:translate-y-10 bg-[#fff9f7] shadow-lg rounded-2xl w-full md:w-5/6 lg:w-5/6 p-6 md:p-10 text-center">
           <h2 className="text-3xl md:text-4xl font-semibold mb-4">
-            <span className="text-[#b23a8a] font-bold">About</span>{" "}
-            <span className="text-gray-800">Us</span>
+            <span className="text-[#b23a8a] font-semibold!">About</span>{" "}
+            <span className="text-(--accent-color)">Us</span>
           </h2>
 
-          <div className="text-gray-700 leading-relaxed space-y-4 text-[14px] md:text-base">
+          <div className="text-gray-700 leading-relaxed space-y-4 text-sm md:text-base">
             <p>
               At Enoralifestyle Spa, we believe self-care is not a luxury—it is
               a lifestyle.
             </p>
-            <p>
+            <p className="font-[inter]!">
               We are a world-class spa destination offering a full range of
               wellness and beauty treatments designed to relax your body,
               refresh your mind, and restore your natural glow.
             </p>
-            <p>
+            <p className="font-[inter]!">
               Our mission is to promote total body wellness through personalized
               therapies that relieve pain, reduce stress, and enhance overall
               health. Each session is thoughtfully crafted to balance your body
               and mind while reviving your inner calm.
             </p>
-            <p>
+            <p className="font-[inter]!">
               Step into our serene environment where expert hands, soothing
               aromas, and natural products come together to create an experience
               of true relaxation and renewal.
             </p>
-            <p>
+            <p className="font-[inter]!">
               At Enoralifestyle Spa, your well-being is our priority—because you
               deserve to feel your best, inside and out.
             </p>
@@ -196,7 +250,7 @@ const Home = () => {
       {/* PACKAGES SECTION */}
       <div className="Our bg-white mt-10 lg:px-10 px-5 py-10">
         <div>
-          <h1 className="md:text-[48px] text-[30px] text-center font-semibold text-[var(--primary-color)]">
+          <h1 className="md:text-[48px] text-[30px] text-center font-semibold text-(--primary-color)">
             Our <span className="text-black">Packages</span>
           </h1>
         </div>
@@ -222,10 +276,10 @@ const Home = () => {
                 <h2 className="text-[22px] font-semibold text-[var(--primary-color)]">
                   {item.title}
                 </h2>
-                <p className="text-gray-600 mt-2 text-sm">{item.description}</p>
-                <h2 className="mt-3 font-semibold text-black/80 md:text-[24px] text-[21px]">
+                <p className="text-gray-600 mt-2">{item.description}</p>
+                <p className="mt-3 font-bold text-black/80 md:text-[24px] text-[20px]">
                   {item.price}
-                </h2>
+                </p>
 
                 <div className="flex gap-3 mt-10">
                   {/* Add to Cart Button */}
@@ -248,7 +302,7 @@ const Home = () => {
         <div className="flex flex-row-reverse mt-10">
           <Link
             to="/packages"
-            className="flex items-center text-[var(--primary-color)] font-semibold hover:text-black transition-colors"
+            className="flex items-center text-(--primary-color) font-semibold hover:text-black transition-colors"
           >
             <span>See all</span>
             <IoIosArrowRoundForward size={30} />
@@ -257,10 +311,10 @@ const Home = () => {
       </div>
 
       {/* services SECTION */}
-      <div className="bg-[var(--secondary-color)] mt-10 lg:px-10 px-5 py-10">
+      <div className="bg-(--secondary-color) mt-10 lg:px-10 px-5 py-10">
         <div>
           <h1 className="md:text-[48px] text-[30px] text-center font-semibold text-black">
-            Our <span className="text-[var(--primary-color)]">Services</span>
+            Our <span className="text-(--primary-color)">Services</span>
           </h1>
         </div>
 
@@ -287,13 +341,13 @@ const Home = () => {
 
                 <div className="flex gap-3 mt-10">
                   {/* Add to Cart Button */}
-                  <button className="flex items-center justify-center gap-2 bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-white font-medium px-6 py-3 rounded-md transition-colors duration-200 shadow-sm">
+                  <button className="flex items-center justify-center gap-2 bg-(--primary-color) hover:bg-(--primary-color) text-white font-medium px-6 py-3 rounded-md transition-colors duration-200 shadow-sm">
                     <FiShoppingCart className="w-5 h-5" />
                     Add to Cart
                   </button>
 
                   {/* View Details Button */}
-                  <button className="flex items-center justify-center gap-1 bg-transparent hover:bg-gray-200 text-[var(--primary-color)] font-medium px-6 py-3 rounded-md transition-colors duration-200 border border-[var(--primary-color)]">
+                  <button className="flex items-center justify-center gap-1 bg-transparent hover:bg-gray-200 text-(--primary-color) font-medium px-6 py-3 rounded-md transition-colors duration-200 border border-(--primary-color)">
                     View Details
                     <FiArrowRight className="w-4 h-4 ml-1" />
                   </button>
@@ -306,7 +360,7 @@ const Home = () => {
         <div className="flex flex-row-reverse mt-10">
           <Link
             to="/services"
-            className="flex items-center text-[var(--primary-color)] font-semibold hover:text-black transition-colors"
+            className="flex items-center text-(--primary-color) font-semibold hover:text-black transition-colors"
           >
             <span>See all</span>
             <IoIosArrowRoundForward size={30} />
@@ -326,7 +380,7 @@ const Home = () => {
 
         <div className="text">
           <h1 className="md:text-[48px] text-[30px] md:text-start text-center font-semibold text-black mb-5">
-            Our <span className="text-[var(--primary-color)]">Ebook</span>
+            Our <span className="text-(--primary-color)">Ebook</span>
           </h1>
           <p className="md:text-start text-center">
             A beginner-friendly guide that breaks down skin types, facial
@@ -339,7 +393,7 @@ const Home = () => {
             radiance the Enora way.
           </p>
           <div className="mt-10 flex md:justify-start justify-center ">
-            <button className="flex items-center justify-center gap-2 bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-white font-medium px-6 py-3 rounded-md transition-colors duration-200 shadow-sm">
+            <button className="flex items-center justify-center gap-2 bg-(--primary-color) hover:bg-(--primary-color) text-white font-medium px-6 py-3 rounded-md transition-colors duration-200 shadow-sm">
               Buy Book
             </button>
           </div>
@@ -347,10 +401,10 @@ const Home = () => {
       </div>
       {/* FAQ SECTION */}
       {/* FAQ SECTION */}
-      <section className="bg-[var(--secondary-color)] mt-20 lg:px-10 px-5 py-16">
+      <section className="bg-(--secondary-color) mt-20 lg:px-10 px-5 py-16">
         <h1 className="md:text-[48px] text-[30px] text-center font-semibold mb-12">
           Frequently{" "}
-          <span className="text-[var(--primary-color)]">Asked Questions</span>
+          <span className="text-(--primary-color)">Asked Questions</span>
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8  mx-auto">
@@ -396,7 +450,7 @@ const Home = () => {
               </div>
 
               <div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                <h3 className="text-lg font-semibold text-(--accent-color) mb-2">
                   {faq.q}
                 </h3>
                 <p className="text-gray-600 text-sm leading-relaxed">{faq.a}</p>
@@ -408,13 +462,13 @@ const Home = () => {
       {/* review SECTION */}
       {/* <div className="mt-10 lg:px-10 px-5">
         <h1 className="md:text-[48px] text-[30px] text-center font-semibold mb-12">
-          <span className="text-[var(--primary-color)]">Client’s Review</span>
+          <span className="text-(--primary-color)">Client’s Review</span>
         </h1>
         <div className="">
           <div className="border border-black/20 rounded-t-2xl px-3 py-10">
             <div className="flex items-center gap-1">
-              <BiSolidQuoteSingleLeft className="w-8 h-8 md:w-12 md:h-12 text-[var(--primary-color)]" />
-              <BiSolidQuoteSingleLeft className="w-8 h-8 md:w-12 md:h-12 text-[var(--primary-color)]" />
+              <BiSolidQuoteSingleLeft className="w-8 h-8 md:w-12 md:h-12 text-(--primary-color)" />
+              <BiSolidQuoteSingleLeft className="w-8 h-8 md:w-12 md:h-12 text-(--primary-color)" />
             </div>
             <div className="text">
               <p className="text-gray-700 text-sm md:text-base leading-relaxed flex-1 mt-5">
@@ -424,7 +478,7 @@ const Home = () => {
               </p>
             </div>
           </div>
-          <div className="bg-[var(--primary-color)] p-3 rounded-b-2xl">
+          <div className="bg-(--primary-color) p-3 rounded-b-2xl">
             <div className="flex items-center gap-2">
               <div className="md:w-20 md:h-20 w-15 h-15 rounded-full overflow-hidden  ring-offset-2  flex-shrink-0">
                 <img
@@ -447,7 +501,7 @@ const Home = () => {
       {/* REVIEW SECTION */}
       <div className="mt-10 px-5 lg:px-10">
         <h1 className="md:text-[48px] text-[30px] text-center font-semibold md:mb-25 mb-10">
-          <span className="text-[var(--primary-color)]">Client’s Review</span>
+          <span className="text-(--primary-color)">Client’s Review</span>
         </h1>
 
         {/* Scrollable container for sm & md; static grid on lg */}

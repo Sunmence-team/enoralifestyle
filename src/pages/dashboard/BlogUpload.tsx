@@ -27,7 +27,9 @@ export default function UploadBlog() {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { value, name } = e.target;
     setBlogDetails((prev) => ({ ...prev, [name]: value }));
   };
@@ -77,12 +79,6 @@ export default function UploadBlog() {
       const data: any = await res.json();
       if (res.ok) {
         toast.success("Blog created successfully");
-        setBlogDetails({
-          title: "",
-          short_description: "",
-          body: "",
-          cover_image: "",
-        });
       } else {
         toast.error(`Failed to create blog. ${data.message}.`);
       }
@@ -97,6 +93,13 @@ export default function UploadBlog() {
       }
     } finally {
       setCreateBlog(false);
+      setBlogDetails({
+        title: "",
+        short_description: "",
+        body: "",
+        cover_image: "",
+      });
+      setPrevImage("");
     }
   };
 

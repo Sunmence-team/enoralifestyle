@@ -33,6 +33,10 @@ button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
+button:disabled:hover {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
 
 .styled-scrollbar::-webkit-scrollbar {
   @apply lg:w-2 w-1 h-1;

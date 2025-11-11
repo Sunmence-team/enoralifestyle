@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { assets } from "../assets/assests";
 import { Link } from "react-router-dom";
 import { FiShoppingCart, FiArrowRight } from "react-icons/fi";
@@ -8,10 +8,14 @@ import { IoIosArrowRoundForward } from "react-icons/io";
 import BlogCard from "../components/cards/BlogCard";
 import UserDetailsModal from "../modals/UserDetailsModal";
 import { toast } from "sonner";
+import TestimonialCardSkeleton from "../components/skeletons/TestimonialCardSkeleton";
+import type { testimonialProps } from "../utilities/sharedInterFaces";
 
 const Home = () => {
   const [initializingPayment, setInitializingPayment] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [testimonials, setTestimonials] = useState<testimonialProps[]>([]);
+  const [loadingTestimonials, setLoadingTestimonials] = useState(false);
   interface UserDetails {
     name: string;
     email: string;
@@ -170,6 +174,43 @@ const Home = () => {
       setInitializingPayment(false);
     }
   };
+
+  async function fetchTestimonials() {
+    setLoadingTestimonials(true);
+    try {
+      const baseUrl = import.meta.env.VITE_API_BASE_URL;
+      const token = localStorage.getItem("authToken");
+      const res = await fetch(`${baseUrl}/testimonials`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data: any = await res.json();
+      if (res.ok) {
+        setTestimonials(data.data.data);
+      } else {
+        toast.error(`Failed to load testimonials. ${data.message}.`);
+      }
+    } catch (error: any) {
+      if (
+        error?.message?.includes("Unexpected token '<'") ||
+        error?.message === "Failed to fetch"
+      ) {
+        return toast.error(
+          "An uexpected error occured while loading testimonials"
+        );
+      } else {
+        toast.error(error?.message || "Error loading testimonials");
+      }
+    } finally {
+      setLoadingTestimonials(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchTestimonials();
+  }, []);
 
   return (
     <>
@@ -529,60 +570,126 @@ const Home = () => {
 
           {/* Scrollable container for sm & md; static grid on lg */}
           <div className="flex gap-6 overflow-x-auto overflow-y-hidden lg:overflow-x-visible lg:justify-center pb-5 snap-x snap-mandatory lg:flex-row lg:flex-wrap">
-            {reviews.map((review, index) => (
-              <div
-                key={index}
-                className={`
+            {loadingTestimonials
+              ? [1, 2, 3].map((s, idx) => <TestimonialCardSkeleton key={idx} />)
+              : testimonials.length === 0
+              ? reviews.map((review, index) => (
+                  <div
+                    key={index}
+                    className={`
           flex flex-col flex-shrink-0 w-[300px] h-[360px] snap-center 
           lg:flex-1 lg:min-w-[350px] lg:h-[380px]
           transition-all duration-300
         `}
-              >
-                {/* Top section (review content) */}
-                <div className="border border-black/20 rounded-t-2xl px-4 py-8 flex-1 flex flex-col bg-white">
-                  <div className="flex items-center gap-1">
-                    <BiSolidQuoteSingleLeft
-                      className="w-8 h-8 md:w-10 md:h-10"
-                      style={{ color: review.iconColor }}
-                    />
-                    <BiSolidQuoteSingleLeft
-                      className="w-8 h-8 md:w-10 md:h-10"
-                      style={{ color: review.iconColor }}
-                    />
-                  </div>
+                  >
+                    {/* Top section (review content) */}
+                    <div className="border border-black/20 rounded-t-2xl px-4 py-8 flex-1 flex flex-col bg-white">
+                      <div className="flex items-center gap-1">
+                        <BiSolidQuoteSingleLeft
+                          className="w-8 h-8 md:w-10 md:h-10"
+                          style={{ color: review.iconColor }}
+                        />
+                        <BiSolidQuoteSingleLeft
+                          className="w-8 h-8 md:w-10 md:h-10"
+                          style={{ color: review.iconColor }}
+                        />
+                      </div>
 
-                  <div className="text mt-5 flex-1">
-                    <p className="text-gray-700 text-sm md:text-base leading-relaxed">
-                      {review.reviewText}
-                    </p>
-                  </div>
-                </div>
+                      <div className="text mt-5 flex-1">
+                        <p className="text-gray-700 text-sm md:text-base leading-relaxed">
+                          {review.reviewText}
+                        </p>
+                      </div>
+                    </div>
 
-                {/* Bottom section (profile) */}
-                <div
-                  className="p-3 rounded-b-2xl"
-                  style={{ backgroundColor: review.bgColor }}
-                >
-                  <div className="flex items-center gap-2">
-                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden flex-shrink-0">
-                      <img
-                        src={review.profileImage}
-                        alt={review.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-white text-sm md:text-base">
-                        {review.name}
-                      </h4>
-                      <p className="text-xs md:text-sm text-white">
-                        {review.role}
-                      </p>
+                    {/* Bottom section (profile) */}
+                    <div
+                      className="p-3 rounded-b-2xl"
+                      style={{ backgroundColor: review.bgColor }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden flex-shrink-0">
+                          <img
+                            src={review.profileImage}
+                            alt={review.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-white text-sm md:text-base">
+                            {review.name}
+                          </h4>
+                          <p className="text-xs md:text-sm text-white">
+                            {review.role}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            ))}
+                ))
+              : testimonials.map((t, idx) => (
+                  <div
+                    key={idx}
+                    className={`
+          flex flex-col flex-shrink-0 w-[300px] h-[360px] snap-center 
+          lg:flex-1 lg:min-w-[350px] lg:h-[380px]
+          transition-all duration-300
+        `}
+                  >
+                    {/* Top section (review content) */}
+                    <div className="border border-black/20 rounded-t-2xl px-4 py-8 flex-1 flex flex-col bg-white">
+                      <div className="flex items-center gap-1">
+                        <BiSolidQuoteSingleLeft
+                          className="w-8 h-8 md:w-10 md:h-10"
+                          style={{
+                            color: idx % 2 === 0 ? "#000000CC" : "#C97BB7",
+                          }}
+                        />
+                        <BiSolidQuoteSingleLeft
+                          className="w-8 h-8 md:w-10 md:h-10"
+                          style={{
+                            color: idx % 2 === 0 ? "#000000CC" : "#C97BB7",
+                          }}
+                        />
+                      </div>
+
+                      <div className="text mt-5 flex-1">
+                        <p className="text-gray-700 text-sm md:text-base leading-relaxed">
+                          {decodeURIComponent(t.comment)}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Bottom section (profile) */}
+                    <div
+                      className="p-3 rounded-b-2xl"
+                      style={{
+                        backgroundColor:
+                          idx % 2 !== 0 ? "#000000CC" : "#C97BB7",
+                      }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden flex-shrink-0">
+                          <img
+                            src={`${import.meta.env.VITE_IMAGE_BASE_URL}/${
+                              t.image
+                            }`}
+                            alt={t.full_name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-white text-sm md:text-base">
+                            {t.full_name}
+                          </h4>
+                          <p className="text-xs md:text-sm text-white">
+                            {t.occupation}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
           </div>
         </div>
       </div>

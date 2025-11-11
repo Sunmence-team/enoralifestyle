@@ -5,6 +5,7 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { toast } from "sonner";
 import ConfirmModal from "../../modals/ConfirmDialog";
 import ViewContactModal from "../../modals/ViewContact";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 interface Contact {
   id: number;
   name: string;
@@ -21,13 +22,16 @@ const ManageContacts: React.FC = () => {
   const [singleContact, setSingleContact] = useState<Contact | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isViewOpen, setIsViewOpen] = useState(false);
-
+  const [currentPageFromApi, setCurrentPageFromApi] = useState(NaN);
+  const [totalApiPages, setTotalApiPages] = useState(NaN);
+  const apiItemsPerPage = 1;
+  const [totalPagesInArr, setTotalPagesInArr] = useState<number[]>([]);
   const fetchContacts = async () => {
     setLoadingContacts(true);
     try {
       const baseUrl = import.meta.env.VITE_API_BASE_URL;
       const token = localStorage.getItem("authToken");
-      const res = await fetch(`${baseUrl}/contact`, {
+      const res = await fetch(`${baseUrl}/contact?page=${currentPageFromApi}`, {
         method: "GET",
         // headers: {
         //   Authorization: `Bearer ${token}`,
@@ -37,6 +41,11 @@ const ManageContacts: React.FC = () => {
       if (res.ok) {
         toast.success("Contact fetched successfully");
         setContacts(data.data.data);
+        setCurrentPageFromApi(data.data.current_page);
+        setTotalApiPages(data.data.last_page);
+        setTotalPagesInArr(
+          Array.from({ length: data.data.last_page }, (_, i) => i + 1)
+        );
       } else {
         toast.error(`Failed to load contact. ${data.message}.`);
       }
@@ -71,7 +80,7 @@ const ManageContacts: React.FC = () => {
         setShowDeleteModal(false);
         fetchContacts();
       } else {
-        toast.error(`Failed to load contact. ${data.message}.`);
+        toast.error(`Failed to delete contact. ${data.message}.`);
       }
     } catch (error: any) {
       if (
@@ -94,12 +103,15 @@ const ManageContacts: React.FC = () => {
     try {
       const baseUrl = import.meta.env.VITE_API_BASE_URL;
       const token = localStorage.getItem("authToken");
-      const res = await fetch(`${baseUrl}/contact/${selectedContact?.id}`, {
-        method: "GET",
-        // headers: {
-        //   Authorization: `Bearer ${token}`,
-        // },
-      });
+      const res = await fetch(
+        `${baseUrl}/contact/${selectedContact?.id}`,
+        {
+          method: "GET",
+          // headers: {
+          //   Authorization: `Bearer ${token}`,
+          // },
+        }
+      );
       const data: any = await res.json();
       if (res.ok) {
         setSingleContact(data.data);
@@ -129,7 +141,7 @@ const ManageContacts: React.FC = () => {
 
   useEffect(() => {
     fetchContacts();
-  }, []);
+  }, [currentPageFromApi]);
 
   return (
     <>
@@ -223,6 +235,50 @@ const ManageContacts: React.FC = () => {
                 ))
               )}
             </tbody>
+            <tfoot>
+              <tr className={"bg-white/61 h-[77px] border-t border-black/10"}>
+                {totalPagesInArr.length !== 0 ? (
+                  <td className="text-center p-4" colSpan={8}>
+                    <div className="flex gap-3 justify-center items-center">
+                      <button
+                        className="p-2 text-gray-600 hover:text-black cursor-pointer"
+                        disabled={
+                          currentPageFromApi === totalApiPages ? true : false
+                        }
+                        onClick={() =>
+                          setCurrentPageFromApi(currentPageFromApi - 1)
+                        }
+                      >
+                        <FaAngleLeft />
+                      </button>
+                      {totalPagesInArr.map((t, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setCurrentPageFromApi(t)}
+                          className={`w-8 h-8 flex items-center justify-center font-bold ${
+                            t === currentPageFromApi
+                              ? "bg-[var(--primary-color)]"
+                              : "bg-gray-300"
+                          } cursor-pointer text-white rounded-lg`}
+                        >
+                          {t}
+                        </button>
+                      ))}
+                      <span className="text-gray-500">...</span>
+                      <button
+                        className="p-2 text-gray-600 hover:text-black cursor-pointer"
+                        disabled={currentPageFromApi === 1 ? true : false}
+                        onClick={() =>
+                          setCurrentPageFromApi(currentPageFromApi + 1)
+                        }
+                      >
+                        <FaAngleRight />
+                      </button>
+                    </div>
+                  </td>
+                ) : null}
+              </tr>
+            </tfoot>
           </table>
         </div>
       </div>

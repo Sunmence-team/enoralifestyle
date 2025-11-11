@@ -19,6 +19,7 @@ import Packages from "./pages/Packages";
 import ManageContacts from "./pages/dashboard/ManageContacts";
 import PaymentStatus from "./pages/PaymentStatus";
 import Reservation from "./pages/Reservation";
+import UploadTestimonial from "./pages/dashboard/TestimonialUpload";
 
 const App: React.FC = () => {
   return (
@@ -76,6 +77,10 @@ const App: React.FC = () => {
         <Route
           path="/dashboard/contacts"
           element={<DashboardLayout children={<ManageContacts />} />}
+        />
+        <Route
+          path="/dashboard/testimonial"
+          element={<DashboardLayout children={<UploadTestimonial />} />}
         />
       </Routes>
     </>

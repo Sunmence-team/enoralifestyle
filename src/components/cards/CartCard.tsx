@@ -7,7 +7,7 @@ interface cartItemProps {
     id: string,
     title: string,
     price: number,
-    image: string,
+    image?: string,
 }
 
 const CartCard = (cartItem: cartItemProps) => {

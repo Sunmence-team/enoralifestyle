@@ -1,5 +1,4 @@
-// src/pages/Services.tsx
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import HeroSection from "../components/herosections/Herosection";
 import { assets } from "../assets/assests";
 import ServiceCard from "../components/cards/ServiceCard";
@@ -7,7 +6,7 @@ import axios from "axios";
 import ServiceCardSkeleton from "../components/skeletons/ServiceCardSkeleton";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-const IMAGE_URL = (import.meta.env.VITE_IMAGE_BASE_URL || "").replace(/\/?$/, "/");
+const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
 
 interface Service {
   id: number;
@@ -22,8 +21,8 @@ interface Service {
 const Services = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [lastPage, setlastPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [lastPage, setlastPage] = useState(1);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -33,15 +32,23 @@ const Services = () => {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const res = await axios.get(`${API_URL}/services`);
-        const rawData = res.data.data?.data || [];
+        const response = await axios.get(`${API_URL}/services`);
 
-        // Filter only services and sort by latest
-        const sorted = rawData
-          .filter((item: any) => item.type === "service") // Fixed: item.type
-          .sort((a: Service, b: Service) =>
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-          );
+        console.log("response", response);
+        if (response.status === 200) {
+          const { data, 
+            // current_page, last_page 
+          } = response.data.data;
+          setServices(data);
+          // setCurrentPage(current_page);
+          // setlastPage(last_page);
+        }
+
+        // const sorted = rawData
+        //   .filter((item: any) => item.type === "service")
+        //   .sort((a: Service, b: Service) =>
+        //     new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        //   );
 
         // setServices(sorted);
       } catch (err) {

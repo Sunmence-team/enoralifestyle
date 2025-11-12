@@ -3,7 +3,7 @@ import { assets } from "../assets/assests";
 import { IoCartOutline } from "react-icons/io5";
 import { MdOutlineArrowOutward } from "react-icons/md";
 
-export default function PackageList() {
+const PackageList : React.FC = () => {
 
     const packages = [
         {
@@ -94,3 +94,5 @@ export default function PackageList() {
 
     )
 }
+
+export default PackageList;

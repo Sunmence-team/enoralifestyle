@@ -82,12 +82,12 @@ export default function DashboardTable<T extends { id: number }>({
                       <img
                         src={
                           (item as any).image
-                            ? `${import.meta.env.VITE_IMAGE_BASE_URL}/${(item as any).image.replace(/^public\//, "")}`
-                            : "/placeholder.jpg"
+                            ? `${import.meta.env.VITE_IMAGE_BASE_URL}/${(item as any)?.image}`
+                            : "https://placehold.co/600x400/png"
                         }
                         alt="img"
                         className="w-12 h-12 object-cover rounded-lg shadow"
-                        onError={(e) => ((e.target as HTMLImageElement).src = "/placeholder.jpg")}
+                        onError={(e) => ((e.target as HTMLImageElement).src = "https://placehold.co/600x400/png")}
                       />
                     ) : col.key === "actions" ? (
                       <div className="flex justify-center space-x-5 text-[var(--primary-color)]">

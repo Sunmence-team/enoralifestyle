@@ -1,19 +1,8 @@
 import React from 'react'
 import { FiArrowRight, FiShoppingCart } from 'react-icons/fi';
 
-// The interface remains for type definition, though the skeleton doesn't use the props.
-interface PackageCardProps {
-    id: string;
-    index: number;
-    title: string;
-    description: string;
-    image: string;
-    price: number;
-    showMidLine?: boolean;
-}
-
 // Renamed for clarity as a skeleton component
-const PackageCardSkeleton = () => {
+const PackageCardSkeleton : React.FC = () => {
     return (
         <div
             className="relative flex justify-center animate-pulse"

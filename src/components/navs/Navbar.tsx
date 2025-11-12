@@ -42,7 +42,7 @@ const Navbar: React.FC = () => {
 
   const [isOpen, setIsOpen] = useState({ sidebar: false, cart: false });
   const [isScrolled, setIsScrolled] = useState(false);
-  const { items, setItems, clearCart } = useCartStore();
+  const { items, setItems } = useCartStore();
 
   const navLinks = [
     { path: "/", name: "Home" },

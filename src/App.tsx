@@ -1,24 +1,27 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import MainLayout from "./Layout/MainLayout";
-
+import DashboardLayout from "./Layout/DashboardLayout";
 import { Toaster } from "sonner";
+
+// Pages
 import Home from "./pages/Home";
 import Services from "./pages/Services";
 import Blog from "./pages/Blog";
-import Contact from "./pages/Contact";
-import Overview from "./pages/dashboard/Overview";
-import DashboardLayout from "./Layout/DashboardLayout";
-import Appointments from "./pages/dashboard/Appointments";
-import BlogUpload from "./pages/dashboard/BlogUpload";
-import Package from "./pages/dashboard/Package";
 import BlogDetails from "./pages/BlogDetails";
+import Contact from "./pages/Contact";
+import Packages from "./pages/Packages";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
-import Packages from "./pages/Packages";
+
+// Dashboard Pages
+import Overview from "./pages/dashboard/Overview";
+import BlogUpload from "./pages/dashboard/BlogUpload";
+import Package from "./pages/dashboard/Package";
+import Appointments from "./pages/dashboard/Appointments";
+import Reservation from "./pages/Reservation";
 import ManageContacts from "./pages/dashboard/ManageContacts";
 import PaymentStatus from "./pages/PaymentStatus";
-import Reservation from "./pages/Reservation";
 import UploadTestimonial from "./pages/dashboard/TestimonialUpload";
 
 const App: React.FC = () => {
@@ -26,17 +29,14 @@ const App: React.FC = () => {
     <>
       <Toaster />
 
-      {/* Main route */}
       <Routes>
+        {/* Auth Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+        {/* Main routes with navbar */}
         <Route path="/" element={<MainLayout children={<Home />} />} />
         <Route path="/blog" element={<MainLayout children={<Blog />} />} />
-        <Route
-          path="/blog/:id"
-          element={<MainLayout children={<BlogDetails />} />}
-        />
-        {/* <Route path="/appointment" element={<MainLayout children={<BookAppointment />} />} /> */}
         <Route
           path="/services"
           element={<MainLayout children={<Services />} />}
@@ -50,14 +50,18 @@ const App: React.FC = () => {
           element={<MainLayout children={<Contact />} />}
         />
         <Route
-          path="/payment-status"
-          element={<MainLayout children={<PaymentStatus />} />}
-        />
-        <Route
           path="/reservation"
           element={<MainLayout children={<Reservation />} />}
         />
-        {/* Dashboard Route */}
+        <Route
+          path="/payment-status"
+          element={<MainLayout children={<PaymentStatus />} />}
+        />
+
+        {/* Blog details route WITHOUT navbar */}
+        <Route path="/blog/:id" element={<BlogDetails />} />
+
+        {/* Dashboard routes */}
         <Route
           path="/dashboard/overview"
           element={<DashboardLayout children={<Overview />} />}

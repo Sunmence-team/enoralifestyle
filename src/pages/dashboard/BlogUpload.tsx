@@ -183,7 +183,7 @@ export default function BlogUpload() {
     setIsEditing(true);
     setEditingId(blog.id);
     setTitle(blog.title);
-    setArticle(blog.short_loadingdescription);
+    setArticle(blog.short_description);
     setBlogPost(blog.body.content);
     setImage(null);
     setError(null);
@@ -464,7 +464,7 @@ export default function BlogUpload() {
       {/* VIEW MODAL */}
       {viewModal && selectedBlog && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 overscroll-contain">
-          <div className="bg-white rounded-3xl shadow-2xl w-full md:w-[70%] max-h-[95vh] overflow-y-auto overscroll-contain scrollbar-thin scrollbar-thumb-[var(--primary-color)] scrollbar-track-gray-100">
+          <div className="bg-white rounded-3xl shadow-2xl w-full md:w-[70%] max-h-[95vh] overflow-y-auto overscroll-contain styled-scrollbar">
             <div className="sticky top-0 bg-white border-b-2 border-gray-200 p-6 flex justify-between items-center z-10">
               <h2 className="text-3xl font-bold text-gray-800 pr-10">
                 {selectedBlog.title}
@@ -624,26 +624,7 @@ export default function BlogUpload() {
         </div>
       )}
 
-      {/* Custom Scrollbar */}
-      <style jsx global>{`
-        .scrollbar-thin {
-          scrollbar-width: thin;
-        }
-        .scrollbar-thin::-webkit-scrollbar {
-          width: 8px;
-        }
-        .scrollbar-thin::-webkit-scrollbar-track {
-          background: #f1f1f1;
-          border-radius: 10px;
-        }
-        .scrollbar-thin::-webkit-scrollbar-thumb {
-          background: var(--primary-color);
-          border-radius: 10px;
-        }
-        .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-          background: #9f5f91;
-        }
-      `}</style>
+
     </div>
   );
 }

@@ -1,4 +1,3 @@
-// src/pages/Reservation.tsx
 import React, { useEffect, useState, useRef } from 'react';
 import HeroSection from '../components/herosections/Herosection';
 import { assets } from '../assets/assests';
@@ -36,7 +35,7 @@ const Reservation = () => {
   }, []);
 
   const { items, setItems, clearCart } = useCartStore();
-  const [allServices, setAllServices] = useState<ServiceItem[]>([]);
+  // const [allServices, setAllServices] = useState<ServiceItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Modal
@@ -54,7 +53,7 @@ const Reservation = () => {
         const res = await axios.get(`${API_URL}/services`);
         const data = res.data.data?.data || [];
 
-        setAllServices(data);
+        // setAllServices(data);
 
         const defaultItems = data.slice(0, 2).map((item: ServiceItem) => ({
           id: item.id.toString(),

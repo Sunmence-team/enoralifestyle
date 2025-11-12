@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { Eye, Trash2 } from "lucide-react";
 import { IoIosNotifications } from "react-icons/io";
 import { FaRegUserCircle } from "react-icons/fa";
 import { toast } from "sonner";
@@ -30,8 +30,7 @@ const ManageContacts: React.FC = () => {
     setLoadingContacts(true);
     try {
       const baseUrl = import.meta.env.VITE_API_BASE_URL;
-      const token = localStorage.getItem("authToken");
-      const res = await fetch(`${baseUrl}/contact?page=${currentPageFromApi}`, {
+      const res = await fetch(`${baseUrl}/contact`, {
         method: "GET",
         // headers: {
         //   Authorization: `Bearer ${token}`,
@@ -67,7 +66,7 @@ const ManageContacts: React.FC = () => {
     setDeletingContacts(true);
     try {
       const baseUrl = import.meta.env.VITE_API_BASE_URL;
-      const token = localStorage.getItem("authToken");
+      // const token = localStorage.getItem("authToken");
       const res = await fetch(`${baseUrl}/contact/${selectedContact?.id}`, {
         method: "DELETE",
         // headers: {
@@ -102,16 +101,12 @@ const ManageContacts: React.FC = () => {
     setLoadingView(true);
     try {
       const baseUrl = import.meta.env.VITE_API_BASE_URL;
-      const token = localStorage.getItem("authToken");
-      const res = await fetch(
-        `${baseUrl}/contact/${selectedContact?.id}`,
-        {
-          method: "GET",
-          // headers: {
-          //   Authorization: `Bearer ${token}`,
-          // },
-        }
-      );
+      const res = await fetch(`${baseUrl}/contact/${selectedContact?.id}`, {
+        method: "GET",
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
+      });
       const data: any = await res.json();
       if (res.ok) {
         setSingleContact(data.data);

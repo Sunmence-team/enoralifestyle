@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 import { BiSolidQuoteSingleLeft } from "react-icons/bi";
 import HeroSection from "../components/herosections/Herosection";
 import { IoIosArrowRoundForward } from "react-icons/io";
-import BlogCard from "../components/cards/BlogCard";
+import BlogCard from "../components/cards/Blogcard";
 import PackageCard from "../components/cards/PackageCard";
 import ServiceCard from "../components/cards/ServiceCard";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 import UserDetailsModal from "../modals/UserDetailsModal";
 import BlogCardSkeleton from "../components/skeletons/BlogCardSkeleton";
@@ -42,7 +42,12 @@ interface Blog {
   created_at: string;
 }
 
-const Home = () => {
+interface PaymentResponse {
+  message: string;
+  authorization_url: string;
+}
+
+const Home: React.FC = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Home - Enora Lifestyle And Spa";
@@ -108,8 +113,9 @@ const Home = () => {
         // console.log("response", response)
         const data = response.data?.data?.data || response.data?.data || [];
         setBlogs(Array.isArray(data) ? data : []);
-      } catch (err: any) {
-        console.error("Failed to fetch blogs:", err);
+      } catch (err) {
+        const error = err as AxiosError;
+        console.error("Failed to fetch blogs:", error);
         setError("Failed to load blogs. Please try again later.");
       } finally {
         setTimeout(() => {
@@ -199,7 +205,7 @@ const Home = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(reqBody),
       });
-      const data: any = await res.json();
+      const data: PaymentResponse = await res.json();
       if (res.ok) {
         toast.success(
           "Payment initialize successfull, redirecting to pyment page..."
@@ -211,58 +217,22 @@ const Home = () => {
       } else {
         toast.error(`Failed to initialize payment. ${data.message}.`);
       }
-    } catch (error: any) {
+    } catch (error) {
+      const err = error as Error;
       if (
-        error?.message?.includes("Unexpected token '<'") ||
-        error?.message === "Failed to fetch"
+        err?.message?.includes("Unexpected token '<'") ||
+        err?.message === "Failed to fetch"
       ) {
         return toast.error(
           "An uexpected error occured while initializing payment"
         );
       } else {
-        toast.error(error?.message || "Error initializing payment");
+        toast.error(err?.message || "Error initializing payment");
       }
     } finally {
       setInitializingPayment(false);
     }
   };
-
-  async function fetchTestimonials() {
-    setLoadingTestimonials(true);
-    try {
-      const baseUrl = import.meta.env.VITE_API_BASE_URL;
-      const token = localStorage.getItem("authToken");
-      const res = await fetch(`${baseUrl}/testimonials`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data: any = await res.json();
-      if (res.ok) {
-        setTestimonials(data.data.data);
-      } else {
-        toast.error(`Failed to load testimonials. ${data.message}.`);
-      }
-    } catch (error: any) {
-      if (
-        error?.message?.includes("Unexpected token '<'") ||
-        error?.message === "Failed to fetch"
-      ) {
-        return toast.error(
-          "An uexpected error occured while loading testimonials"
-        );
-      } else {
-        toast.error(error?.message || "Error loading testimonials");
-      }
-    } finally {
-      setLoadingTestimonials(false);
-    }
-  }
-
-  useEffect(() => {
-    fetchTestimonials();
-  }, []);
 
   return (
     <>
@@ -279,7 +249,7 @@ const Home = () => {
 
         {/* BLOG SECTION */}
         <section className="bg-white mt-16 lg:px-10 px-5">
-          <h1 className="md:text-[48px] text-[30px] text-center font-semibold! text-(--accent-color)">
+          <h1 className="md:text-[48px] text-[30px] text-center font-semibold text-(--accent-color)">
             Blog <span className="text-(--primary-color)">News</span>
           </h1>
 
@@ -319,9 +289,8 @@ const Home = () => {
         </section>
 
         {/* ABOUT SECTION */}
-        <section className="relative w-full bg-white mt-10 lg:px-10 px-5 mb:pb-60 pb-50">
-          {/* Background Image */}
-          <div className="relative h-[350px] overflow-hidden rounded-[20px]">
+        <section className="relative w-full bg-white mt-10 lg:px-10 px-5 md:pb-60">
+          <div className="relative h-[350px] overflow-hidden rounded-[20px] md:block hidden">
             <img
               src={assets.newabout}
               alt="Spa background"
@@ -329,35 +298,33 @@ const Home = () => {
             />
           </div>
 
-          {/* Text Card Overlay */}
-          <div className="absolute inset-0 h-max md:top-30 bottom-5 left-1/2 transform -translate-x-1/2 translate-y-10 bg-[#fff9f7] shadow-lg rounded-2xl w-[90%] md:w-5/6 lg:w-5/6 p-6 md:p-10 text-center">
+          <div className="md:absolute inset-0 h-max md:top-30 bottom-5 left-1/2 transform md:-translate-x-1/2 md:translate-y-10 bg-[#fff9f7] shadow-lg rounded-2xl w-full md:w-5/6 lg:w-5/6 p-6 md:p-10 text-center">
             <h2 className="text-3xl md:text-4xl font-semibold mb-4">
-              <span className="text-[#b23a8a] font-semibold!">About</span>{" "}
+              <span className="text-[#b23a8a] font-semibold">About</span>{" "}
               <span className="text-(--accent-color)">Us</span>
             </h2>
 
             <div className="text-gray-700 leading-relaxed space-y-4 text-xs md:text-sm lg:text-base">
-              <p className="font-[inter]!">
+              <p className="font-[inter]">
                 At Enoralifestyle Spa, we believe self-care is not a luxury—it
                 is a lifestyle.
               </p>
-              <p className="font-[inter]!">
+              <p className="font-[inter]">
                 We are a world-class spa destination offering a full range of
                 wellness and beauty treatments designed to relax your body,
                 refresh your mind, and restore your natural glow.
               </p>
-              <p className="font-[inter]!">
+              <p className="font-[inter]">
                 Our mission is to promote total body wellness through
                 personalized therapies that relieve pain, reduce stress, and
-                enhance overall health. Each session is thoughtfully crafted to
-                balance your body and mind while reviving your inner calm.
+                enhance overall health.
               </p>
-              <p className="font-[inter]!">
+              <p className="font-[inter]">
                 Step into our serene environment where expert hands, soothing
                 aromas, and natural products come together to create an
                 experience of true relaxation and renewal.
               </p>
-              <p className="font-[inter]!">
+              <p className="font-[inter]">
                 At Enoralifestyle Spa, your well-being is our priority—because
                 you deserve to feel your best, inside and out.
               </p>
@@ -366,60 +333,58 @@ const Home = () => {
         </section>
 
         {/* PACKAGES SECTION */}
-        <div className="Our bg-white mt-10 lg:px-10 px-5 py-10">
-          <div>
-            <h1 className="md:text-[48px] text-[30px] text-center font-semibold text-(--primary-color)">
-              Our <span className="text-black">Packages</span>
-            </h1>
-            <div className="mt-10 lg:grid grid-cols-3 md:gap-6 gap-4 flex lg:overflow-auto overflow-x-scroll no-scrollbar py-4">
-              {loading ? (
-                Array(3)
-                  .fill(0)
-                  .map((_, index) => (
-                    <div className="w-full" key={index}>
-                      <PackageCardSkeleton />
-                    </div>
-                  ))
-              ) : packages.length === 0 ? (
-                <div className="w-full text-center py-20 text-gray-500">
-                  No packages available
-                </div>
-              ) : (
-                packages.map((item, index) => (
-                  <div className="min-w-[340px]" key={index}>
-                    <PackageCard
-                      id={item.id.toString()}
-                      index={index}
-                      title={item.name}
-                      description={item.description}
-                      price={parseFloat(item.price)}
-                      image={
-                        item.image ? `${IMAGE_URL}/${item.image}` : assets.our1
-                      }
-                    />
+        <section className="bg-white mt-10 lg:px-10 px-5 py-10">
+          <h1 className="md:text-[48px] text-[30px] text-center font-semibold text-(--primary-color)">
+            Our <span className="text-black">Packages</span>
+          </h1>
+
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {loading ? (
+              Array(3)
+                .fill(0)
+                .map((_, index) => (
+                  <div className="w-full" key={index}>
+                    <PackageCardSkeleton />
                   </div>
                 ))
-              )}
-            </div>
-            <div className="flex flex-row-reverse mt-10">
-              <Link
-                to="/packages"
-                className="flex items-center text-(--primary-color) font-semibold hover:text-black transition-colors"
-              >
-                <span>See all</span>
-                <IoIosArrowRoundForward size={30} />
-              </Link>
-            </div>
+            ) : packages.length === 0 ? (
+              <div className="w-full text-center py-20 text-gray-500">
+                No packages available
+              </div>
+            ) : (
+              packages.map((item, index) => (
+                <div className="min-w-[340px]" key={index}>
+                  <PackageCard
+                    id={item.id.toString()}
+                    index={index}
+                    title={item.name}
+                    description={item.description}
+                    price={item.price}
+                    image={
+                      item.image ? `${IMAGE_URL}/${item.image}` : assets.our1
+                    }
+                  />
+                </div>
+              ))
+            )}
           </div>
-        </div>
+
+          <div className="flex justify-end mt-10">
+            <Link
+              to="/packages"
+              className="flex items-center text-(--primary-color) font-semibold hover:text-black transition-colors"
+            >
+              <span>See all</span>
+              <IoIosArrowRoundForward size={30} />
+            </Link>
+          </div>
+        </section>
 
         {/* SERVICES SECTION */}
-        <div className="bg-(--secondary-color) mt-10 lg:px-10 px-5 py-8">
-          <div>
-            <h1 className="md:text-[48px] text-[30px] text-center font-semibold! text-(--accent-color)">
-              Our <span className="text-(--primary-color)">Services</span>
-            </h1>
-          </div>
+        <section className="bg-(--secondary-color) mt-10 lg:px-10 px-5 py-10">
+          <h1 className="md:text-[48px] text-[30px] text-center font-semibold! text-(--accent-color)">
+            Our <span className="text-(--primary-color)">Services</span>
+          </h1>
 
           <div className="mt-10 lg:grid grid-cols-3 md:gap-6 gap-4 flex lg:overflow-auto overflow-x-scroll no-scrollbar py-4">
             {loading ? (
@@ -448,7 +413,8 @@ const Home = () => {
               ))
             )}
           </div>
-          <div className="flex flex-row-reverse mt-10">
+
+          <div className="flex justify-end mt-10">
             <Link
               to="/services"
               className="flex items-center text-(--accent-color) font-semibold transition-colors"
@@ -457,10 +423,10 @@ const Home = () => {
               <IoIosArrowRoundForward size={30} />
             </Link>
           </div>
-        </div>
+        </section>
 
         {/* EBOOK SECTION */}
-        <div className="mt-10 lg:px-10 px-5 py-10 grid md:grid-cols-2 grid-cols-1 gap-10 items-center">
+        <section className="mt-10 lg:px-10 px-5 py-10 grid md:grid-cols-2 grid-cols-1 gap-10 items-center">
           <div className="rounded-xl overflow-hidden md:h-80">
             <img
               src={assets.ebook}
@@ -473,7 +439,7 @@ const Home = () => {
             <h1 className="md:text-[48px] text-[30px] md:text-start text-center font-bold! text-(--accent-color) mb-3">
               Our <span className="text-(--primary-color)">Ebook</span>
             </h1>
-            <p className="md:text-start text-center font-[inter]! text-sm">
+            <p className="md:text-start text-center font-[inter] text-sm">
               This course is designed to simplify weight loss cutting through
               the jargon and confusion, so you can achieve results that fit
               seamlessly into your busy lifestyle. With practical strategies,
@@ -486,44 +452,43 @@ const Home = () => {
             </p>
             <div className="mt-6 flex md:justify-start justify-center">
               <button
-                onClick={() => setIsModalOpen(true)}
                 className="flex items-center justify-center gap-2 bg-(--primary-color) hover:bg-(--primary-color) text-white font-medium! px-6 py-3 rounded-sm transition-colors duration-200 shadow-sm cursor-pointer"
+                onClick={() => setIsModalOpen(true)}
               >
                 Buy Now
               </button>
             </div>
           </div>
-        </div>
+        </section>
 
         {/* FAQ SECTION */}
-        <section className="bg-(--secondary-color) mt-20 lg:px-10 px-5 py-16">
+        <div className="bg-(--secondary-color) mt-20 lg:px-10 px-5 py-16">
           <h1 className="md:text-[48px] text-[30px] text-center font-semibold mb-12">
             Frequently{" "}
             <span className="text-(--primary-color)">Asked Questions</span>
           </h1>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mx-auto">
             {faqs.map((faq, idx) => (
               <div
                 key={idx}
-                className="relative bg-white rounded-2xl px-6 py-10 border border-black/20 hover:shadow-lg transition-shadow duration-300 flex gap-4"
+                className="relative bg-white rounded-2xl px-6 py-8 border border-black/20 hover:shadow-lg transition-shadow duration-300 flex gap-4"
               >
-                {/* Pink circle with number */}
-                <div className="flex-shrink-0 md:w-15 md:h-15 w-12 h-12 bg-[#C97BB7] text-white rounded-full flex items-center justify-center text-[22px] font-bold">
+                <div className="shrink-0 md:w-15 md:h-15 w-12 h-12 bg-[#C97BB7] text-white rounded-full flex items-center justify-center text-2xl font-bold">
                   {faq.num}
                 </div>
-
                 <div>
                   <h3 className="text-lg font-semibold text-(--accent-color) mb-2">
                     {faq.q}
                   </h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
+                  <p className="text-gray-600 text-sm leading-relaxed font-[inter]">
                     {faq.a}
                   </p>
                 </div>
               </div>
             ))}
           </div>
-        </section>
+        </div>
 
         <section className="mt-10 px-5 lg:px-10">
           <h1 className="md:text-[48px] text-[30px] text-center font-semibold md:mb-25 mb-10">

@@ -23,6 +23,7 @@ import servicehero from "./images/services.jpg"
 import dets from "./images/details.jpg"
 import newblog from "./images/blog.jpg"
 import pac from "./images/pack.jpg"
+import login from "./images/login.jpg"
 
 export const assets = {
     logo,
@@ -50,5 +51,5 @@ export const assets = {
     dets,
     newblog,
     pac,
-
+    login
 };

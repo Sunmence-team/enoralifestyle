@@ -7,6 +7,7 @@ import { NavLink } from "react-router-dom";
 import { GrContract, GrExpand } from "react-icons/gr";
 import { assets } from "../../assets/assests";
 import { MessageSquareMore } from "lucide-react";
+import { FaClipboardUser } from "react-icons/fa6";
 
 interface SidebarProps {
   isExpanded: boolean;
@@ -16,24 +17,24 @@ interface SidebarProps {
 export default function Sidebar({ isExpanded, setIsExpanded }: SidebarProps) {
   const barLinks = [
     {
+      name: "Appointments",
+      href: "/dashboard/appointments",
+      icon: <FaClipboardUser />,
+    },
+    {
       name: "Add Service",
       href: "/dashboard/overview",
       icon: <LuPackagePlus />,
     },
     {
-      name: "Appointment",
-      href: "/dashboard/appointments",
-      icon: <MdBathroom />,
+      name: "Create Package",
+      href: "/dashboard/package",
+      icon: <IoIosCreate />,
     },
     {
       name: "Upload Blog",
       href: "/dashboard/blogUpload",
       icon: <FaCloudUploadAlt />,
-    },
-    {
-      name: "Create Package",
-      href: "/dashboard/package",
-      icon: <IoIosCreate />,
     },
     {
       name: "Manage Contact",
@@ -50,7 +51,7 @@ export default function Sidebar({ isExpanded, setIsExpanded }: SidebarProps) {
   return (
     <div
       className={`transition-all duration-500 left-nav relative ${
-        isExpanded ? "w-64" : "w-20"
+        isExpanded ? "w-64" : "md:w-20 w-0"
       } rounded-r-4xl h-full bg-(--primary-color) py-8 px-2 flex items-center flex-col gap-6`}
     >
       <button

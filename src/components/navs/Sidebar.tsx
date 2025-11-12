@@ -1,13 +1,12 @@
 import React from "react";
 import { LuPackagePlus } from "react-icons/lu";
-import { MdBathroom } from "react-icons/md";
 import { FaCloudUploadAlt, FaInfoCircle } from "react-icons/fa";
-import { IoIosCreate } from "react-icons/io";
 import { NavLink } from "react-router-dom";
 import { GrContract, GrExpand } from "react-icons/gr";
 import { assets } from "../../assets/assests";
 import { MessageSquareMore } from "lucide-react";
 import { FaClipboardUser } from "react-icons/fa6";
+import { BiBox } from "react-icons/bi";
 
 interface SidebarProps {
   isExpanded: boolean;
@@ -22,14 +21,14 @@ export default function Sidebar({ isExpanded, setIsExpanded }: SidebarProps) {
       icon: <FaClipboardUser />,
     },
     {
-      name: "Add Service",
-      href: "/dashboard/overview",
+      name: "Manage Services",
+      href: "/dashboard/services",
       icon: <LuPackagePlus />,
     },
     {
-      name: "Create Package",
+      name: "Manage Packages",
       href: "/dashboard/package",
-      icon: <IoIosCreate />,
+      icon: <BiBox />,
     },
     {
       name: "Upload Blog",

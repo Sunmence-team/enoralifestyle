@@ -240,11 +240,11 @@ export default function Package() {
           {isEditing ? "Edit Package" : "Create Package"}
         </h2>
         <div className="flex gap-3">
-          <div className="p-3 rounded-full bg-[var(--pink-color)]">
-            <IoIosNotifications size={25} className="text-[var(--primary-color)]" />
+          <div className="p-3 rounded-full bg-(--pink-color)">
+            <IoIosNotifications size={25} className="text-(--primary-color)" />
           </div>
-          <div className="p-3 rounded-full bg-[var(--pink-color)]">
-            <FaRegUserCircle size={25} className="text-[var(--primary-color)]" />
+          <div className="p-3 rounded-full bg-(--pink-color)">
+            <FaRegUserCircle size={25} className="text-(--primary-color)" />
           </div>
         </div>
       </div>
@@ -262,7 +262,7 @@ export default function Package() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-[var(--primary-color)]"
+              className="w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-(--primary-color)"
             />
             <input
               type="number"
@@ -270,7 +270,7 @@ export default function Package() {
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               required
-              className="w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-[var(--primary-color)]"
+              className="w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-(--primary-color)"
             />
           </div>
 
@@ -279,7 +279,7 @@ export default function Package() {
             rows={3}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full px-4 py-3 border rounded-md resize-none focus:ring-2 focus:ring-[var(--primary-color)]"
+            className="w-full px-4 py-3 border rounded-md resize-none focus:ring-2 focus:ring-(--primary-color)"
           />
 
           {/* Services Multi-Select */}
@@ -300,7 +300,7 @@ export default function Package() {
                       type="checkbox"
                       checked={selectedServices.includes(s.id)}
                       onChange={() => handleServiceToggle(s.id)}
-                      className="w-4 h-4 text-[var(--primary-color)] rounded focus:ring-[var(--primary-color)]"
+                      className="w-4 h-4 text-(--primary-color) rounded focus:ring-(--primary-color)"
                     />
                     <span className="text-sm font-medium">{s.name}</span>
                   </label>
@@ -320,13 +320,13 @@ export default function Package() {
             />
             <label
               htmlFor="package-image"
-              className="block border-2 border-dashed border-[var(--primary-color)] rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 transition"
+              className="block border-2 border-dashed border-(--primary-color) rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 transition"
             >
               {imagePreview ? (
                 <img src={imagePreview} alt="Preview" className="mx-auto max-h-48 rounded" />
               ) : (
                 <div>
-                  <BiImageAlt className="mx-auto text-5xl text-[var(--primary-color)] mb-2" />
+                  <BiImageAlt className="mx-auto text-5xl text-(--primary-color) mb-2" />
                   <p className="text-sm">Click to upload image</p>
                 </div>
               )}
@@ -351,7 +351,7 @@ export default function Package() {
             <button
               type="submit"
               disabled={submitting}
-              className="flex-1 py-3 bg-[var(--primary-color)] text-white font-bold rounded-md hover:opacity-90 disabled:opacity-60 transition shadow-lg"
+              className="flex-1 py-3 bg-(--primary-color) text-white font-bold rounded-md hover:opacity-90 disabled:opacity-60 transition shadow-lg"
             >
               {submitting ? "Saving..." : isEditing ? "Update Package" : "Create Package"}
             </button>
@@ -361,7 +361,7 @@ export default function Package() {
 
       {/* Table – using reusable DashboardTable */}
       <div className="bg-white rounded-xl shadow-xl overflow-hidden">
-        <div className="px-8 py-6 bg-[var(--primary-color)]">
+        <div className="px-8 py-6 bg-(--primary-color)">
           <h2 className="text-2xl font-bold text-white">All Packages</h2>
         </div>
 

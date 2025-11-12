@@ -24,7 +24,12 @@ interface Service {
 }
 
 interface ApiResponse {
-  data: Service[];
+  data: {
+    data: Service[];
+    total: number;
+    per_page: number;
+    current_page: number;
+  };
   total: number;
   per_page: number;
   current_page: number;
@@ -63,7 +68,7 @@ export default function Overview() {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      const { data, total, per_page, current_page } = response.data || {};
+      const { data, total, per_page, current_page } = response.data.data || {};
       setServices(Array.isArray(data) ? data : []);
       setTotal(total || 0);
       setPerPage(per_page || 10);

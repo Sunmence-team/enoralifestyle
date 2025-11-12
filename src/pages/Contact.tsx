@@ -82,7 +82,7 @@ const Contact = () => {
             value={name}
             required
             onChange={(e) => setName(e.target.value)}
-            className="bg-gray-200 w-72 md:w-90 px-4 py-3 rounded-md border border-(--primary-color) text-xs focus:ring-1 focus:ring-(--primary-color) "
+            className="bg-gray-200 w-full max-w-[360px] px-4 py-3 rounded-md border border-[var(--primary-color)] text-xs focus:ring-1 focus:ring-[var(--primary-color)] "
           />
           <input
             type="email"
@@ -109,6 +109,18 @@ const Contact = () => {
           {postingMessage ? "Please wait..." : "Contact Us"}
         </button>
       </form>
+
+      <div className="w-full mx-auto  mt-10 overflow-hidden">
+        <iframe
+          src="https://www.google.com/maps?q=21+Oyegbami+Street,+Iyana+Barrack,+Felele,+Ibadan&output=embed"
+          width="100%"
+          height="500"
+          style={{ border: 0 }}
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
     </div>
   );
 };

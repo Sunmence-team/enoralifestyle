@@ -62,7 +62,7 @@ const Navbar: React.FC = () => {
       <div className="made-container flex items-center justify-between w-full">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <img src={assets.logo} alt="Logo" className="w-12 h-12 md:w-14 md:h-14 object-cover" />
+          <img src={assets.logo} alt="Logo" className="w-12 h-12 md:w-16 md:h-16 object-cover" />
         </div>
 
         {/* Desktop Nav */}

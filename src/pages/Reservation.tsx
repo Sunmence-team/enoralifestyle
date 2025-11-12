@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-const IMAGE_URL = import.meta.env.VITE_API_IMAGE_URL;
+// const IMAGE_URL = import.meta.env.VITE_API_IMAGE_URL;
 
 const DEPOSIT = 5000;
 
@@ -29,7 +29,7 @@ const ReservationSchema = Yup.object().shape({
   notes: Yup.string(),
 });
 
-const Reservation = () => {
+const Reservation : React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -284,11 +284,11 @@ const Reservation = () => {
           {/* CART SUMMARY */}
           {items.length > 0 ? (
             <div className="mt-6 p-4 bg-gray-50 rounded-lg border">
-              <p className="font-semibold text-(--accent-color) mb-2">Selected Services:</p>
-              <div className="space-y-2 text-sm">
+              <p className="font-semibold! text-(--accent-color) mb-2 text-sm">Selected Services:</p>
+              <div className="space-y-2">
                 {items.map((i) => (
                   <div key={i.id} className="flex justify-between">
-                    <span className="font-medium">{i.title}</span>
+                    <span className="font-semibold! text-lg text-(--primary-color)">{i.title}</span>
                     <span>₦{i.price.toLocaleString()}</span>
                   </div>
                 ))}
@@ -422,6 +422,7 @@ const Reservation = () => {
                 <button
                   type="button"
                   onClick={processPayment}
+                  disabled={submitting}
                   style={{ backgroundColor: "var(--primary-color)" }}
                   className="w-full text-white py-3 rounded-lg font-medium hover:opacity-90"
                 >

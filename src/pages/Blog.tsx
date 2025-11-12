@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { assets } from "../assets/assests";
 import HeroSection from "../components/herosections/Herosection";
-import BlogCard from "../components/cards/Blogcard";
+import BlogCard from "../components/cards/BlogCard";
 import axios, { AxiosError } from "axios";
 import BlogCardSkeleton from "../components/skeletons/BlogCardSkeleton";
 

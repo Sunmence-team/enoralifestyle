@@ -388,7 +388,7 @@ export default function Package() {
               key: "price",
               header: "PRICE",
               render: (pkg: any) => (
-                <span className="font-bold text-pink-600">
+                <span className="font-bold text-pink-600 font-[Raleway]!">
                   ₦{parseFloat(pkg.price).toLocaleString()}
                 </span>
               ),
@@ -397,16 +397,16 @@ export default function Package() {
               key: "services",
               header: "SERVICES",
               render: (pkg: any) => (
-                <ul className="text-sm space-y-1">
+                <ul className="text-sm space-y-1 font-[Raleway]!">
                   {pkg.services?.length > 0 ? (
                     pkg.services.map((sid: any) => {
                       const service = services.find(
                         (s) => s.id === (typeof sid === "string" ? parseInt(sid) : sid)
                       );
-                      return <li key={sid}>• {service?.name || `ID: ${sid}`}</li>;
+                      return <li className="font-[Raleway]! font-medium!" key={sid}>• {service?.name || `ID: ${sid}`}</li>;
                     })
                   ) : (
-                    <span className="text-gray-400 italic">None</span>
+                    <span className="text-gray-400 italic font-[Raleway]!">None</span>
                   )}
                 </ul>
               ),

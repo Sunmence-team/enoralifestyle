@@ -291,11 +291,11 @@ export default function BlogUpload() {
 
       {/* Form */}
       <div className="bg-white rounded-2xl shadow-xl p-8 mb-10 mx-4 lg:mx-0">
-        <h2 className="font-bold text-2xl mb-8">Upload Blog</h2>
+        <h2 className="font-bold text-xl mb-8">Upload Blog</h2>
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Title */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-[Raleway]! font-medium text-gray-700 mb-2">
               Post Title
             </label>
             <input
@@ -307,7 +307,7 @@ export default function BlogUpload() {
               }}
               required
               placeholder="E.g Anti-Aging Facials: Do They Really Make You Look Younger?"
-              className="w-full border bg-(--pending-bg)/15 border-(--primary-color) rounded-md p-4 text-base placeholder:text-[var(--primary-color)/70] focus:outline-none focus:ring-4 focus:ring-[var(--primary-color)/20]"
+              className="w-full border bg-(--pending-bg)/15 border-(--primary-color) rounded-md p-4 text-base placeholder:text-(--primary-color)/70 focus:outline-none focus:ring-4 focus:ring-[var(--primary-color)/20]"
             />
             {error && error.from === "title" && (
               <span className="text-base mt-2 font-semibold text-red-700 block">
@@ -318,7 +318,7 @@ export default function BlogUpload() {
 
           {/* Image */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+            <label className="block text-sm font-[Raleway]! font-medium text-gray-700 mb-3">
               Cover Image
             </label>
             <div className="border border-dashed bg-(--pending-bg)/15 border-(--primary-color) rounded-2xl p-10 text-center hover:border-solid transition">
@@ -341,7 +341,7 @@ export default function BlogUpload() {
                   <div className="space-y-4">
                     <BiImageAlt className="mx-auto w-16 h-16 text-(--primary-color)" />
                     <div className="text-sm">
-                      <span className="inline-block px-4 py-2 bg-white border bg-(--pending-bg)/15 border-(--primary-color) rounded-full font-medium">
+                      <span className="inline-block px-4 py-2 border bg-(--pending-bg)/15 border-(--primary-color) rounded-full font-medium">
                         Choose File
                       </span>
                       <p className="mt-2 text-gray-500">No file chosen</p>
@@ -359,7 +359,7 @@ export default function BlogUpload() {
 
           {/* Short Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-[Raleway]! font-medium text-gray-700 mb-2">
               Short Description
             </label>
             <textarea
@@ -374,7 +374,7 @@ export default function BlogUpload() {
 
           {/* Body */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-[Raleway]! font-medium text-gray-700 mb-2">
               Body Text
             </label>
             <textarea
@@ -383,7 +383,7 @@ export default function BlogUpload() {
               required
               rows={8}
               placeholder="Write your blog post here..."
-              className="w-full border bg-(--pending-bg)/15 border-(--primary-color) rounded-md p-4 focus:outline-none focus:ring-4 focus:ring-[var(--primary-color)/20]"
+              className="w-full border bg-(--pending-bg)/15 border-(--primary-color) rounded-md p-4 focus:outline-none focus:ring-4 focus:ring-[var(--primary-color)/20] styled-scrollbar"
             />
           </div>
 
@@ -445,7 +445,7 @@ export default function BlogUpload() {
               key: "short_description",
               header: "SUMMARY",
               render: (b: any) => (
-                <div className="max-w-md text-sm text-gray-600 line-clamp-2">
+                <div className="max-w-md text-sm text-gray-600 font-[Raleway]! line-clamp-2">
                   {b.short_description}
                 </div>
               ),

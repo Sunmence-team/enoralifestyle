@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { BiSolidQuoteSingleLeft } from "react-icons/bi";
 import HeroSection from "../components/herosections/Herosection";
 import { IoIosArrowRoundForward } from "react-icons/io";
-import BlogCard from "../components/cards/Blogcard";
+import BlogCard from "../components/cards/BlogCard";
 import PackageCard from "../components/cards/PackageCard";
 import ServiceCard from "../components/cards/ServiceCard";
 import axios, { AxiosError } from "axios";
@@ -293,18 +293,24 @@ const Home: React.FC = () => {
 
           <div className="mt-10 flex overflow-x-scroll gap-4 no-scrollbar pb-2">
             {isLoadingBlogs
-              ? Array(5)
-                  .fill(0)
-                  .map((_, index) => (
-                    <div className="md:min-w-[340px] min-w-[320px]" key={index}>
-                      <BlogCardSkeleton />
+              ? Array(5).fill(0).map((_, index) => (
+                <div className="md:min-w-[340px] min-w-[320px]" key={index}>
+                  <BlogCardSkeleton />
+                </div>
+              ))
+              : !isLoadingBlogs && !error && blogs.length === 0 ? (
+                <div className="text-center pt-16 relative w-full">
+                  <div className="bg-gray-100 w-24 h-24 rounded-full flex flex-col items-center justify-center mx-auto mb-6">
+                    <div className="absolute">
+                      <p className="text-xl text-gray-600 font-medium">
+                        No blogs available at the moment.
+                      </p>
+                      <p className="text-gray-500 mt-2">Check back soon for fresh content!</p>
                     </div>
-                  ))
-              : !isLoadingBlogs &&
-                !error &&
-                blogs.length > 0 &&
-                blogs.slice(0, 6).map((blog, index) => (
-                  <div className="md:min-w-[340px] min-w-[320px]" key={index}>
+                  </div>
+                </div>
+              ) : blogs.slice(0, 6).map((blog, index) => (
+                  <div className="md:max-w-[340px] max-w-[320px]" key={index}>
                     <BlogCard
                       id={String(blog?.id)}
                       title={blog?.title}
@@ -312,7 +318,9 @@ const Home: React.FC = () => {
                       image={`${IMAGE_URL}/${blog?.cover_image}`}
                     />
                   </div>
-                ))}
+                )
+              )
+            }
           </div>
 
           <div className="flex justify-end mt-10">
@@ -534,71 +542,73 @@ const Home: React.FC = () => {
           </h1>
 
           {/* Scrollable container for sm & md; static grid on lg */}
-          <div className="flex gap-6 overflow-x-auto overflow-y-hidden lg:overflow-x-visible lg:justify-center pb-5 snap-x snap-mandatory lg:flex-row lg:flex-wrap">
+          <div className="flex gap-6 overflow-x-auto lg:overflow-y-visible overflow-y-hidden lg:overflow-x-visible lg:justify-center pb-5 snap-x snap-mandatory lg:flex-row lg:flex-wrap">
             {loadingTestimonials
               ? [1, 2, 3].map((_, idx) => <TestimonialCardSkeleton key={idx} />)
-              : testimonials.length === 0
-              ? reviews.map((review, index) => (
-                  <div
-                    key={index}
-                    className={`
-                      flex flex-col shrink-0 w-[300px] h-[360px] snap-center 
-                      lg:flex-1 lg:min-w-[350px] lg:h-[380px]
-                      transition-all duration-300
-                    `}
-                  >
-                    {/* Top section (review content) */}
-                    <div className="border border-black/20 rounded-t-2xl px-4 py-8 flex-1 flex flex-col bg-white">
-                      <div className="flex items-center gap-1">
-                        <BiSolidQuoteSingleLeft
-                          className="w-8 h-8 md:w-10 md:h-10"
-                          style={{ color: review.iconColor }}
-                        />
-                        <BiSolidQuoteSingleLeft
-                          className="w-8 h-8 md:w-10 md:h-10"
-                          style={{ color: review.iconColor }}
-                        />
-                      </div>
-
-                      <div className="text mt-5 flex-1">
-                        <p className="text-gray-700 text-sm md:text-base leading-relaxed">
-                          {review.reviewText}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Bottom section (profile) */}
+              : testimonials.length < 3
+                ? reviews.map((review, index) => (
                     <div
-                      className="p-3 rounded-b-2xl"
-                      style={{ backgroundColor: review.bgColor }}
+                      key={index}
+                      className={`
+                        flex flex-col shrink-0 w-[300px] h-[360px] snap-center 
+                        lg:flex-1 lg:min-w-[350px] lg:h-[380px]
+                        transition-all duration-300
+                        ${index % 2 !== 0 && "lg:-translate-y-14"}
+                      `}
                     >
-                      <div className="flex items-center gap-2">
-                        <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden flex-shrink-0">
-                          <img
-                            src={review.profileImage}
-                            alt={review.name}
-                            className="w-full h-full object-cover"
+                      {/* Top section (review content) */}
+                      <div className="border border-black/20 rounded-t-2xl px-4 py-8 flex-1 flex flex-col bg-white">
+                        <div className="flex items-center gap-1">
+                          <BiSolidQuoteSingleLeft
+                            className="w-8 h-8 md:w-10 md:h-10"
+                            style={{ color: review.iconColor }}
+                          />
+                          <BiSolidQuoteSingleLeft
+                            className="w-8 h-8 md:w-10 md:h-10"
+                            style={{ color: review.iconColor }}
                           />
                         </div>
-                        <div>
-                          <h4 className="font-semibold text-white text-sm md:text-base">
-                            {review.name}
-                          </h4>
-                          <p className="text-xs md:text-sm text-white">
-                            {review.role}
+
+                        <div className="text mt-5 flex-1">
+                          <p className="text-gray-700 text-sm md:text-base leading-relaxed">
+                            {review.reviewText}
                           </p>
                         </div>
                       </div>
+
+                      {/* Bottom section (profile) */}
+                      <div
+                        className="p-3 rounded-b-2xl"
+                        style={{ backgroundColor: review.bgColor }}
+                      >
+                        <div className="flex items-center gap-2">
+                          <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden flex-shrink-0">
+                            <img
+                              src={review.profileImage}
+                              alt={review.name}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-white text-sm md:text-base">
+                              {review.name}
+                            </h4>
+                            <p className="text-xs md:text-sm text-white">
+                              {review.role}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                ))
-              : testimonials.map((t, idx) => (
+                  ))
+                : testimonials.map((t, idx) => (
                   <div
                     key={idx}
                     className={`
                       flex flex-col shrink-0 w-[300px] h-[360px] snap-center 
                       lg:flex-1 lg:min-w-[350px] lg:h-[380px]
                       transition-all duration-300
+                      ${idx % 2 !== 0 && "lg:-translate-y-14"}
                     `}
                   >
                     {/* Top section (review content) */}
@@ -654,7 +664,7 @@ const Home: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                ))}
+              ))}
           </div>
         </section>
       </div>

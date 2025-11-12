@@ -24,7 +24,6 @@ const ManageContacts: React.FC = () => {
   const [isViewOpen, setIsViewOpen] = useState(false);
   const [currentPageFromApi, setCurrentPageFromApi] = useState(NaN);
   const [totalApiPages, setTotalApiPages] = useState(NaN);
-  const apiItemsPerPage = 1;
   const [totalPagesInArr, setTotalPagesInArr] = useState<number[]>([]);
   const fetchContacts = async () => {
     setLoadingContacts(true);
@@ -147,13 +146,13 @@ const ManageContacts: React.FC = () => {
             <div className="p-3 rounded-full bg-[var(--pink-color)]">
               <IoIosNotifications
                 size={25}
-                className="text-[var(--primary-color)]"
+                className="text-(--primary-color)"
               />
             </div>
             <div className="p-3 rounded-full bg-[var(--pink-color)]">
               <FaRegUserCircle
                 size={25}
-                className="text-[var(--primary-color)]"
+                className="text-(--primary-color)"
               />
             </div>
           </div>
@@ -174,7 +173,7 @@ const ManageContacts: React.FC = () => {
                 <th className="py-6 px-6 uppercase tracking-wider text-sm font-semibold text-gray-700">
                   Message
                 </th>
-                <th className="py-6 px-6 uppercase tracking-wider text-sm font-semibold text-gray-700">
+                <th className="py-6 px-6 uppercase tracking-wider text-sm text-center font-semibold text-gray-700">
                   Actions
                 </th>
               </tr>
@@ -214,21 +213,21 @@ const ManageContacts: React.FC = () => {
                 contacts.map((c, index) => (
                   <tr
                     key={index}
-                    className={`border-b hover:bg-gray-50 transition-colors duration-200 ${
+                    className={`border-b hover:bg-gray-50 font-[Raleway]! transition-colors duration-200 ${
                       index % 2 === 0 ? "bg-white" : "bg-[#901E76]/20"
                     }`}
                     onMouseOver={() => setSelectedContact(c)}
                   >
-                    <td className="py-4 px-6 align-middle">{index + 1}</td>
-                    <td className="py-4 px-6 align-middle">{c.name}</td>
-                    <td className="py-4 px-6 align-middle">{c.email}</td>
-                    <td className="py-4 px-6 align-middle">
-                      {c.message.slice(0, 170)}...
+                    <td className="py-4 px-6 font-[Raleway]! align-middle">{index + 1}</td>
+                    <td className="py-4 px-6 font-[Raleway]! align-middle">{c.name}</td>
+                    <td className="py-4 px-6 font-[Raleway]! align-middle">{c.email}</td>
+                    <td className="py-4 px-6 font-[Raleway]! align-middle">
+                      <p className="line-clamp-1">{c.message}</p>
                     </td>
-                    <td className="py-4 px-6 align-middle">
-                      <div className="flex gap-3 justify-center text-[var(--primary-color)]">
+                    <td className="py-4 px-6 font-[Raleway]! align-middle">
+                      <div className="flex gap-3 justify-center text-(--primary-color)">
                         <button
-                          className="cursor-pointer hover:bg-gray-200 p-2 rounded-md hover:text-[var(--primary-color)]"
+                          className="cursor-pointer hover:bg-gray-200 p-2 rounded-md hover:text-(--primary-color)"
                           onClick={handleViewContact}
                         >
                           <Eye size={18} />
@@ -265,7 +264,7 @@ const ManageContacts: React.FC = () => {
                           onClick={() => setCurrentPageFromApi(t)}
                           className={`w-8 h-8 flex items-center justify-center font-bold ${
                             t === currentPageFromApi
-                              ? "bg-[var(--primary-color)] text-white"
+                              ? "bg-(--primary-color) text-white"
                               : "bg-gray-300 text-gray-700"
                           } cursor-pointer rounded-lg`}
                         >

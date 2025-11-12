@@ -240,13 +240,13 @@ export default function Overview() {
           <div className="p-3 rounded-full bg-[var(--pink-color)]">
             <IoIosNotifications
               size={25}
-              className="text-[var(--primary-color)]"
+              className="text-(--primary-color)"
             />
           </div>
           <div className="p-3 rounded-full bg-[var(--pink-color)]">
             <FaRegUserCircle
               size={25}
-              className="text-[var(--primary-color)]"
+              className="text-(--primary-color)"
             />
           </div>
         </div>
@@ -268,7 +268,7 @@ export default function Overview() {
                 id="name"
                 onChange={(e) => setName(e.target.value)}
                 required
-                className="w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-[var(--primary-color)]"
+                className="w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-(--primary-color)"
               />
             </div>
             <div className="flex gap-2 flex-col font-[Raleway]!">
@@ -280,7 +280,7 @@ export default function Overview() {
                 onChange={(e) => setPrice(e.target.value)}
                 required
                 id="price"
-                className="w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-[var(--primary-color)]"
+                className="w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-(--primary-color)"
               />
             </div>
           </div>
@@ -294,7 +294,7 @@ export default function Overview() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
-              className="w-full px-4 py-3 border rounded-md resize-none focus:ring-2 focus:ring-[var(--primary-color)]"
+              className="w-full px-4 py-3 border rounded-md resize-none focus:ring-2 focus:ring-(--primary-color)"
             />
           </div>
 
@@ -310,7 +310,7 @@ export default function Overview() {
               <label htmlFor="image">Image</label>
             <label
               htmlFor="image-upload"
-              className="block border-2 border-dashed border-[var(--primary-color)] rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 transition"
+              className="block border-2 border-dashed border-(--primary-color) rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 transition"
             >
               {imagePreview ? (
                 <img
@@ -320,7 +320,7 @@ export default function Overview() {
                 />
               ) : (
                 <div>
-                  <BiImageAlt className="mx-auto text-5xl text-[var(--primary-color)] mb-2" />
+                  <BiImageAlt className="mx-auto text-5xl text-(--primary-color) mb-2" />
                   <p className="text-sm">Click to upload image</p>
                 </div>
               )}
@@ -347,7 +347,7 @@ export default function Overview() {
             <button
               type="submit"
               disabled={submitting}
-              className="flex-1 py-3 bg-[var(--primary-color)] text-white font-bold rounded-md hover:opacity-90 disabled:opacity-60 transition shadow-lg"
+              className="flex-1 py-3 bg-(--primary-color) text-white font-bold rounded-md hover:opacity-90 disabled:opacity-60 transition shadow-lg"
             >
               {submitting
                 ? "Saving..."
@@ -361,7 +361,7 @@ export default function Overview() {
 
       {/* Reusable Table */}
       <div className="bg-white rounded-xl shadow-xl overflow-hidden">
-        <div className="px-8 py-6 bg-[var(--primary-color)]">
+        <div className="px-8 py-6 bg-(--primary-color)">
           <h2 className="text-2xl font-bold text-white">All Services</h2>
         </div>
 
@@ -386,9 +386,9 @@ export default function Overview() {
               key: "description",
               header: "DESCRIPTION",
               render: (service: Service) => (
-                <div className="md:max-w-md max-w-lg text-gray-600 line-clamp-3">
+                <div className="md:max-w-md max-w-lg text-gray-600 font-[Raleway]! line-clamp-3">
                   {service.description || (
-                    <span className="text-gray-400 italic">No description</span>
+                    <span className="text-gray-400 italic font-[Raleway]!">No description</span>
                   )}
                 </div>
               ),

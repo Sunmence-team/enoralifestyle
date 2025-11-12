@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { assets } from "../assets/assests";
 import HeroSection from "../components/herosections/Herosection";
-import { FiX } from "react-icons/fi";
 import PackageCard from "../components/cards/PackageCard";
 import axios, { AxiosError } from "axios";
 import PackageCardSkeleton from "../components/skeletons/PackageCardSkeleton";
@@ -20,17 +19,9 @@ interface Package {
   type: "package" | "service";
 }
 
-interface SelectedPackage {
-  title: string;
-  description: string;
-  price: string;
-  image: string;
-}
-
 const Packages : React.FC = () => {
   const [packages, setPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedPackage, setSelectedPackage] = useState<SelectedPackage | null>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -69,16 +60,6 @@ const Packages : React.FC = () => {
     fetchPackages();
   }, []);
 
-  // Open modal with selected package
-  const openModal = (pkg: Package) => {
-    setSelectedPackage({
-      title: pkg.name,
-      description: pkg.description,
-      price: pkg.price,
-      image: pkg.image ? `${IMAGE_URL}${pkg.image.replace(/^public\//, "")}` : assets.our1,
-    });
-  };
-
   return (
     <div>
       {/* HERO SECTION */}
@@ -111,17 +92,15 @@ const Packages : React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8">
             {packages.map((item, index) => (
-              <div key={item?.id} onClick={() => openModal(item)} className="cursor-pointer">
-                <PackageCard
-                  id={item?.id.toString()}
-                  index={index}
-                  title={item?.name}
-                  description={item?.description}
-                  price={item?.price}
-                  image={`${IMAGE_URL}/${item?.image}`}
-                  showMidLine={false}
-                />
-              </div>
+              <PackageCard
+                id={item?.id.toString()}
+                index={index}
+                title={item?.name}
+                description={item?.description}
+                price={item?.price}
+                image={`${IMAGE_URL}/${item?.image}`}
+                showMidLine={false}
+              />
             ))}
           </div>
         )}

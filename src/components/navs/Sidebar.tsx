@@ -51,7 +51,7 @@ export default function Sidebar({ isExpanded, setIsExpanded }: SidebarProps) {
     <div
       className={`transition-all duration-500 left-nav relative ${
         isExpanded ? "w-64" : "md:w-20 w-0"
-      } rounded-r-4xl h-full bg-(--primary-color) py-8 px-2 flex items-center flex-col gap-6`}
+      } rounded-r-4xl h-full bg-(--primary-color) pt-4 pb-8 px-2 flex items-center flex-col gap-4`}
     >
       <button
         type="button"
@@ -63,7 +63,7 @@ export default function Sidebar({ isExpanded, setIsExpanded }: SidebarProps) {
       <img
         src={assets.logo}
         alt="Enora Lifestyle and Spa Logo"
-        className="w-12 h-12"
+        className="w-16 h-16 object-cover"
       />
       <div className="w-full flex flex-col gap-2.5 border-b border-white/30 h-[calc(100%-(24px+3rem))] overflow-y-auto no-scrollbar">
         {barLinks.map((link) => (

@@ -45,7 +45,7 @@ const Footer: React.FC = () => {
 
         {/* Address */}
         <p className="text-xs text-gray-400 mt-6">
-          21 Oyegbami Street, Felle Road, Ibadan (Felle)
+          21 Oyegbami Street, Felele Road, Ibadan (Felele)
         </p>
       </div>
 

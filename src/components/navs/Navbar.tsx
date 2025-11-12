@@ -159,7 +159,7 @@ const Navbar: React.FC = () => {
                 <CartCard key={index} {...cartItem} />
               ))}
             </div>
-            <div className="flex items-center justify-center gap-4 border mt-3">
+            <div className="flex items-center justify-center gap-4 mt-3">
               <button
                 onClick={clearCart}
                 className="bg-gray-400 py-3 px-3 md:px-4 rounded-sm text-white"

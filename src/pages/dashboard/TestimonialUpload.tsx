@@ -45,6 +45,8 @@ export default function UploadTestimonial() {
     errorMessage: "",
   });
 
+  const token = localStorage.getItem("authToken");
+
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -309,7 +311,7 @@ export default function UploadTestimonial() {
 
   useEffect(() => {
     fetchTestimonials();
-  }, [currentPageFromApi]);
+  }, [token, currentPageFromApi]);
 
   return (
     <>

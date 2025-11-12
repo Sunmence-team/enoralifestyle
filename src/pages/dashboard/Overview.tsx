@@ -59,12 +59,12 @@ export default function Overview() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deletingService, setDeletingService] = useState<Service | null>(null);
+  const token = localStorage.getItem("token");
 
   const fetchServices = useCallback(
     async (page: number) => {
       setLoading(true);
       try {
-        const token = localStorage.getItem("token");
         const response = await axios.get<ApiResponse>(
           `${API_URL}/services?page=${page}&per_page=${perPage}`,
           {
@@ -93,7 +93,7 @@ export default function Overview() {
         setLoading(false);
       }
     },
-    [navigate, perPage]
+    [token, navigate, perPage]
   );
 
   useEffect(() => {
@@ -104,7 +104,7 @@ export default function Overview() {
       return;
     }
     fetchServices(currentPage);
-  }, [navigate, currentPage, fetchServices]);
+  }, [token, navigate, currentPage, fetchServices]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

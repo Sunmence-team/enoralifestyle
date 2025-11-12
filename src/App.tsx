@@ -21,6 +21,8 @@ import Package from "./pages/dashboard/Package";
 import Appointments from "./pages/dashboard/Appointments";
 import Reservation from "./pages/Reservation";
 import ManageContacts from "./pages/dashboard/ManageContacts";
+import PaymentStatus from "./pages/PaymentStatus";
+import UploadTestimonial from "./pages/dashboard/TestimonialUpload";
 
 const App: React.FC = () => {
   return (
@@ -35,10 +37,26 @@ const App: React.FC = () => {
         {/* Main routes with navbar */}
         <Route path="/" element={<MainLayout children={<Home />} />} />
         <Route path="/blog" element={<MainLayout children={<Blog />} />} />
-        <Route path="/services" element={<MainLayout children={<Services />} />} />
-        <Route path="/packages" element={<MainLayout children={<Packages />} />} />
-        <Route path="/contact" element={<MainLayout children={<Contact />} />} />
-        <Route path="/reservation" element={<MainLayout children={<Reservation />} />} />
+        <Route
+          path="/services"
+          element={<MainLayout children={<Services />} />}
+        />
+        <Route
+          path="/packages"
+          element={<MainLayout children={<Packages />} />}
+        />
+        <Route
+          path="/contact"
+          element={<MainLayout children={<Contact />} />}
+        />
+        <Route
+          path="/reservation"
+          element={<MainLayout children={<Reservation />} />}
+        />
+        <Route
+          path="/payment-status"
+          element={<MainLayout children={<PaymentStatus />} />}
+        />
 
         {/* Blog details route WITHOUT navbar */}
         <Route path="/blog/:id" element={<BlogDetails />} />
@@ -62,7 +80,11 @@ const App: React.FC = () => {
         />
         <Route
           path="/dashboard/contacts"
-          element={<DashboardLayout children={<ManageContacts/>} />}
+          element={<DashboardLayout children={<ManageContacts />} />}
+        />
+        <Route
+          path="/dashboard/testimonial"
+          element={<DashboardLayout children={<UploadTestimonial />} />}
         />
       </Routes>
     </>

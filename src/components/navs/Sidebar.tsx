@@ -1,6 +1,7 @@
 import React from "react";
 import { LuPackagePlus } from "react-icons/lu";
-import { FaCloudUploadAlt } from "react-icons/fa";
+import { MdBathroom } from "react-icons/md";
+import { FaCloudUploadAlt, FaInfoCircle } from "react-icons/fa";
 import { IoIosCreate } from "react-icons/io";
 import { NavLink } from "react-router-dom";
 import { GrContract, GrExpand } from "react-icons/gr";
@@ -39,6 +40,11 @@ export default function Sidebar({ isExpanded, setIsExpanded }: SidebarProps) {
       name: "Manage Contact",
       href: "/dashboard/contacts",
       icon: <MessageSquareMore/>,
+    },
+    {
+      name: "Upload Testimonial",
+      href: "/dashboard/testimonial",
+      icon: <FaInfoCircle/>,
     },
   ];
 

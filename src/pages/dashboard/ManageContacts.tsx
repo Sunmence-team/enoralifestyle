@@ -5,6 +5,7 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { toast } from "sonner";
 import ConfirmModal from "../../modals/ConfirmDialog";
 import ViewContactModal from "../../modals/ViewContact";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 interface Contact {
   id: number;
   name: string;
@@ -21,7 +22,10 @@ const ManageContacts: React.FC = () => {
   const [singleContact, setSingleContact] = useState<Contact | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isViewOpen, setIsViewOpen] = useState(false);
-
+  const [currentPageFromApi, setCurrentPageFromApi] = useState(NaN);
+  const [totalApiPages, setTotalApiPages] = useState(NaN);
+  const apiItemsPerPage = 1;
+  const [totalPagesInArr, setTotalPagesInArr] = useState<number[]>([]);
   const fetchContacts = async () => {
     setLoadingContacts(true);
     try {
@@ -36,6 +40,11 @@ const ManageContacts: React.FC = () => {
       if (res.ok) {
         toast.success("Contact fetched successfully");
         setContacts(data.data.data);
+        setCurrentPageFromApi(data.data.current_page);
+        setTotalApiPages(data.data.last_page);
+        setTotalPagesInArr(
+          Array.from({ length: data.data.last_page }, (_, i) => i + 1)
+        );
       } else {
         toast.error(`Failed to load contact. ${data.message}.`);
       }
@@ -70,7 +79,7 @@ const ManageContacts: React.FC = () => {
         setShowDeleteModal(false);
         fetchContacts();
       } else {
-        toast.error(`Failed to load contact. ${data.message}.`);
+        toast.error(`Failed to delete contact. ${data.message}.`);
       }
     } catch (error: any) {
       if (
@@ -127,7 +136,7 @@ const ManageContacts: React.FC = () => {
 
   useEffect(() => {
     fetchContacts();
-  }, []);
+  }, [currentPageFromApi]);
 
   return (
     <>
@@ -135,7 +144,7 @@ const ManageContacts: React.FC = () => {
         <div className="flex justify-between items-center w-full mb-3">
           <h2 className="font-bold text-2xl">Manage Contact</h2>
           <div className="flex gap-3">
-            <div className="p-3 rounded-full bg-[var(--pink-color)] ">
+            <div className="p-3 rounded-full bg-[var(--pink-color)]">
               <IoIosNotifications
                 size={25}
                 className="text-[var(--primary-color)]"
@@ -150,30 +159,37 @@ const ManageContacts: React.FC = () => {
           </div>
         </div>
         <div className="bg-white rounded-xl shadow border border-black/10 overflow-hidden">
-          <table className="w-full text-left">
+          <table className="w-full text-left border-collapse">
             <thead className="bg-gray-100 border-b">
               <tr>
-                <th className="p-3">Name</th>
-                <th className="p-3">Email</th>
-                <th className="p-3">Message</th>
-                <th className="p-3 text-center">Actions</th>
+                <th className="py-4 px-6 text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                  Name
+                </th>
+                <th className="py-4 px-6 text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                  Email
+                </th>
+                <th className="py-4 px-6 text-sm font-semibold text-gray-700 uppercase tracking-wider">
+                  Message
+                </th>
+                <th className="py-4 px-6 text-sm font-semibold text-gray-700 uppercase tracking-wider text-center">
+                  Actions
+                </th>
               </tr>
             </thead>
-
             <tbody>
               {loadingContacts ? (
                 Array.from({ length: 5 }).map((_, i) => (
                   <tr key={i} className="animate-pulse border-b">
-                    <td className="p-5">
+                    <td className="py-5 px-6">
                       <div className="h-4 bg-gray-300 rounded w-3/4"></div>
                     </td>
-                    <td className="p-5">
+                    <td className="py-5 px-6">
                       <div className="h-4 bg-gray-300 rounded w-5/6"></div>
                     </td>
-                    <td className="p-5">
+                    <td className="py-5 px-6">
                       <div className="h-5 bg-gray-200 rounded w-full"></div>
                     </td>
-                    <td className="p-5 text-center">
+                    <td className="py-5 px-6 text-center">
                       <div className="flex gap-3 justify-center">
                         <div className="h-5 w-5 bg-gray-300 rounded"></div>
                         <div className="h-5 w-5 bg-gray-300 rounded"></div>
@@ -183,35 +199,43 @@ const ManageContacts: React.FC = () => {
                   </tr>
                 ))
               ) : contacts.length === 0 ? (
-                <tr className="border-b hover:bg-gray-50 transition">
-                  <td className="p-8 text-center" colSpan={4}>
-                    {" "}
-                    No Contact found.
+                <tr className="border-b hover:bg-gray-50 transition-colors duration-200">
+                  <td
+                    className="py-8 px-6 text-center text-gray-500"
+                    colSpan={4}
+                  >
+                    {"No Contact found."}
                   </td>
                 </tr>
               ) : (
                 contacts.map((c, index) => (
                   <tr
                     key={index}
-                    className="border-b hover:bg-gray-50 transition"
+                    className={`border-b hover:bg-gray-50 transition-colors duration-200 ${
+                      index % 2 === 0 ? "bg-white" : "bg-[var(--light-primary)]"
+                    }`}
                     onMouseOver={() => setSelectedContact(c)}
                   >
-                    <td className="p-5 font-medium">{c.name}</td>
-                    <td className="p-5 text-sm text-gray-600">{c.email}</td>
-                    <td className="p-5 text-sm text-gray-700 line-clamp-2">
+                    <td className="py-5 px-6 font-medium text-gray-800">
+                      {c.name}
+                    </td>
+                    <td className="py-5 px-6 text-sm text-gray-600">
+                      {c.email}
+                    </td>
+                    <td className="py-5 px-6 text-sm text-gray-700 line-clamp-2">
                       {c.message.slice(0, 170)}...
                     </td>
-                    <td className="p-5">
+                    <td className="py-5 px-6 text-center">
                       <div className="flex gap-3 justify-center text-gray-700">
                         <button
-                          className="cursor-pointer hover:bg-gray-300 p-2 rounded-sm hover:text-(--primary-color)"
+                          className="cursor-pointer hover:bg-gray-200 p-2 rounded-md hover:text-[var(--primary-color)]"
                           onClick={handleViewContact}
                         >
                           <Eye size={18} />
                         </button>
                         <button
                           onClick={() => setShowDeleteModal(true)}
-                          className="cursor-pointer hover:bg-gray-300 p-2 rounded-sm hover:text-red-600"
+                          className="cursor-pointer hover:bg-gray-200 p-2 rounded-md hover:text-red-600"
                         >
                           <Trash2 size={18} />
                         </button>
@@ -221,6 +245,48 @@ const ManageContacts: React.FC = () => {
                 ))
               )}
             </tbody>
+            <tfoot>
+              <tr className="bg-white/60 h-[77px] border-t border-black/10">
+                {totalPagesInArr.length !== 0 && (
+                  <td className="py-4 px-6 text-center" colSpan={8}>
+                    <div className="flex gap-3 justify-center items-center">
+                      <button
+                        className="p-2 text-gray-600 hover:text-black cursor-pointer"
+                        disabled={currentPageFromApi === totalApiPages}
+                        onClick={() =>
+                          setCurrentPageFromApi(currentPageFromApi - 1)
+                        }
+                      >
+                        <FaAngleLeft />
+                      </button>
+                      {totalPagesInArr.map((t, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setCurrentPageFromApi(t)}
+                          className={`w-8 h-8 flex items-center justify-center font-bold ${
+                            t === currentPageFromApi
+                              ? "bg-[var(--primary-color)] text-white"
+                              : "bg-gray-300 text-gray-700"
+                          } cursor-pointer rounded-lg`}
+                        >
+                          {t}
+                        </button>
+                      ))}
+                      <span className="text-gray-500">...</span>
+                      <button
+                        className="p-2 text-gray-600 hover:text-black cursor-pointer"
+                        disabled={currentPageFromApi === 1}
+                        onClick={() =>
+                          setCurrentPageFromApi(currentPageFromApi + 1)
+                        }
+                      >
+                        <FaAngleRight />
+                      </button>
+                    </div>
+                  </td>
+                )}
+              </tr>
+            </tfoot>
           </table>
         </div>
       </div>

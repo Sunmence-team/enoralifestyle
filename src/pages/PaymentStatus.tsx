@@ -7,6 +7,7 @@ const PaymentStatus: React.FC = () => {
   const location = useLocation();
 
   const queryParams = new URLSearchParams(location.search);
+  const typeParam = queryParams.get("type");
   const status = queryParams.get("status");
   const reference = queryParams.get("reference");
   const purchase_id = queryParams.get("purchase_id");
@@ -30,7 +31,7 @@ const PaymentStatus: React.FC = () => {
     }
   }, [reference, purchase_id, navigate]);
 
-  return (
+  return typeParam === "ebook" ? (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="bg-white rounded-3xl shadow-lg p-8 max-w-md text-center">
         {status === "success" ? (
@@ -73,7 +74,7 @@ const PaymentStatus: React.FC = () => {
         )}
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default PaymentStatus;

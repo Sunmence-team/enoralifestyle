@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { GoChevronRight } from "react-icons/go";
 import { assets } from "../../assets/assests";
 
-interface BlogCardProps {
+interface BlogCrdProps {
   id: string;
   title: string;
   description: string;
@@ -11,7 +11,7 @@ interface BlogCardProps {
 
 
 
-const BlogCard = ({ id, title, description, image }: BlogCardProps) => {
+const BlogCrd = ({ id, title, description, image }: BlogCrdProps) => {
   return (
     <Link
       to={`/blog/${id}`}
@@ -55,4 +55,4 @@ const BlogCard = ({ id, title, description, image }: BlogCardProps) => {
   );
 };
 
-export default BlogCard;
+export default BlogCrd;

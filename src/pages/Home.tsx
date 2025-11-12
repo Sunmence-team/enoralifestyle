@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { BiSolidQuoteSingleLeft } from "react-icons/bi";
 import HeroSection from "../components/herosections/Herosection";
 import { IoIosArrowRoundForward } from "react-icons/io";
-import BlogCard from "../components/cards/BlogCard";
+import BlogCrd from "../components/cards/BlogCrd";
 import PackageCard from "../components/cards/PackageCard";
 import ServiceCard from "../components/cards/ServiceCard";
 import axios, { AxiosError } from "axios";
@@ -311,7 +311,7 @@ const Home: React.FC = () => {
                 </div>
               ) : blogs.slice(0, 6).map((blog, index) => (
                   <div className="md:max-w-[340px] max-w-[320px]" key={index}>
-                    <BlogCard
+                    <BlogCrd
                       id={String(blog?.id)}
                       title={blog?.title}
                       description={blog?.short_description}

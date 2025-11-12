@@ -1,3 +1,5 @@
+// src/components/cards/BlogCard.tsx
+import React from "react";
 import { Link } from "react-router-dom";
 import { GoChevronRight } from "react-icons/go";
 import { assets } from "../../assets/assests";
@@ -11,7 +13,7 @@ interface BlogCardProps {
 
 
 
-const BlogCard= ({ id, title, description, image }: BlogCardProps) => {
+const BlogCard = ({ id, title, description, image }: BlogCardProps) => {
   return (
     <Link
       to={`/blog/${id}`}

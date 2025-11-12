@@ -166,7 +166,7 @@ const Reservation = () => {
       <HeroSection title="Reservation" backgroundImage={assets.hero} height="lg:h-[65vh] h-[35vh]" />
 
       {/* ==================== FORM ==================== */}
-      <div className="max-w-4xl mx-auto mt-12 p-8 bg-white shadow-lg rounded-lg">
+      <div className="max-w-4xl mx-auto mt-12 p-8 bg-white lg:shadow-lg rounded-lg">
         <form onSubmit={formik.handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* NAME */}
@@ -271,7 +271,7 @@ const Reservation = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.notes}
-                className="indent-3 py-3 text-sm resize-none floating-label-input w-full rounded-md transition-all duration-200 outline-0 bg-[#d9d9d9]/15 border border-(--primary-color)/20"
+                className="indent-3 py-3 text-sm resize-none floating-label-input w-full rounded-md transition-all duration-200 outline-0 bg-[#d9d9d9]/15 border border-(--primary-color)/20 styled-scrollbar"
                 rows={4}
                 placeholder=" "
               />

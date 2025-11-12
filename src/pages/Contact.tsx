@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import Contacthero from '../components/herosections/Contacthero'
+import React, { useState } from "react";
+import Contacthero from "../components/herosections/Contacthero";
 import { assets } from "../assets/assests";
 import { toast } from "sonner";
 
@@ -75,36 +75,42 @@ const Contact = () => {
         onSubmit={postContact}
         className="flex flex-col gap-6 items-center justify-center h-[50vh] "
       >
-        <div className="flex flex-col md:flex-row lg:flex w-full gap-3 items-center justify-center">
-          <input
-            type="name"
-            placeholder="Fullname"
-            value={name}
+        <div className="w-full max-w-[810px] mx-auto px-4">
+          {/* Inputs */}
+          <div className="flex flex-col md:flex-row gap-4 w-full">
+            <input
+              type="text"
+              placeholder="Fullname"
+              value={name}
+              required
+              onChange={(e) => setName(e.target.value)}
+              className="flex-1 px-4 py-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-[var(--primary-color)]/20 transition focus:outline-none"
+            />
+
+            <input
+              type="email"
+              placeholder="Email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="flex-1 px-4 py-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-[var(--primary-color)]/20 transition focus:outline-none "
+            />
+          </div>
+
+          {/* Textarea */}
+          <textarea
+            placeholder="Drop your enquiries here"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            rows={4}
             required
-            onChange={(e) => setName(e.target.value)}
-            className="bg-gray-200 w-full max-w-[360px] px-4 py-3 rounded-md border border-[var(--primary-color)] text-xs focus:ring-1 focus:ring-[var(--primary-color)] "
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="bg-gray-200 w-72 md:w-90 px-4 py-3 rounded-md border border-(--primary-color) text-xs focus:ring-1 focus:ring-(--primary-color) "
+            className="w-full mt-4 px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]/20 transition resize-none"
           />
         </div>
 
-        <textarea
-          placeholder="Drop your enquires here"
-          required
-          value={message}
-          rows={4}
-          onChange={(e) => setMessage(e.target.value)}
-          className="bg-gray-200 w-72 md:w-[720px] px-4 py-3 rounded-md border border-(--primary-color) text-xs focus:ring-1 focus:ring-primary"
-        />
         <button
           disabled={postingMessage}
-          className="w-72 md:w-[720px] cursor-pointer bg-[var(--primary-color)] text-white font-medium py-3 rounded-lg cursor-pointer transition"
+          className="w-72 md:w-[810px] cursor-pointer bg-[var(--primary-color)] text-white font-medium py-3 rounded-lg cursor-pointer transition"
         >
           {postingMessage ? "Please wait..." : "Contact Us"}
         </button>

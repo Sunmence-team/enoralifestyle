@@ -1,17 +1,26 @@
-import React, { useEffect, useState, useRef } from 'react';
-import HeroSection from '../components/herosections/Herosection';
-import { assets } from '../assets/assests';
+// src/pages/Reservation.tsx
+import React, { useEffect, useState, useRef } from "react";
+import HeroSection from "../components/herosections/Herosection";
+import { assets } from "../assets/assests";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useCartStore } from '../store/cartStore';
-import axios from 'axios';
-import { toast } from 'sonner';
-import { CheckCircle, Copy, Upload, X, CreditCard, BanknoteArrowUp } from 'lucide-react';
+import { useCartStore } from "../store/cartStore";
+import axios from "axios";
+import { toast } from "sonner";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
+const IMAGE_URL = import.meta.env.VITE_API_IMAGE_URL;
 
-const RevervationSchema = Yup.object().shape({
+const DEPOSIT = 5000;
+
+const BANK_DETAILS = {
+  accountName: "Enora Lifestyle And Spa",
+  bankName: "GTBank",
+  accountNumber: "0123456789", // CHANGE TO YOUR REAL ACCOUNT
+};
+
+const ReservationSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
   phone: Yup.string().required("Phone number is required"),
@@ -21,19 +30,19 @@ const RevervationSchema = Yup.object().shape({
 });
 
 const Reservation = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Reservation - Enora Lifestyle And Spa";
   }, []);
 
   const { items, clearCart } = useCartStore();
-  
-  // Modal
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [bookingId, setBookingId] = useState<number | null>(null);
-  const [paymentType, setPaymentType] = useState<"online" | "manual" | null>(null);
-  const [uploading, setUploading] = useState(false);
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<"online" | "manual" | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [proofFile, setProofFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const formik = useFormik({
@@ -45,255 +54,398 @@ const Reservation = () => {
       booking_time: "",
       notes: "",
     },
-    validationSchema: RevervationSchema,
-    enableReinitialize: true,
-    onSubmit: async (values, { setSubmitting, resetForm }) => {
-      const payload = {
-        name: values.name,
-        email: values.email,
-        phone: values.phone,
-        booking_date: values.booking_date,
-        booking_time: values.booking_time,
-        notes: values.notes,
-        bookingable_ids: items.map(i => parseInt(i.id)),
-      };
-
-      try {
-        const response = await axios.post(`${API_URL}/bookings`, payload);
-        setBookingId(response.data.data.id);
-        setShowPaymentModal(true);
-        toast.success("Booking created! Complete payment.");
-        resetForm();
-      } catch (error: any) {
-        toast.error(error.response?.data?.message || "Booking failed");
-      } finally {
-        setSubmitting(false);
+    validationSchema: ReservationSchema,
+    onSubmit: () => {
+      if (items.length === 0) {
+        toast.error("Please add at least one service to your cart.");
+        return;
       }
+      setShowPaymentModal(true);
     },
   });
 
-  // Online Payment
-  const handleOnlinePayment = async () => {
-    if (!bookingId) return;
+  const totalAmount = items.reduce((s, i) => s + i.price, 0);
+
+  /* --------------------------------------------------------------- */
+  /*  CREATE BOOKING                                                 */
+  /* --------------------------------------------------------------- */
+  const createBooking = async (method: "online" | "manual") => {
+    const payload = {
+      name: formik.values.name,
+      email: formik.values.email,
+      phone: formik.values.phone,
+      booking_date: formik.values.booking_date,
+      booking_time: formik.values.booking_time,
+      notes: formik.values.notes,
+      bookingable_ids: items.map((i) => parseInt(i.id)),
+      payment_method: method,
+      amount: totalAmount.toFixed(2),
+    };
+
+    const { data } = await axios.post<{ data: { id: number } }>(`${API_URL}/bookings`, payload);
+    return data.data.id;
+  };
+
+  /* --------------------------------------------------------------- */
+  /*  PROCESS PAYMENT                                                */
+  /* --------------------------------------------------------------- */
+  const processPayment = async () => {
+    if (!paymentMethod) return;
+    setSubmitting(true);
 
     try {
-      const res = await axios.post(`${API_URL}/bookings/${bookingId}/transactions`, {
-        payment_type: "online",
-        amount: 5000,
-      });
+      const bookingId = await createBooking(paymentMethod);
 
-      const authUrl = res.data.authorization_url;
-      if (authUrl) {
-        setPaymentSuccess(true);
-        toast.success("Redirecting...");
+      if (paymentMethod === "online") {
+        const form = new FormData();
+        form.append("amount", DEPOSIT.toFixed(2));
+        form.append("payment_type", "online");
+
+        const { data } = await axios.post(
+          `${API_URL}/bookings/${bookingId}/transactions`,
+          form,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+
+        const proof = JSON.parse(data.transaction.proof_of_payment);
+        const authUrl = proof.data.authorization_url;
+
+        sessionStorage.setItem("pendingBookingId", bookingId.toString());
+        toast.success("Redirecting to Paystack...");
         setTimeout(() => {
           window.location.href = authUrl;
-        }, 1500);
+        }, 800);
+        return;
       }
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || "Payment failed");
-    }
-  };
 
-  // Manual Payment
-  const handleManualPayment = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!bookingId || !fileInputRef.current?.files?.[0]) {
-      toast.error("Please upload proof");
-      return;
-    }
+      if (paymentMethod === "manual" && proofFile) {
+        const form = new FormData();
+        form.append("amount", DEPOSIT.toFixed(2));
+        form.append("payment_type", "manual");
+        form.append("proof_of_payment", proofFile);
 
-    const file = fileInputRef.current.files[0];
-    const formData = new FormData();
-    formData.append("payment_type", "manual");
-    formData.append("amount", "5000");
-    formData.append("proof_of_payment", file);
+        await axios.post(
+          `${API_URL}/bookings/${bookingId}/transactions`,
+          form,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
 
-    setUploading(true);
-    try {
-      await axios.post(`${API_URL}/bookings/${bookingId}/transactions`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
-      setPaymentSuccess(true);
-      toast.success("Proof submitted!");
-      setTimeout(() => {
+        toast.success("Booking confirmed! Pay ₦5,000 on arrival.");
         setShowPaymentModal(false);
-        clearCart(); // CART CLEARED HERE
-      }, 2000);
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || "Upload failed");
+        formik.resetForm();
+        clearCart?.();
+      }
+    } catch (e: any) {
+      toast.error(e.response?.data?.message || "Payment failed. Try again.");
     } finally {
-      setUploading(false);
+      setSubmitting(false);
     }
   };
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    toast.success("Copied!");
-  };
-
-  // Lock scroll
+  /* --------------------------------------------------------------- */
+  /*  PAYSTACK CALLBACK                                              */
+  /* --------------------------------------------------------------- */
   useEffect(() => {
-    if (showPaymentModal) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => { document.body.style.overflow = "unset"; };
-  }, [showPaymentModal]);
+    const query = new URLSearchParams(location.search);
+    const reference = query.get("reference");
+    const status = query.get("status");
+
+    if (!reference) return;
+
+    const pendingId = sessionStorage.getItem("pendingBookingId") || "0";
+    sessionStorage.removeItem("pendingBookingId");
+
+    const isSuccess = status === "success";
+    const target = `/payment-status?type=booking&status=${isSuccess ? "success" : "failed"}&reference=${reference}&purchase_id=${pendingId}`;
+
+    navigate(target, { replace: true });
+  }, [location.search, navigate]);
 
   return (
     <div>
       <HeroSection title="Reservation" backgroundImage={assets.hero} height="lg:h-[65vh] h-[35vh]" />
 
+      {/* ==================== FORM ==================== */}
       <div className="max-w-4xl mx-auto mt-12 p-8 bg-white shadow-lg rounded-lg">
         <form onSubmit={formik.handleSubmit} className="space-y-6">
-          {/* === FORM FIELDS (unchanged) === */}
-          {/* ... (your existing form fields) ... */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* NAME */}
+            <div className="floating-label-group relative md:col-span-2">
+              <input
+                type="text"
+                id="name"
+                name="name"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.name}
+                className="indent-3 text-sm floating-label-input w-full h-[50px] rounded-md transition-all duration-200 outline-0 bg-[#d9d9d9]/15 border border-(--primary-color)/20"
+                placeholder=" "
+              />
+              <label htmlFor="name" className="floating-label absolute top-1 text-(--accent-color) text-sm pointer-events-none transition-all duration-200 left-3">
+                Name
+              </label>
+              {formik.touched.name && formik.errors.name && <div className="text-red-500 text-sm mt-1">{formik.errors.name}</div>}
+            </div>
+
+            {/* EMAIL */}
+            <div className="floating-label-group relative">
+              <input
+                type="email"
+                id="email"
+                name="email"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.email}
+                className="indent-3 text-sm floating-label-input w-full h-[50px] rounded-md transition-all duration-200 outline-0 bg-[#d9d9d9]/15 border border-(--primary-color)/20"
+                placeholder=" "
+              />
+              <label htmlFor="email" className="floating-label absolute top-1 text-(--accent-color) text-sm pointer-events-none transition-all duration-200 left-3">
+                Email
+              </label>
+              {formik.touched.email && formik.errors.email && <div className="text-red-500 text-sm mt-1">{formik.errors.email}</div>}
+            </div>
+
+            {/* PHONE */}
+            <div className="floating-label-group relative">
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.phone}
+                className="indent-3 text-sm floating-label-input w-full h-[50px] rounded-md transition-all duration-200 outline-0 bg-[#d9d9d9]/15 border border-(--primary-color)/20"
+                placeholder=" "
+              />
+              <label htmlFor="phone" className="floating-label absolute top-1 text-(--accent-color) text-sm pointer-events-none transition-all duration-200 left-3">
+                Phone
+              </label>
+              {formik.touched.phone && formik.errors.phone && <div className="text-red-500 text-sm mt-1">{formik.errors.phone}</div>}
+            </div>
+
+            {/* DATE */}
+            <div className="floating-label-group relative">
+              <input
+                type="date"
+                id="booking_date"
+                name="booking_date"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.booking_date}
+                className="indent-3 text-sm floating-label-input w-full h-[50px] rounded-md transition-all duration-200 outline-0 bg-[#d9d9d9]/15 border border-(--primary-color)/20"
+                placeholder=" "
+              />
+              <label htmlFor="booking_date" className="floating-label absolute top-1 text-(--accent-color) text-sm pointer-events-none transition-all duration-200 left-3">
+                Booking Date
+              </label>
+              {formik.touched.booking_date && formik.errors.booking_date && (
+                <div className="text-red-500 text-sm mt-1">{formik.errors.booking_date}</div>
+              )}
+            </div>
+
+            {/* TIME */}
+            <div className="floating-label-group relative">
+              <input
+                type="time"
+                id="booking_time"
+                name="booking_time"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.booking_time}
+                className="indent-3 text-sm floating-label-input w-full h-[50px] rounded-md transition-all duration-200 outline-0 bg-[#d9d9d9]/15 border border-(--primary-color)/20"
+                placeholder=" "
+              />
+              <label htmlFor="booking_time" className="floating-label absolute top-1 text-(--accent-color) text-sm pointer-events-none transition-all duration-200 left-3">
+                Booking Time
+              </label>
+              {formik.touched.booking_time && formik.errors.booking_time && (
+                <div className="text-red-500 text-sm mt-1">{formik.errors.booking_time}</div>
+              )}
+            </div>
+
+            {/* NOTES */}
+            <div className="floating-label-group relative md:col-span-2">
+              <textarea
+                id="notes"
+                name="notes"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.notes}
+                className="indent-3 py-3 text-sm resize-none floating-label-input w-full rounded-md transition-all duration-200 outline-0 bg-[#d9d9d9]/15 border border-(--primary-color)/20"
+                rows={4}
+                placeholder=" "
+              />
+              <label htmlFor="notes" className="floating-label absolute top-1 text-(--accent-color) text-sm pointer-events-none transition-all duration-200 left-3">
+                Notes
+              </label>
+            </div>
+          </div>
+
           {/* CART SUMMARY */}
-          {items.length > 0 && (
+          {items.length > 0 ? (
             <div className="mt-6 p-4 bg-gray-50 rounded-lg border">
               <p className="font-semibold text-(--accent-color) mb-2">Selected Services:</p>
               <div className="space-y-2 text-sm">
-                {items.map((item) => (
-                  <div key={item.id} className="flex justify-between">
-                    <span className="font-medium">{item.title}</span>
-                    <span>₦{item.price.toLocaleString()}</span>
+                {items.map((i) => (
+                  <div key={i.id} className="flex justify-between">
+                    <span className="font-medium">{i.title}</span>
+                    <span>₦{i.price.toLocaleString()}</span>
                   </div>
                 ))}
               </div>
-              <p className="mt-3 font-bold text-right text-lg">
-                Total: ₦{items.reduce((sum, i) => sum + i.price, 0).toLocaleString()}
+              <p className="mt-3 font-bold text-right text-lg">Total: ₦{totalAmount.toLocaleString()}</p>
+              <p className="mt-1 text-sm text-gray-600">
+                *Pay <strong>₦5,000 deposit</strong> to confirm. Balance on arrival.
               </p>
+            </div>
+          ) : (
+            <div className="mt-6 p-4 bg-yellow-50 border border-yellow-300 rounded-lg text-sm text-center">
+              <p>Your cart is empty. Please <strong>add services</strong> before booking.</p>
             </div>
           )}
 
+          {/* SUBMIT BUTTON */}
           <div className="mt-8 text-center">
             <button
               type="submit"
-              disabled={formik.isSubmitting || items.length === 0}
-              className="md:w-1/2 w-full bg-(--primary-color) text-white py-3 px-6 rounded-lg transition-all disabled:opacity-60 disabled:cursor-not-allowed hover:opacity-90 font-medium"
+              disabled={items.length === 0}
+              style={{ backgroundColor: "var(--primary-color)" }}
+              className="md:w-1/2 w-full text-white py-3 px-6 rounded-lg transition-all disabled:opacity-60 hover:opacity-90 font-medium"
             >
-              {formik.isSubmitting ? "Booking..." : "Book Now"}
+              Proceed to Payment
             </button>
           </div>
         </form>
       </div>
 
-      {/* PAYMENT MODAL */}
+      {/* ==================== PAYMENT MODAL ==================== */}
       {showPaymentModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 max-h-screen overflow-y-auto relative">
-            <button
-              onClick={() => !paymentSuccess && setShowPaymentModal(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
-              disabled={paymentSuccess}
-            >
-              <X className="w-5 h-5" />
-            </button>
+        <>
+          <div className="fixed inset-0 bg-black/50 z-50" onClick={() => !submitting && setShowPaymentModal(false)} />
+          <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
+              <h3 className="text-xl font-bold text-(--accent-color) mb-4">Deposit – ₦5,000</h3>
 
-            {paymentSuccess ? (
-              <div className="text-center py-8">
-                <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-                <h3 className="text-xl font-bold mb-2">Payment Successful!</h3>
-                <p className="text-sm text-gray-600">
-                  {paymentType === "online" ? "Redirecting..." : "We’ll verify your proof."}
+              {/* Summary */}
+              <div className="mb-5 text-sm space-y-1">
+                {items.map((i) => (
+                  <div key={i.id} className="flex justify-between">
+                    <span>{i.title}</span>
+                    <span className="font-medium">₦{i.price.toLocaleString()}</span>
+                  </div>
+                ))}
+                <div className="border-t pt-2 font-bold flex justify-between">
+                  <span>Total</span>
+                  <span>₦{totalAmount.toLocaleString()}</span>
+                </div>
+                <p className="text-xs text-gray-600 mt-2">
+                  Pay <strong>₦5,000 deposit</strong> to secure your booking.
                 </p>
               </div>
-            ) : (
-              <>
-                <div className="text-center mb-6">
-                  <h3 className="text-2xl font-bold">Complete Booking</h3>
-                  <p className="text-sm text-gray-600 mt-2">
-                    Pay <strong className="text-(--primary-color)">₦5,000</strong> deposit now.
-                  </p>
+
+              {/* CHOOSE METHOD */}
+              {!paymentMethod && (
+                <div className="space-y-3">
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod("online")}
+                    disabled={submitting}
+                    style={{ backgroundColor: "var(--primary-color)" }}
+                    className="w-full text-white py-3 rounded-lg font-medium hover:opacity-90 disabled:opacity-60"
+                  >
+                    Pay Online Now
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod("manual")}
+                    disabled={submitting}
+                    style={{ borderColor: "var(--primary-color)", color: "var(--primary-color)" }}
+                    className="w-full border py-3 rounded-lg font-medium hover:bg-(--primary-color)/5 disabled:opacity-60"
+                  >
+                    Pay Manually (Upload Proof)
+                  </button>
                 </div>
+              )}
 
-                {!paymentType ? (
-                  <div className="grid grid-cols-1 gap-4">
-                    <button
-                      onClick={() => setPaymentType("online")}
-                      className="flex items-center justify-center gap-3 p-5 border-2 border-(--primary-color) rounded-xl hover:bg-(--primary-color) hover:text-white transition-all font-medium text-lg"
-                    >
-                      <CreditCard className="w-6 h-6" /> Pay Online
-                    </button>
-                    <button
-                      onClick={() => setPaymentType("manual")}
-                      className="flex items-center justify-center gap-3 p-5 border-2 border-gray-300 rounded-xl hover:bg-gray-50 transition-all font-medium text-lg"
-                    >
-                      <BanknoteArrowUp className="w-6 h-6" /> Pay via Transfer
-                    </button>
-                  </div>
-                ) : paymentType === "online" ? (
-                  <div className="space-y-4">
-                    <div className="bg-blue-50 p-4 rounded-lg text-center">
-                      <p className="text-sm font-medium text-blue-900">Secure via Paystack</p>
-                    </div>
-                    <button
-                      onClick={handleOnlinePayment}
-                      className="w-full bg-(--primary-color) text-white py-4 rounded-xl font-semibold text-lg flex items-center justify-center gap-2"
-                    >
-                      <CreditCard className="w-5 h-5" /> Pay ₦5,000
-                    </button>
-                    <button onClick={() => setPaymentType(null)} className="w-full text-gray-500 text-sm underline">
-                      Back
-                    </button>
-                  </div>
-                ) : (
-                  <form onSubmit={handleManualPayment} className="space-y-5">
-                    <div className="bg-gray-50 p-5 rounded-xl space-y-3 text-sm">
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium">Bank:</span>
-                        <button type="button" onClick={() => copyToClipboard("GTBank")} className="flex items-center gap-1 text-(--primary-color)">
-                          GTBank <Copy className="w-4 h-4" />
-                        </button>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium">Account Name:</span>
-                        <button type="button" onClick={() => copyToClipboard("Enora Lifestyle & Spa")} className="flex items-center gap-1 text-(--primary-color)">
-                          Enora Lifestyle & Spa <Copy className="w-4 h-4" />
-                        </button>
-                      </div>
-                      <div className="flex justify-between items-center">
+              {/* MANUAL FLOW */}
+              {paymentMethod === "manual" && (
+                <>
+                  <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg text-sm">
+                    <p className="font-semibold text-blue-900 mb-2">Transfer to:</p>
+                    <div className="space-y-1 text-gray-800">
+                      <p><span className="font-medium">Account Name:</span> {BANK_DETAILS.accountName}</p>
+                      <p><span className="font-medium">Bank:</span> {BANK_DETAILS.bankName}</p>
+                      <p className="flex items-center gap-2">
                         <span className="font-medium">Account No:</span>
-                        <button type="button" onClick={() => copyToClipboard("0123456789")} className="flex items-center gap-1 text-(--primary-color) font-mono">
-                          0123456789 <Copy className="w-4 h-4" />
-                        </button>
-                      </div>
+                        <span
+                          className="font-mono text-(--primary-color) underline cursor-pointer flex items-center gap-1"
+                          onClick={() => {
+                            navigator.clipboard.writeText(BANK_DETAILS.accountNumber);
+                            toast.success("Account number copied!");
+                          }}
+                        >
+                          {BANK_DETAILS.accountNumber}
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                          </svg>
+                        </span>
+                      </p>
                     </div>
+                  </div>
 
-                    <div>
-                      <label className="block text-sm font-medium mb-2 flex items-center gap-2">
-                        <Upload className="w-4 h-4" /> Upload Proof
-                      </label>
-                      <input
-                        ref={fileInputRef}
-                        type="file"
-                        accept="image/*"
-                        required
-                        className="w-full text-sm file:mr-4 file:py-2.5 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-(--primary-color) file:text-white"
-                      />
-                    </div>
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium mb-1">Upload Proof of Payment</label>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*,.pdf"
+                      onChange={(e) => e.target.files?.[0] && setProofFile(e.target.files[0])}
+                      className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-(--primary-color) file:text-white"
+                    />
+                    {proofFile && <p className="mt-1 text-xs" style={{ color: "#28a745" }}>{proofFile.name}</p>}
+                  </div>
 
-                    <div className="flex gap-3">
-                      <button
-                        type="submit"
-                        disabled={uploading}
-                        className="flex-1 bg-(--primary-color) text-white py-3 rounded-xl font-medium disabled:opacity-60"
-                      >
-                        {uploading ? "Uploading..." : "Submit"}
-                      </button>
-                      <button type="button" onClick={() => setPaymentType(null)} className="flex-1 border border-gray-300 py-3 rounded-xl font-medium">
-                        Back
-                      </button>
-                    </div>
-                  </form>
-                )}
-              </>
-            )}
+                  <button
+                    type="button"
+                    onClick={processPayment}
+                    disabled={submitting || !proofFile}
+                    style={{ backgroundColor: "#28a745" }}
+                    className="w-full text-white py-3 rounded-lg font-medium hover:opacity-90 disabled:opacity-60"
+                  >
+                    {submitting ? "Submitting..." : "Confirm Manual Payment"}
+                  </button>
+                </>
+              )}
+
+              {/* ONLINE FLOW */}
+              {paymentMethod === "online" && !submitting && (
+                <button
+                  type="button"
+                  onClick={processPayment}
+                  style={{ backgroundColor: "var(--primary-color)" }}
+                  className="w-full text-white py-3 rounded-lg font-medium hover:opacity-90"
+                >
+                  Redirecting to Paystack...
+                </button>
+              )}
+
+              {/* CANCEL */}
+              <button
+                type="button"
+                onClick={() => {
+                  setShowPaymentModal(false);
+                  setPaymentMethod(null);
+                  setProofFile(null);
+                  if (fileInputRef.current) fileInputRef.current.value = "";
+                }}
+                disabled={submitting}
+                className="mt-4 text-sm underline text-gray-500 hover:text-gray-700 w-full text-center"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );

@@ -11,8 +11,7 @@ interface Package {
 interface CartState {
   items: Package[];
   addToCart: (item: Package) => void;
-  removeFromCart: (id: string) => void;
-  setItems: (items: Package[]) => void;     // <-- NEW
+  removeFromCart: (id: string) => void;// <-- NEW
   clearCart: () => void;                    // <-- NEW
   getCartTotal: () => number;
   getCartCount: () => number;
@@ -22,8 +21,7 @@ export const useCartStore = create<CartState>((set, get) => ({
   items: [],
   addToCart: (item) => set((state) => ({ items: [...state.items, item] })),
   removeFromCart: (id) => set((state) => ({ items: state.items.filter((i) => i.id !== id) })),
-  setItems: (items) => set({ items }),      // <-- implementation
-  clearCart: () => set({ items: [] }),      // <-- implementation
+  clearCart: () => set({ items: [] }),
   getCartTotal: () => get().items.reduce((total, item) => total + item.price, 0),
   getCartCount: () => get().items.length,
 }));

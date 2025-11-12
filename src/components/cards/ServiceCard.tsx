@@ -41,14 +41,16 @@ const ServiceCard = (item: ServiceCardProps) => {
     return (
         <>
             <div
-                className="bg-white rounded-3xl pb-5 shadow-sm hover:shadow-md transition-all duration-300  flex flex-col items-center text-start"
+                className="bg-white rounded-3xl pb-5 shadow-sm hover:shadow-md transition-all duration-300  flex flex-col items-center text-start h-[520px]"
             >
-                <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-[250px] object-cover rounded-t-lg mb-4"
-                />
-                <div className="px-5 w-full flex flex-col justify-between h-full">
+                <div className="h-[250px] w-full">
+                    <img
+                        src={item.image}
+                        alt={item.title}
+                        className="w-full h-full object-cover rounded-t-lg mb-4"
+                    />
+                </div>
+                <div className="px-5 pt-5 w-full flex flex-col justify-between h-[calc(100%-250px)]">
                     <div className="">
                         <h2 className="capitalize text-[22px] font-semibold! text-(--accent-color) line-clamp-1">
                             {item.title}

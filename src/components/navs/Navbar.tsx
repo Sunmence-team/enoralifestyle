@@ -30,7 +30,7 @@ const Navbar: React.FC = () => {
 
   const [isOpen, setIsOpen] = useState({ sidebar: false, cart: false });
   const [isScrolled, setIsScrolled] = useState(false);
-  const { items } = useCartStore();
+  const { items, clearCart } = useCartStore();
 
   const navLinks = [
     { path: "/", name: "Home" },
@@ -159,13 +159,21 @@ const Navbar: React.FC = () => {
                 <CartCard key={index} {...cartItem} />
               ))}
             </div>
-            <Link
-              to="/reservation"
-              onClick={() => setIsOpen({ sidebar: false, cart: false })}
-              className="bg-(--primary-color) py-3 px-4 rounded-sm mt-3 mx-auto text-white"
-            >
-              Proceed to Reservation
-            </Link>
+            <div className="flex items-center justify-center gap-4 border mt-3">
+              <button
+                onClick={clearCart}
+                className="bg-gray-400 py-3 px-3 md:px-4 rounded-sm text-white"
+              >
+                Clear Cart
+              </button>
+              <Link
+                to="/reservation"
+                onClick={() => setIsOpen({ sidebar: false, cart: false })}
+                className="bg-(--primary-color) py-3 px-3 md:px-4 rounded-sm text-white"
+              >
+                Proceed to Reservation
+              </Link>
+            </div>
           </div>
         ) : (
           <div className="flex flex-col gap-4 items-center justify-center h-[50vh]">

@@ -60,31 +60,41 @@ export default function Overview() {
   const [deleteModal, setDeleteModal] = useState(false);
   const [deletingService, setDeletingService] = useState<Service | null>(null);
 
-  const fetchServices = useCallback(async (page: number) => {
-    setLoading(true);
-    try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get<ApiResponse>(`${API_URL}/services?page=${page}&per_page=${perPage}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+  const fetchServices = useCallback(
+    async (page: number) => {
+      setLoading(true);
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get<ApiResponse>(
+          `${API_URL}/services?page=${page}&per_page=${perPage}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
-      const { data, total, per_page, current_page } = response.data.data || {};
-      setServices(Array.isArray(data) ? data : []);
-      setTotal(total || 0);
-      setPerPage(per_page || 10);
-      setCurrentPage(current_page || 1);
-    } catch (err) {
-      const error = err as AxiosError<{ message: string; errors: Record<string, string[]> }>;
-      console.error("Fetch error:", error.response?.data);
-      toast.error("Failed to load services");
-      if (error.response?.status === 401) {
-        localStorage.removeItem("token");
-        navigate("/login");
+        const { data, total, per_page, current_page } =
+          response.data.data || {};
+        setServices(Array.isArray(data) ? data : []);
+        setTotal(total || 0);
+        setPerPage(per_page || 10);
+        setCurrentPage(current_page || 1);
+      } catch (err) {
+        const error = err as AxiosError<{
+          message: string;
+          errors: Record<string, string[]>;
+        }>;
+        console.error("Fetch error:", error.response?.data);
+        toast.error("Failed to load services");
+        if (error.response?.status === 401) {
+          localStorage.removeItem("token");
+          navigate("/login");
+        }
+      } finally {
+        setLoading(false);
       }
-    } finally {
-      setLoading(false);
-    }
-  }, [navigate, perPage]);
+    },
+    [navigate, perPage]
+  );
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -142,10 +152,16 @@ export default function Overview() {
       resetForm();
       fetchServices(currentPage);
     } catch (err) {
-      const error = err as AxiosError<{ message: string; errors: Record<string, string[]> }>;
+      const error = err as AxiosError<{
+        message: string;
+        errors: Record<string, string[]>;
+      }>;
       console.error("Operation failed:", error.response?.data);
       const errors = error.response?.data?.errors;
-      if (errors) Object.values(errors).flat().forEach((msg: string) => toast.error(msg));
+      if (errors)
+        Object.values(errors)
+          .flat()
+          .forEach((msg: string) => toast.error(msg));
       else toast.error(error.response?.data?.message || "Operation failed");
     } finally {
       setSubmitting(false);
@@ -222,10 +238,16 @@ export default function Overview() {
         </h2>
         <div className="flex gap-3">
           <div className="p-3 rounded-full bg-[var(--pink-color)]">
-            <IoIosNotifications size={25} className="text-[var(--primary-color)]" />
+            <IoIosNotifications
+              size={25}
+              className="text-[var(--primary-color)]"
+            />
           </div>
           <div className="p-3 rounded-full bg-[var(--pink-color)]">
-            <FaRegUserCircle size={25} className="text-[var(--primary-color)]" />
+            <FaRegUserCircle
+              size={25}
+              className="text-[var(--primary-color)]"
+            />
           </div>
         </div>
       </div>
@@ -237,32 +259,44 @@ export default function Overview() {
         </h2>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid md:grid-cols-2 gap-4">
-            <input
-              type="text"
-              placeholder="Service Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              className="w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-[var(--primary-color)]"
-            />
-            <input
-              type="number"
-              placeholder="Price (e.g. 25000)"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              required
-              className="w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-[var(--primary-color)]"
-            />
+            <div className="flex gap-2 flex-col font-[Raleway]!">
+              <label htmlFor="name">Name</label>
+              <input
+                type="text"
+                placeholder="Service Name"
+                value={name}
+                id="name"
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-[var(--primary-color)]"
+              />
+            </div>
+            <div className="flex gap-2 flex-col font-[Raleway]!">
+              <label htmlFor="price">Price</label>
+              <input
+                type="number"
+                placeholder="Price (e.g. 25000)"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                required
+                id="price"
+                className="w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-[var(--primary-color)]"
+              />
+            </div>
           </div>
 
-          <textarea
-            placeholder="Service description..."
-            rows={3}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-            className="w-full px-4 py-3 border rounded-md resize-none focus:ring-2 focus:ring-[var(--primary-color)]"
-          />
+          <div className="flex gap-2 flex-col font-[Raleway]!">
+            <label htmlFor="description">Description</label>
+            <textarea
+              placeholder="Service description..."
+              id="description"
+              rows={3}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+              className="w-full px-4 py-3 border rounded-md resize-none focus:ring-2 focus:ring-[var(--primary-color)]"
+            />
+          </div>
 
           <div>
             <input
@@ -272,12 +306,18 @@ export default function Overview() {
               id="image-upload"
               className="hidden"
             />
+            <div className="flex gap-2 flex-col font-[Raleway]!">
+              <label htmlFor="image">Image</label>
             <label
               htmlFor="image-upload"
               className="block border-2 border-dashed border-[var(--primary-color)] rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 transition"
             >
               {imagePreview ? (
-                <img src={imagePreview} alt="Preview" className="mx-auto max-h-48 rounded" />
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="mx-auto max-h-48 rounded"
+                />
               ) : (
                 <div>
                   <BiImageAlt className="mx-auto text-5xl text-[var(--primary-color)] mb-2" />
@@ -285,6 +325,8 @@ export default function Overview() {
                 </div>
               )}
             </label>
+
+            </div>
             {isEditing && imagePreview && !image && (
               <p className="text-xs text-green-600 font-medium mt-2 text-center">
                 Current image loaded. Upload new one to replace.
@@ -307,7 +349,11 @@ export default function Overview() {
               disabled={submitting}
               className="flex-1 py-3 bg-[var(--primary-color)] text-white font-bold rounded-md hover:opacity-90 disabled:opacity-60 transition shadow-lg"
             >
-              {submitting ? "Saving..." : isEditing ? "Update Service" : "Add Service"}
+              {submitting
+                ? "Saving..."
+                : isEditing
+                ? "Update Service"
+                : "Add Service"}
             </button>
           </div>
         </form>
@@ -341,7 +387,9 @@ export default function Overview() {
               header: "DESCRIPTION",
               render: (service: Service) => (
                 <div className="md:max-w-md max-w-lg text-gray-600 line-clamp-3">
-                  {service.description || <span className="text-gray-400 italic">No description</span>}
+                  {service.description || (
+                    <span className="text-gray-400 italic">No description</span>
+                  )}
                 </div>
               ),
             },
@@ -359,14 +407,23 @@ export default function Overview() {
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
             <div className="flex justify-between items-start mb-6">
-              <h3 className="text-2xl font-bold text-gray-800">Delete Service?</h3>
-              <button onClick={() => setDeleteModal(false)} className="p-2 hover:bg-gray-100 rounded-lg">
+              <h3 className="text-2xl font-bold text-gray-800">
+                Delete Service?
+              </h3>
+              <button
+                onClick={() => setDeleteModal(false)}
+                className="p-2 hover:bg-gray-100 rounded-lg"
+              >
                 <FaTimes className="text-gray-500" />
               </button>
             </div>
             <p className="text-gray-600 mb-8 text-lg">
-              Permanently delete <span className="font-bold text-pink-600">"{deletingService.name}"</span>?
-              This action <span className="font-bold text-red-600">cannot</span> be undone.
+              Permanently delete{" "}
+              <span className="font-bold text-pink-600">
+                "{deletingService.name}"
+              </span>
+              ? This action{" "}
+              <span className="font-bold text-red-600">cannot</span> be undone.
             </p>
             <div className="flex gap-4 justify-end">
               <button

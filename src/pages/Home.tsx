@@ -190,6 +190,43 @@ const Home: React.FC = () => {
     },
   ];
 
+  async function fetchTestimonials() {
+    setLoadingTestimonials(true);
+    try {
+      const baseUrl = import.meta.env.VITE_API_BASE_URL;
+      const token = localStorage.getItem("authToken");
+      const res = await fetch(`${baseUrl}/testimonials`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data: any = await res.json();
+      if (res.ok) {
+        setTestimonials(data.data.data);
+      } else {
+        toast.error(`Failed to load testimonials. ${data.message}.`);
+      }
+    } catch (error: any) {
+      if (
+        error?.message?.includes("Unexpected token '<'") ||
+        error?.message === "Failed to fetch"
+      ) {
+        return toast.error(
+          "An uexpected error occured while loading testimonials"
+        );
+      } else {
+        toast.error(error?.message || "Error loading testimonials");
+      }
+    } finally {
+      setLoadingTestimonials(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchTestimonials();
+  }, []);
+
   const initializePayment = async (userDetails: UserDetails) => {
     setInitializingPayment(true);
     const loading = toast.loading("Initializing payment");

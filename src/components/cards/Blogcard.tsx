@@ -15,7 +15,7 @@ const BlogCard= ({ id, title, description, image }: BlogCardProps) => {
   return (
     <Link
       to={`/blog/${id}`}
-      className="relative bg-white rounded-3xl shadow hover:shadow-md transition-all duration-300 flex flex-col gap-2 justify-between text-center border border-black/10 overflow-hidden"
+      className="h-[450px] relative bg-white rounded-3xl shadow hover:shadow-md transition-all duration-300 flex flex-col gap-2 justify-between text-center border border-black/10 overflow-hidden"
     >
       {/* Text before image */}
       <div className="px-5 pt-6 text-start">

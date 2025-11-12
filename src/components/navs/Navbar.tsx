@@ -6,18 +6,6 @@ import { assets } from "../../assets/assests";
 import { MdShoppingCart } from "react-icons/md";
 import { useCartStore } from "../../store/cartStore";
 import CartCard from "../cards/CartCard";
-import axios from "axios";
-
-const API_URL = import.meta.env.VITE_API_BASE_URL;
-const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
-
-interface ServiceItem {
-  id: number;
-  name: string;
-  price: string;
-  type: "service" | "package";
-  image: string | null;
-}
 
 // Paystack success listener (clears cart when returning from Paystack)
 const usePaystackSuccess = () => {
@@ -42,7 +30,7 @@ const Navbar: React.FC = () => {
 
   const [isOpen, setIsOpen] = useState({ sidebar: false, cart: false });
   const [isScrolled, setIsScrolled] = useState(false);
-  const { items, setItems } = useCartStore();
+  const { items } = useCartStore();
 
   const navLinks = [
     { path: "/", name: "Home" },
@@ -58,31 +46,6 @@ const Navbar: React.FC = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  // Fetch services & auto-fill cart (demo)
-  useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/services`);
-        const data: ServiceItem[] = res.data.data?.data || [];
-
-        const cartItems = data.map((item) => ({
-          id: item.id.toString(),
-          title: item.name,
-          price: parseFloat(item.price),
-          image: item.image ? `${IMAGE_URL}${item.image}` : assets.our1,
-        }));
-
-        setItems(cartItems.slice(0, 2));
-      } catch (err) {
-        console.error("Failed to load services:", err);
-      }
-    };
-
-    fetchServices();
-  }, [setItems]);
-
-  const cartCount = items.length;
 
   const handleLinkClick = () => {
     if (window.innerWidth < 1024) {
@@ -132,9 +95,9 @@ const Navbar: React.FC = () => {
             onClick={() => setIsOpen({ sidebar: false, cart: true })}
           >
             <MdShoppingCart />
-            {cartCount > 0 && (
+            {items.length > 0 && (
               <div className="absolute -top-2 -right-2 bg-(--primary-color) rounded-full text-white text-xs flex items-center justify-center w-5 h-5 border-2 border-white">
-                <span className="-mt-1">{cartCount}</span>
+                <span className="-mt-1">{items.length}</span>
               </div>
             )}
           </button>

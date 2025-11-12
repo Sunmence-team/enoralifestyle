@@ -11,14 +11,6 @@ import { CheckCircle, Copy, Upload, X, CreditCard, BanknoteArrowUp } from 'lucid
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
 
-interface ServiceItem {
-  id: number;
-  name: string;
-  price: string;
-  type: "service" | "package";
-  image: string | null;
-}
-
 const RevervationSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -34,10 +26,8 @@ const Reservation = () => {
     document.title = "Reservation - Enora Lifestyle And Spa";
   }, []);
 
-  const { items, setItems, clearCart } = useCartStore();
-  // const [allServices, setAllServices] = useState<ServiceItem[]>([]);
-  const [loading, setLoading] = useState(true);
-
+  const { items, clearCart } = useCartStore();
+  
   // Modal
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [bookingId, setBookingId] = useState<number | null>(null);
@@ -45,33 +35,6 @@ const Reservation = () => {
   const [uploading, setUploading] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Fetch services
-  useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/services`);
-        const data = res.data.data?.data || [];
-
-        // setAllServices(data);
-
-        const defaultItems = data.slice(0, 2).map((item: ServiceItem) => ({
-          id: item.id.toString(),
-          title: item.name,
-          price: parseFloat(item.price),
-          image: item.image ? `${IMAGE_URL}${item.image}` : assets.our1,
-        }));
-
-        setItems(defaultItems);
-      } catch (err) {
-        toast.error("Failed to load services");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchServices();
-  }, [setItems]);
 
   const formik = useFormik({
     initialValues: {
@@ -179,10 +142,6 @@ const Reservation = () => {
     }
     return () => { document.body.style.overflow = "unset"; };
   }, [showPaymentModal]);
-
-  if (loading) {
-    return <div className="text-center py-20">Loading...</div>;
-  }
 
   return (
     <div>

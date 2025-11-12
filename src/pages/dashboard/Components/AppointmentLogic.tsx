@@ -23,7 +23,7 @@ interface Booking {
   updated_at: string;
 }
 
-const Appointments : React.FC = () => {
+const Appointments: React.FC = () => {
   const navigate = useNavigate();
 
   // UI
@@ -187,7 +187,11 @@ const Appointments : React.FC = () => {
     {
       key: "booking_date" as const,
       header: "Date",
-      render: (b: Booking) => format(new Date(b.booking_date), "MMM dd, yyyy"),
+      render: (b: Booking) => (
+        <span className="font-bold! whitespace-nowrap text-[#901E76] ">
+          {format(new Date(b.booking_date), "MMM dd, yyyy")}
+        </span>
+      ),
     },
     { key: "booking_time" as const, header: "Time" },
     {
@@ -195,13 +199,16 @@ const Appointments : React.FC = () => {
       header: "Status",
       render: (b: Booking) => (
         <span
-          className={`px-4 py-2 rounded-full text-sm font-bold ${
-            b.status === "pending"
-              ? "bg-gray-300 text-black/50"
-              : b.status === "confirmed"
-              ? "bg-blue-100 text-blue-800"
-              : "bg-green-100 text-green-800"
-          }`}
+          className={`px-4 py-2 rounded-lg text-sm font-bold ${b.status === "pending"
+            ? "bg-[#D9D9D9] text-black/50 border border-[#D9D9D9]/15"     // yellow for pending
+            : b.status === "confirmed"
+              ? "bg-[#DFF7EE]/80 border border-[#2F5318]/15 text-[#065F46]"     // green for confirmed
+              : b.status === "attended"
+                ? "bg-[#BFDBFE] text-[#1E3A8A]"     // blue for attended
+                : b.status === "cancelled"
+                  ? "bg-[#EAC4C2]/80 text-[#D1503D] border border-[#E73A3A]/15"     // red for cancelled
+                  : "bg-gray-200 text-gray-700"
+            }`}
         >
           {b.status.charAt(0).toUpperCase() + b.status.slice(1)}
         </span>

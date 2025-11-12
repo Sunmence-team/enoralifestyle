@@ -70,9 +70,8 @@ export default function DashboardTable<T extends { id: number }>({
             {data.map((item, index) => (
               <tr
                 key={item.id}
-                className={`border-b hover:bg-gray-50 transition-colors duration-200 ${
-                  index % 2 === 0 ? "bg-white" : "bg-[var(--light-primary)]"
-                }`}
+                className={`border-b hover:bg-gray-50 transition-colors duration-200 ${index % 2 === 0 ? "bg-white" : "bg-[#901E76]/20" // 👈 replace with your color code
+                  }`}
               >
                 {columns.map((col) => (
                   <td key={col.key as string} className="py-4 px-6 align-middle">
@@ -87,22 +86,36 @@ export default function DashboardTable<T extends { id: number }>({
                         }
                         alt="img"
                         className="w-12 h-12 object-cover rounded-lg shadow"
-                        onError={(e) => ((e.target as HTMLImageElement).src = "https://placehold.co/600x400/png")}
+                        onError={(e) =>
+                          ((e.target as HTMLImageElement).src = "https://placehold.co/600x400/png")
+                        }
                       />
                     ) : col.key === "actions" ? (
                       <div className="flex justify-center space-x-5 text-[var(--primary-color)]">
                         {onView && (
-                          <button onClick={() => onView(item)} className="hover:text-blue-600 transition" title="View">
+                          <button
+                            onClick={() => onView(item)}
+                            className="hover:text-blue-600 transition"
+                            title="View"
+                          >
                             <FaEye size={18} />
                           </button>
                         )}
                         {onEdit && (
-                          <button onClick={() => onEdit(item)} className="hover:text-green-600 transition" title="Edit">
+                          <button
+                            onClick={() => onEdit(item)}
+                            className="hover:text-green-600 transition"
+                            title="Edit"
+                          >
                             <FaEdit size={18} />
                           </button>
                         )}
                         {onDelete && (
-                          <button onClick={() => onDelete(item)} className="hover:text-red-600 transition" title="Delete">
+                          <button
+                            onClick={() => onDelete(item)}
+                            className="hover:text-red-600 transition"
+                            title="Delete"
+                          >
                             <FaTrash size={18} />
                           </button>
                         )}
@@ -115,6 +128,7 @@ export default function DashboardTable<T extends { id: number }>({
               </tr>
             ))}
           </tbody>
+
         </table>
       </div>
 
@@ -140,11 +154,10 @@ export default function DashboardTable<T extends { id: number }>({
               <button
                 key={pageNum}
                 onClick={() => onPageChange?.(pageNum)}
-                className={`w-10 h-10 rounded-lg font-bold transition ${
-                  currentPage === pageNum
+                className={`w-10 h-10 rounded-lg font-bold transition ${currentPage === pageNum
                     ? "bg-[var(--primary-color)] text-white"
                     : "text-gray-700 hover:bg-gray-200"
-                }`}
+                  }`}
               >
                 {pageNum}
               </button>

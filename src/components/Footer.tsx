@@ -1,5 +1,5 @@
 import React from "react";
-import { FaInstagram, FaXTwitter, FaWhatsapp } from "react-icons/fa6";
+import { FaInstagram, FaXTwitter, FaWhatsapp, FaFacebook } from "react-icons/fa6";
 
 const Footer: React.FC = () => {
   return (
@@ -29,13 +29,16 @@ const Footer: React.FC = () => {
 
         {/* Social Icons */}
         <div className="flex justify-center gap-6 mt-6 text-2xl">
-          <a href="https://wa.me/yournumber" target="_blank" className="hover:text-(--primary-color) transition">
+          <a href="https://wa.me/+2347035544194" target="_blank" className="hover:text-(--primary-color) transition">
             <FaWhatsapp />
           </a>
-          <a href="https://instagram.com" target="_blank" className="hover:text-(--primary-color) transition">
+          <a href="https://www.instagram.com/enoralifestyleng/?utm_source=ig_web_button_share_sheet" target="_blank" className="hover:text-(--primary-color) transition">
             <FaInstagram />
           </a>
-          <a href="https://x.com" target="_blank" className="hover:text-(--primary-color) transition">
+          <a href="https://www.facebook.com/profile.php?id=100051596345009&ref=ac_edit_ig_profile_ac" target="_blank" className="hover:text-(--primary-color) transition">
+            <FaFacebook />
+          </a>
+          <a href="https://x.com/EnoraLifes3249?s=20" target="_blank" className="hover:text-(--primary-color) transition">
             <FaXTwitter />
           </a>
         </div>

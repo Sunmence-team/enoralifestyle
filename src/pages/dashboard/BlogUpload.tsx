@@ -280,11 +280,11 @@ export default function BlogUpload() {
       <div className="flex justify-between items-center w-full mb-8 px-4 lg:px-0">
         <h2 className="font-bold text-3xl text-gray-800">Upload Blog</h2>
         <div className="flex gap-4">
-          <div className="p-3 rounded-full bg-[var(--pink-color)]">
-            <IoIosNotifications size={28} className="text-[var(--primary-color)]" />
+          <div className="p-3 rounded-full bg-(--pink-color)">
+            <IoIosNotifications size={28} className="text-(--primary-color)" />
           </div>
-          <div className="p-3 rounded-full bg-[var(--pink-color)]">
-            <FaRegUserCircle size={28} className="text-[var(--primary-color)]" />
+          <div className="p-3 rounded-full bg-(--pink-color)">
+            <FaRegUserCircle size={28} className="text-(--primary-color)" />
           </div>
         </div>
       </div>
@@ -307,7 +307,7 @@ export default function BlogUpload() {
               }}
               required
               placeholder="E.g Anti-Aging Facials: Do They Really Make You Look Younger?"
-              className="w-full border-2 border-[var(--primary-color)] rounded-xl p-4 text-base placeholder:text-[var(--primary-color)/70] bg-[var(--light-primary)] focus:outline-none focus:ring-4 focus:ring-[var(--primary-color)/20]"
+              className="w-full border bg-(--pending-bg)/15 border-(--primary-color) rounded-md p-4 text-base placeholder:text-[var(--primary-color)/70] focus:outline-none focus:ring-4 focus:ring-[var(--primary-color)/20]"
             />
             {error && error.from === "title" && (
               <span className="text-base mt-2 font-semibold text-red-700 block">
@@ -321,7 +321,7 @@ export default function BlogUpload() {
             <label className="block text-sm font-medium text-gray-700 mb-3">
               Cover Image
             </label>
-            <div className="border-2 border-dashed border-[var(--primary-color)] rounded-2xl p-10 text-center bg-[var(--light-primary)] hover:border-solid transition">
+            <div className="border border-dashed bg-(--pending-bg)/15 border-(--primary-color) rounded-2xl p-10 text-center hover:border-solid transition">
               <input
                 type="file"
                 accept="image/*"
@@ -334,14 +334,14 @@ export default function BlogUpload() {
                   <img
                     src={imagePreview}
                     alt="Preview"
-                    className="mx-auto max-h-24 rounded-xl shadow-lg"
+                    className="mx-auto max-h-24 rounded-md shadow-lg"
                     onError={() => setImagePreview("/placeholder.jpg")}
                   />
                 ) : (
                   <div className="space-y-4">
-                    <BiImageAlt className="mx-auto w-16 h-16 text-[var(--primary-color)]" />
+                    <BiImageAlt className="mx-auto w-16 h-16 text-(--primary-color)" />
                     <div className="text-sm">
-                      <span className="inline-block px-4 py-2 bg-white border-2 border-[var(--primary-color)] rounded-full font-medium">
+                      <span className="inline-block px-4 py-2 bg-white border bg-(--pending-bg)/15 border-(--primary-color) rounded-full font-medium">
                         Choose File
                       </span>
                       <p className="mt-2 text-gray-500">No file chosen</p>
@@ -368,7 +368,7 @@ export default function BlogUpload() {
               required
               rows={3}
               placeholder="A brief summary..."
-              className="w-full border-2 border-[var(--primary-color)] rounded-xl p-4 bg-[var(--light-primary)] focus:outline-none focus:ring-4 focus:ring-[var(--primary-color)/20]"
+              className="w-full border bg-(--pending-bg)/15 border-(--primary-color) rounded-md p-4 focus:outline-none focus:ring-4 focus:ring-[var(--primary-color)/20]"
             />
           </div>
 
@@ -383,7 +383,7 @@ export default function BlogUpload() {
               required
               rows={8}
               placeholder="Write your blog post here..."
-              className="w-full border-2 border-[var(--primary-color)] rounded-xl p-4 bg-[var(--light-primary)] focus:outline-none focus:ring-4 focus:ring-[var(--primary-color)/20]"
+              className="w-full border bg-(--pending-bg)/15 border-(--primary-color) rounded-md p-4 focus:outline-none focus:ring-4 focus:ring-[var(--primary-color)/20]"
             />
           </div>
 
@@ -392,7 +392,7 @@ export default function BlogUpload() {
               <button
                 type="button"
                 onClick={resetForm}
-                className="px-8 py-4 border-2 border-red-500 text-red-600 rounded-xl font-bold hover:bg-red-50 transition"
+                className="px-8 py-4 border border-red-500 text-red-600 rounded-md font-bold hover:bg-red-50 transition"
               >
                 Cancel
               </button>
@@ -400,7 +400,7 @@ export default function BlogUpload() {
             <button
               type="submit"
               disabled={submitting}
-              className="flex-1 bg-[var(--primary-color)] text-white font-bold py-4 rounded-xl hover:opacity-90 disabled:opacity-60 transition shadow-lg"
+              className="flex-1 bg-(--primary-color) text-white font-bold py-4 rounded-md hover:opacity-90 disabled:opacity-60 transition shadow-lg"
             >
               {submitting ? "Saving..." : isEditing ? "Update Blog" : "Upload Blog"}
             </button>
@@ -410,7 +410,7 @@ export default function BlogUpload() {
 
       {/* Table */}
       <div className="bg-white rounded-2xl shadow-2xl overflow-hidden mx-4 lg:mx-0">
-        <div className="px-8 py-6 bg-[var(--primary-color)]">
+        <div className="px-8 py-6 bg-(--primary-color)">
           <h2 className="text-3xl font-bold text-white">All Blogs</h2>
         </div>
         <DashboardTable
@@ -435,7 +435,7 @@ export default function BlogUpload() {
                       : "/placeholder.jpg"
                   }
                   alt=""
-                  className="w-12 h-12 object-cover rounded-xl shadow"
+                  className="w-12 h-12 object-cover rounded-md shadow"
                   onError={(e) => (e.currentTarget.src = "/placeholder.jpg")}
                 />
               ),
@@ -522,13 +522,13 @@ export default function BlogUpload() {
                             <textarea
                               value={editText}
                               onChange={(e) => setEditText(e.target.value)}
-                              className="w-full p-4 border-2 border-[var(--primary-color)] rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)/30]"
+                              className="w-full p-4 border bg-(--pending-bg)/15 border-(--primary-color) rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)/30]"
                               rows={4}
                             />
                             <div className="flex gap-3">
                               <button
                                 onClick={saveCommentEdit}
-                                className="px-6 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition"
+                                className="px-6 py-3 bg-green-600 text-white rounded-md font-bold hover:bg-green-700 transition"
                               >
                                 Save
                               </button>
@@ -537,7 +537,7 @@ export default function BlogUpload() {
                                   setEditingComment(null);
                                   setEditText("");
                                 }}
-                                className="px-6 py-3 bg-gray-500 text-white rounded-xl font-bold hover:bg-gray-600 transition"
+                                className="px-6 py-3 bg-gray-500 text-white rounded-md font-bold hover:bg-gray-600 transition"
                               >
                                 Cancel
                               </button>
@@ -609,13 +609,13 @@ export default function BlogUpload() {
             <div className="flex justify-end gap-4">
               <button
                 onClick={() => setDeleteModal(false)}
-                className="px-8 py-4 border-2 border-gray-300 rounded-xl font-bold hover:bg-gray-50"
+                className="px-8 py-4 border border-gray-300 rounded-md font-bold hover:bg-gray-50"
               >
                 Cancel
               </button>
               <button
                 onClick={confirmDelete}
-                className="px-10 py-4 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700"
+                className="px-10 py-4 bg-red-600 text-white font-bold rounded-md hover:bg-red-700"
               >
                 Yes, Delete
               </button>

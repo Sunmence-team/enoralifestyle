@@ -47,11 +47,6 @@ const EditTestimonialModal: React.FC<EditTestimonialModalProps> = ({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || "";
-    setFormData((prev) => ({ ...prev, image: file }));
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const updatedTestimonial: EditTestimonialProps = {

@@ -14,6 +14,7 @@ import BlogCardSkeleton from "../components/skeletons/BlogCardSkeleton";
 import ServiceCardSkeleton from "../components/skeletons/ServiceCardSkeleton";
 import PackageCardSkeleton from "../components/skeletons/PackageCardSkeleton";
 import TestimonialCardSkeleton from "../components/skeletons/TestimonialCardSkeleton";
+import type { testimonialProps } from "../utilities/sharedInterFaces";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
@@ -498,16 +499,16 @@ const Home: React.FC = () => {
           {/* Scrollable container for sm & md; static grid on lg */}
           <div className="flex gap-6 overflow-x-auto overflow-y-hidden lg:overflow-x-visible lg:justify-center pb-5 snap-x snap-mandatory lg:flex-row lg:flex-wrap">
             {loadingTestimonials
-              ? [1, 2, 3].map((s, idx) => <TestimonialCardSkeleton key={idx} />)
+              ? [1, 2, 3].map((_, idx) => <TestimonialCardSkeleton key={idx} />)
               : testimonials.length === 0
               ? reviews.map((review, index) => (
                   <div
                     key={index}
                     className={`
-          flex flex-col flex-shrink-0 w-[300px] h-[360px] snap-center 
-          lg:flex-1 lg:min-w-[350px] lg:h-[380px]
-          transition-all duration-300
-        `}
+                      flex flex-col shrink-0 w-[300px] h-[360px] snap-center 
+                      lg:flex-1 lg:min-w-[350px] lg:h-[380px]
+                      transition-all duration-300
+                    `}
                   >
                     {/* Top section (review content) */}
                     <div className="border border-black/20 rounded-t-2xl px-4 py-8 flex-1 flex flex-col bg-white">
@@ -558,10 +559,10 @@ const Home: React.FC = () => {
                   <div
                     key={idx}
                     className={`
-          flex flex-col flex-shrink-0 w-[300px] h-[360px] snap-center 
-          lg:flex-1 lg:min-w-[350px] lg:h-[380px]
-          transition-all duration-300
-        `}
+                      flex flex-col shrink-0 w-[300px] h-[360px] snap-center 
+                      lg:flex-1 lg:min-w-[350px] lg:h-[380px]
+                      transition-all duration-300
+                    `}
                   >
                     {/* Top section (review content) */}
                     <div className="border border-black/20 rounded-t-2xl px-4 py-8 flex-1 flex flex-col bg-white">
@@ -596,7 +597,7 @@ const Home: React.FC = () => {
                       }}
                     >
                       <div className="flex items-center gap-2">
-                        <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden flex-shrink-0">
+                        <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden shrink-0">
                           <img
                             src={`${import.meta.env.VITE_IMAGE_BASE_URL}/${
                               t.image

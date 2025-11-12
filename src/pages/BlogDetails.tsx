@@ -81,7 +81,7 @@ export default function BlogDetails() {
         const data = res.data?.data || [];
         setComments(Array.isArray(data) ? data : []);
       } catch (err) {
-        console.error("Failed to load comments");
+        console.error("Failed to load comments: ", err);
       } finally {
         setLoadingComments(false);
       }

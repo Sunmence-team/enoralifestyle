@@ -29,7 +29,6 @@ export default function UploadTestimonial() {
   const [editingTestimonial, setEditingTestimonial] = useState(false);
   const [currentPageFromApi, setCurrentPageFromApi] = useState(NaN);
   const [totalApiPages, setTotalApiPages] = useState(NaN);
-  const apiItemsPerPage = 1;
   const [totalPagesInArr, setTotalPagesInArr] = useState<number[]>([]);
 
   const [testimonialDetails, setTestimonialDetails] =
@@ -126,7 +125,7 @@ export default function UploadTestimonial() {
       } else {
         toast.error(`Failed to create testimonial. ${data.message}.`);
       }
-    } catch (error) {
+    } catch (error: any) {
       if (
         error?.message?.includes("Unexpected token '<'") ||
         error?.message === "Failed to fetch"
@@ -291,7 +290,7 @@ export default function UploadTestimonial() {
       } else {
         toast.error(`Failed to edit testimonial. ${data.message}.`);
       }
-    } catch (error) {
+    } catch (error: any) {
       if (
         error?.message?.includes("Unexpected token '<'") ||
         error?.message === "Failed to fetch"

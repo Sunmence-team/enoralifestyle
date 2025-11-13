@@ -72,7 +72,7 @@ const PaymentStatus: React.FC = () => {
         } else {
           toast.error(reqdata.message);
         }
-      } catch (error) {
+      } catch (error: any) {
         console.log("Error occured while downloading e-book", error);
         toast.error("Error occured while downloading e-book.", error.message);
       } finally {

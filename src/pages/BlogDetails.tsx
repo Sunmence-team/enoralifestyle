@@ -42,7 +42,20 @@ export default function BlogDetails() {
   const [submitting, setSubmitting] = useState(false);
   const [loadingComments, setLoadingComments] = useState(true);
 
-  // Fetch blog
+  const fetchComments = async () => {
+    if (!id) return;
+    setLoadingComments(true);
+    try {
+      const res = await axios.get(`${API_URL}/blogs/${id}/comments`);
+      const data = res.data?.data || [];
+      setComments(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Failed to load comments: ", err);
+    } finally {
+      setLoadingComments(false);
+    }
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
     const fetchBlog = async () => {
@@ -59,19 +72,6 @@ export default function BlogDetails() {
   }, [id]);
 
   useEffect(() => {
-    const fetchComments = async () => {
-      if (!id) return;
-      setLoadingComments(true);
-      try {
-        const res = await axios.get(`${API_URL}/blogs/${id}/comments`);
-        const data = res.data?.data || [];
-        setComments(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error("Failed to load comments: ", err);
-      } finally {
-        setLoadingComments(false);
-      }
-    };
     fetchComments();
   }, [id]);
 
@@ -82,12 +82,11 @@ export default function BlogDetails() {
 
     setSubmitting(true);
     try {
-      const res = await axios.post(`${API_URL}/blogs/${id}/comments`, {
+      await axios.post(`${API_URL}/blogs/${id}/comments`, {
         name: name.trim(),
         text: comment.trim(),
       });
-      const newComment = res.data.data || res.data;
-      setComments((prev) => [newComment, ...prev]);
+      fetchComments(); // Refetch comments
       setName("");
       setComment("");
     } catch (err: any) {
@@ -193,7 +192,7 @@ export default function BlogDetails() {
                   >
                     <h4 className="font-medium! text-gray-900 font-[Inter]!">{c?.name}</h4>
                     <div className="flex flex-col justify-between items-start mt-2">
-                      <p className="text-gray-700 text-xs leading-snug font-[Inter]!">{c?.text}</p>
+                      <p className="text-gray-700 text-sm leading-snug font-[Inter]!">{c?.text}</p>
                       <p className="text-xs mt-2 w-full text-end text-gray-500">
                         {new Date(c?.created_at).toLocaleString()}
                       </p>

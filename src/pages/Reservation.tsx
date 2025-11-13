@@ -7,10 +7,9 @@ import * as Yup from "yup";
 import { useCartStore } from "../store/cartStore";
 import axios from "axios";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import { toast } from "sonner";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-const IMAGE_URL = import.meta.env.VITE_API_IMAGE_URL;
 
 const DEPOSIT = 5000;
 
@@ -20,7 +19,6 @@ const BANK_DETAILS = {
   accountNumber: "0123456789",
 };
 
-// Helper: Get today’s date in YYYY-MM-DD
 const getTodayDate = () => {
   const today = new Date();
   return today.toISOString().split("T")[0];
@@ -49,7 +47,7 @@ const ReservationSchema = Yup.object().shape({
   notes: Yup.string(),
 });
 
-const Reservation = () => {
+const Reservation: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -201,7 +199,6 @@ const Reservation = () => {
 
   return (
     <div>
-      <Toaster />
       <HeroSection title="Reservation" backgroundImage={assets.hero} height="lg:h-[65vh] h-[35vh]" />
 
       {/* FORM */}

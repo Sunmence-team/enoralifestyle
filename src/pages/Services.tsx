@@ -103,7 +103,6 @@ const Services = () => {
                   backgroundColor: "white",
                   border: "1px solid var(--pink-color)",
                   color: "var(--accent-color)",
-                  ringColor: "var(--primary-color)",
                 }}
               />
             </div>
@@ -144,7 +143,6 @@ const Services = () => {
                 className="px-6 py-3.5 font-medium rounded-xl text-white transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2"
                 style={{
                   backgroundColor: "var(--primary-color)",
-                  ringColor: "var(--primary-color)",
                 }}
               >
                 Apply Filters
@@ -156,8 +154,7 @@ const Services = () => {
                   className="px-6 py-3.5 font-medium rounded-xl border transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2"
                   style={{
                     borderColor: "var(--pink-color)",
-                    color: "var(--primary-color)",
-                    ringColor: "var(--primary-color)",
+                    color: "var(--primary-color)"
                   }}
                 >
                   Clear

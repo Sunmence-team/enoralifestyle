@@ -121,7 +121,7 @@ const Navbar: React.FC = () => {
         }`}
       >
         <div className="w-full flex items-center justify-center border-b border-gray-200 py-5 shadow-sm">
-          <img src={assets.logo} alt="Logo" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
+          <img src={assets.logo} alt="Logo" className="w-20 h-20 object-contain" />
         </div>
         <div className="flex flex-col items-center justify-start flex-1 gap-6 mt-10">
           {navLinks.map((link) => (
@@ -143,12 +143,12 @@ const Navbar: React.FC = () => {
 
       {/* Cart Drawer */}
       <div
-        className={`fixed top-0 right-0 lg:w-1/2 w-4/5 h-dvh bg-white shadow-lg transform transition-transform duration-300 z-50 flex flex-col text-[15px] font-medium ${
+        className={`fixed top-0 right-0 lg:w-1/2 w-[90%] h-[100dvh] max-h-[100svh] bg-white shadow-lg transform transition-transform duration-300 z-50 flex flex-col text-[15px] font-medium ${
           isOpen.cart ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="w-full flex gap-2 items-center justify-center border-b border-gray-200 py-3 shadow-sm">
-          <img src={assets.logo} alt="Logo" className="w-12 h-12 object-cover" />
+          <img src={assets.logo} alt="Logo" className="md:size-12 size-20 object-cover" />
           <h3 className="text-2xl font-bold">Cart</h3>
         </div>
 
@@ -159,7 +159,7 @@ const Navbar: React.FC = () => {
                 <CartCard key={index} {...cartItem} />
               ))}
             </div>
-            <div className="flex items-center justify-center gap-4 my-3">
+            <div className="flex items-center justify-center gap-4 my-3 pb-[env(safe-area-inset-bottom)]">
               <button
                 onClick={clearCart}
                 className="bg-gray-400 py-3 px-3 md:px-4 rounded-sm text-white"

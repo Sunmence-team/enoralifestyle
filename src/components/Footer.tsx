@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaInstagram,
   FaXTwitter,
@@ -10,6 +10,17 @@ const Footer: React.FC = () => {
   const [showTerms, setShowTerms] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
 
+  useEffect(() => {
+    if (showTerms || showPrivacy) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [showTerms, showPrivacy]);
+
   return (
     <footer className="bg-black text-white pt-12 pb-6 px-5 lg:px-10 mt-20 relative">
       {/* Top Section */}
@@ -18,30 +29,30 @@ const Footer: React.FC = () => {
 
         {/* Navigation Links */}
         <nav className="flex flex-wrap justify-center gap-6 md:gap-10 text-sm font-medium">
-          <a href="/" className="hover:text-[var(--primary-color)] transition">
+          <a href="/" className="hover:text-(--primary-color) transition">
             Home
           </a>
           <a
             href="/services"
-            className="hover:text-[var(--primary-color)] transition"
+            className="hover:text-(--primary-color) transition"
           >
             Services
           </a>
           <a
             href="/packages"
-            className="hover:text-[var(--primary-color)] transition"
+            className="hover:text-(--primary-color) transition"
           >
             Packages
           </a>
           <a
             href="/blog"
-            className="hover:text-[var(--primary-color)] transition"
+            className="hover:text-(--primary-color) transition"
           >
             Blog
           </a>
           <a
             href="/contact"
-            className="hover:text-[var(--primary-color)] transition"
+            className="hover:text-(--primary-color) transition"
           >
             Contact Us
           </a>
@@ -52,28 +63,28 @@ const Footer: React.FC = () => {
           <a
             href="https://wa.me/+2347035544194"
             target="_blank"
-            className="hover:text-[var(--primary-color)] transition"
+            className="hover:text-(--primary-color) transition"
           >
             <FaWhatsapp />
           </a>
           <a
             href="https://www.instagram.com/enoralifestyleng/?utm_source=ig_web_button_share_sheet"
             target="_blank"
-            className="hover:text-[var(--primary-color)] transition"
+            className="hover:text-(--primary-color) transition"
           >
             <FaInstagram />
           </a>
           <a
             href="https://www.facebook.com/profile.php?id=100051596345009&ref=ac_edit_ig_profile_ac"
             target="_blank"
-            className="hover:text-[var(--primary-color)] transition"
+            className="hover:text-(--primary-color) transition"
           >
             <FaFacebook />
           </a>
           <a
             href="https://x.com/EnoraLifes3249?s=20"
             target="_blank"
-            className="hover:text-[var(--primary-color)] transition"
+            className="hover:text-(--primary-color) transition"
           >
             <FaXTwitter />
           </a>
@@ -96,19 +107,19 @@ const Footer: React.FC = () => {
         <div className="flex items-center divide-x divide-gray-600">
           <button
             onClick={() => setShowTerms(true)}
-            className="px-3 hover:text-[var(--primary-color)] transition"
+            className="px-3 hover:text-(--primary-color) transition"
           >
             Terms
           </button>
           <button
             onClick={() => setShowPrivacy(true)}
-            className="px-3 hover:text-[var(--primary-color)] transition"
+            className="px-3 hover:text-(--primary-color) transition"
           >
             Privacy
           </button>
           <a
             href="/contact"
-            className="px-3 hover:text-[var(--primary-color)] transition"
+            className="px-3 hover:text-(--primary-color) transition"
           >
             Contact
           </a>
@@ -118,7 +129,7 @@ const Footer: React.FC = () => {
       {/* ===== Terms Modal ===== */}
       {showTerms && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white text-black p-6 rounded-lg max-w-lg w-[90%] shadow-xl relative max-h-[90vh] overflow-y-auto">
+          <div className="bg-white text-black p-6 rounded-2xl max-w-lg w-[90%] shadow-xl relative max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setShowTerms(false)}
               className="absolute top-3 right-3 text-gray-500 hover:text-black text-xl"
@@ -126,7 +137,7 @@ const Footer: React.FC = () => {
               ✕
             </button>
 
-            <h2 className="text-2xl font-semibold mb-4 text-[var(--primary-color)] text-center">
+            <h2 className="text-2xl font-semibold! mb-4 text-(--primary-color) text-center">
               Terms & Conditions
             </h2>
 
@@ -165,7 +176,7 @@ const Footer: React.FC = () => {
       {/* ===== Privacy Modal ===== */}
       {showPrivacy && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white text-black p-6 rounded-lg max-w-lg w-[90%] shadow-xl relative max-h-[90vh] overflow-y-auto">
+          <div className="bg-white text-black p-6 rounded-2xl max-w-lg w-[90%] shadow-xl relative max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setShowPrivacy(false)}
               className="absolute top-3 right-3 text-gray-500 hover:text-black text-xl"
@@ -173,7 +184,7 @@ const Footer: React.FC = () => {
               ✕
             </button>
 
-            <h2 className="text-2xl font-semibold mb-4 text-[var(--primary-color)] text-center">
+            <h2 className="text-2xl font-semibold! mb-4 text-(--primary-color) text-center">
               Privacy Policy
             </h2>
 

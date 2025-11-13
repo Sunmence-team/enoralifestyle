@@ -15,6 +15,10 @@ html {
   scroll-behavior: smooth;
 }
 
+.styledFont {
+  font-family: "Railway" !important;
+}
+
 @theme {
   --primary-color: #901e76;
   --secondary-color: #fdf9f5;

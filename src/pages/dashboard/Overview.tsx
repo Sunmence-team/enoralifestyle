@@ -308,24 +308,23 @@ export default function Overview() {
             />
             <div className="flex gap-2 flex-col font-[Raleway]!">
               <label htmlFor="image">Image</label>
-            <label
-              htmlFor="image-upload"
-              className="block border-2 border-dashed border-[var(--primary-color)] rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 transition"
-            >
-              {imagePreview ? (
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="mx-auto max-h-48 rounded"
-                />
-              ) : (
-                <div>
-                  <BiImageAlt className="mx-auto text-5xl text-[var(--primary-color)] mb-2" />
-                  <p className="text-sm">Click to upload image</p>
-                </div>
-              )}
-            </label>
-
+              <label
+                htmlFor="image-upload"
+                className="block border-2 border-dashed border-[var(--primary-color)] rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 transition"
+              >
+                {imagePreview ? (
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="mx-auto max-h-48 rounded"
+                  />
+                ) : (
+                  <div>
+                    <BiImageAlt className="mx-auto text-5xl text-[var(--primary-color)] mb-2" />
+                    <p className="text-sm">Click to upload image</p>
+                  </div>
+                )}
+              </label>
             </div>
             {isEditing && imagePreview && !image && (
               <p className="text-xs text-green-600 font-medium mt-2 text-center">

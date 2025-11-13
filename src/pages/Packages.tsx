@@ -102,7 +102,7 @@ const Packages: React.FC = () => {
                 placeholder="Search packages..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full px-5 py-3.5 text-base rounded-xl focus:outline-none focus:ring-2 transition"
+                className="w-full px-5 py-3.5 text-base rounded-lg focus:outline-none focus:border focus:border-(--primary-color) transition"
                 style={{
                   backgroundColor: "white",
                   border: "1px solid var(--pink-color)",
@@ -118,7 +118,7 @@ const Packages: React.FC = () => {
                 placeholder="Min"
                 value={minPrice}
                 onChange={(e) => setMinPrice(e.target.value)}
-                className="w-28 px-4 py-3.5 text-sm rounded-xl focus:outline-none focus:ring-2 transition"
+                className="md:w-28 w-full px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border focus:border-(--primary-color) transition"
                 style={{
                   backgroundColor: "white",
                   border: "1px solid var(--pink-color)",
@@ -131,7 +131,7 @@ const Packages: React.FC = () => {
                 placeholder="Max"
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(e.target.value)}
-                className="w-28 px-4 py-3.5 text-sm rounded-xl focus:outline-none focus:ring-2 transition"
+                className="md:w-28 w-full px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border focus:border-(--primary-color) transition"
                 style={{
                   backgroundColor: "white",
                   border: "1px solid var(--pink-color)",
@@ -144,7 +144,7 @@ const Packages: React.FC = () => {
             <div className="flex gap-3 lg:ml-auto">
               <button
                 onClick={handleApplyFilters}
-                className="px-6 py-3.5 font-medium rounded-xl text-white transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2"
+                className="md:w-max w-full px-6 py-3.5 font-medium rounded-lg text-white transition hover:opacity-90 focus:outline-none focus:border focus:border-(--primary-color) focus:ring-offset-2"
                 style={{
                   backgroundColor: "var(--primary-color)",
                 }}
@@ -155,7 +155,7 @@ const Packages: React.FC = () => {
               {hasActiveFilters && (
                 <button
                   onClick={handleClearFilters}
-                  className="px-6 py-3.5 font-medium rounded-xl border transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2"
+                  className="px-6 py-3.5 font-medium rounded-xl border transition hover:bg-gray-50 focus:outline-none focus:border focus:border-(--primary-color) focus:ring-offset-2"
                   style={{
                     borderColor: "var(--pink-color)",
                     color: "var(--primary-color)",

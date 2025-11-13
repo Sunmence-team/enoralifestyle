@@ -224,7 +224,7 @@ const Appointments: React.FC = () => {
         <h2 className="font-bold text-2xl">Appointments</h2>
         <div className="flex space-x-3">
           <div className="flex gap-2">
-            <div className="flex items-center border rounded-full p-2 md:border-[var(--primary-color)]/30 bg-white">
+            <div className="flex items-center border rounded-full p-2 md:border-(--primary-color)/30 bg-white">
               <input
                 type="text"
                 placeholder="Search"
@@ -234,7 +234,7 @@ const Appointments: React.FC = () => {
               />
               <IoSearch size={20} className="text-gray-500" />
             </div>
-            <div className="flex items-center border rounded-full p-2 md:border-[var(--primary-color)]/30 bg-white">
+            <div className="flex items-center border rounded-full p-2 md:border-(--primary-color)/30 bg-white">
               <input
                 type="text"
                 placeholder="Filter"
@@ -247,10 +247,10 @@ const Appointments: React.FC = () => {
           </div>
           <div className="flex gap-3">
             <div className="p-3 rounded-full bg-[var(--pink-color)]">
-              <IoNotifications size={25} className="text-[var(--primary-color)]" />
+              <IoNotifications size={25} className="text-(--primary-color)" />
             </div>
             <div className="p-3 rounded-full bg-[var(--pink-color)]">
-              <FaRegUserCircle size={25} className="text-[var(--primary-color)]" />
+              <FaRegUserCircle size={25} className="text-(--primary-color)" />
             </div>
           </div>
         </div>
@@ -258,7 +258,7 @@ const Appointments: React.FC = () => {
 
       {/* Stats Cards - YOUR DESIGN */}
       <div className='grid grid-cols-1 md:grid-cols-4 gap-4 mt-3'>
-        <div className='bg-[var(--primary-color)] text-white p-6 rounded-xl flex flex-col items-start justify-center h-26'>
+        <div className='bg-(--primary-color) text-white p-6 rounded-xl flex flex-col items-start justify-center h-26'>
           <span className='text-sm'>Total Appointment</span>
           <p className='text-2xl font-[Raleway]! font-bold!'>{statsLoading ? "..." : (totalAppointment ?? 0)}</p>
         </div>
@@ -311,7 +311,7 @@ const Appointments: React.FC = () => {
             </div>
             <button
               onClick={() => setViewBooking(null)}
-              className="mt-6 w-full bg-[var(--primary-color)] text-white py-2 rounded-lg"
+              className="mt-6 w-full bg-(--primary-color) text-white py-2 rounded-lg"
             >
               Close
             </button>
@@ -343,7 +343,7 @@ const Appointments: React.FC = () => {
               </select>
             </div>
             <div className="flex gap-3 mt-6">
-              <button onClick={saveEdit} className="flex-1 bg-[var(--primary-color)] text-white py-2 rounded-lg">
+              <button onClick={saveEdit} className="flex-1 bg-(--primary-color) text-white py-2 rounded-lg">
                 Save
               </button>
               <button onClick={() => setEditBooking(null)} className="flex-1 border py-2 rounded-lg">

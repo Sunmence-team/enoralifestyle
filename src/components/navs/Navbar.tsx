@@ -30,7 +30,7 @@ const Navbar: React.FC = () => {
 
   const [isOpen, setIsOpen] = useState({ sidebar: false, cart: false });
   const [isScrolled, setIsScrolled] = useState(false);
-  const { items } = useCartStore();
+  const { items, clearCart } = useCartStore();
 
   const navLinks = [
     { path: "/", name: "Home" },
@@ -116,7 +116,7 @@ const Navbar: React.FC = () => {
 
       {/* Mobile Sidebar */}
       <div
-        className={`fixed top-0 left-0 w-3/4 h-screen bg-white shadow-lg transform transition-transform duration-300 z-50 flex flex-col text-[15px] font-medium ${
+        className={`fixed top-0 left-0 w-3/4 h-dvh bg-white shadow-lg transform transition-transform duration-300 z-50 flex flex-col text-[15px] font-medium ${
           isOpen.sidebar ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -143,7 +143,7 @@ const Navbar: React.FC = () => {
 
       {/* Cart Drawer */}
       <div
-        className={`fixed top-0 right-0 lg:w-1/2 w-4/5 h-screen bg-white shadow-lg transform transition-transform duration-300 z-50 flex flex-col text-[15px] font-medium ${
+        className={`fixed top-0 right-0 lg:w-1/2 w-4/5 h-dvh bg-white shadow-lg transform transition-transform duration-300 z-50 flex flex-col text-[15px] font-medium ${
           isOpen.cart ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -159,13 +159,21 @@ const Navbar: React.FC = () => {
                 <CartCard key={index} {...cartItem} />
               ))}
             </div>
-            <Link
-              to="/reservation"
-              onClick={() => setIsOpen({ sidebar: false, cart: false })}
-              className="bg-(--primary-color) py-3 px-4 rounded-sm mt-3 mx-auto text-white"
-            >
-              Proceed to Reservation
-            </Link>
+            <div className="flex items-center justify-center gap-4 mt-3">
+              <button
+                onClick={clearCart}
+                className="bg-gray-400 py-3 px-3 md:px-4 rounded-sm text-white"
+              >
+                Clear Cart
+              </button>
+              <Link
+                to="/reservation"
+                onClick={() => setIsOpen({ sidebar: false, cart: false })}
+                className="bg-(--primary-color) py-3 px-3 md:px-4 rounded-sm text-white"
+              >
+                Proceed to Reservation
+              </Link>
+            </div>
           </div>
         ) : (
           <div className="flex flex-col gap-4 items-center justify-center h-[50vh]">

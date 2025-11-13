@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { assets } from "../assets/assests";
 import HeroSection from "../components/herosections/Herosection";
-import { FiX } from "react-icons/fi";
 import PackageCard from "../components/cards/PackageCard";
 import axios, { AxiosError } from "axios";
 import PackageCardSkeleton from "../components/skeletons/PackageCardSkeleton";
@@ -20,17 +19,9 @@ interface Package {
   type: "package" | "service";
 }
 
-interface SelectedPackage {
-  title: string;
-  description: string;
-  price: string;
-  image: string;
-}
-
 const Packages : React.FC = () => {
   const [packages, setPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedPackage, setSelectedPackage] = useState<SelectedPackage | null>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -69,16 +60,6 @@ const Packages : React.FC = () => {
     fetchPackages();
   }, []);
 
-  // Open modal with selected package
-  const openModal = (pkg: Package) => {
-    setSelectedPackage({
-      title: pkg.name,
-      description: pkg.description,
-      price: pkg.price,
-      image: pkg.image ? `${IMAGE_URL}${pkg.image.replace(/^public\//, "")}` : assets.our1,
-    });
-  };
-
   return (
     <div>
       {/* HERO SECTION */}
@@ -99,68 +80,32 @@ const Packages : React.FC = () => {
             ))}
           </div>
         ) : packages.length === 0 ? (
-          <div className="text-center py-20 text-gray-500">
-            No packages available at the moment.
+          <div className="text-center py-12 relative">
+            <div className="bg-gray-100 w-24 h-24 rounded-full flex flex-col items-center justify-center mx-auto mb-6">
+              <div className="absolute">
+                <p className="text-xl text-gray-600 font-medium">
+                  No packages available at the moment.
+                </p>
+              </div>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8">
             {packages.map((item, index) => (
-              <div key={item?.id} onClick={() => openModal(item)} className="cursor-pointer">
-                <PackageCard
-                  id={item?.id.toString()}
-                  index={index}
-                  title={item?.name}
-                  description={item?.description}
-                  price={item?.price}
-                  image={`${IMAGE_URL}/${item?.image}`}
-                  showMidLine={false}
-                />
-              </div>
+              <PackageCard
+                id={item?.id.toString()}
+                index={index}
+                title={item?.name}
+                description={item?.description}
+                price={item?.price}
+                image={`${IMAGE_URL}/${item?.image}`}
+                showMidLine={false}
+              />
             ))}
           </div>
         )}
       </div>
 
-      {/* MODAL */}
-      {selectedPackage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-5">
-          <div className="bg-white rounded-3xl max-w-lg w-full relative shadow-2xl overflow-hidden animate-fadeIn">
-            {/* Close Button */}
-            <button
-              onClick={() => setSelectedPackage(null)}
-              className="absolute top-4 right-4 bg-gray-200 hover:bg-gray-300 text-gray-600 p-2 rounded-full transition-all"
-            >
-              <FiX size={20} />
-            </button>
-
-            {/* Modal Content */}
-            <img
-              src={selectedPackage.image}
-              alt={selectedPackage.title}
-              className="w-full h-[300px] object-cover rounded-t-3xl"
-            />
-
-            <div className="p-6">
-              <h2 className="text-[24px] font-semibold text-black mb-2">
-                {selectedPackage.title}
-              </h2>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                {selectedPackage.description}
-              </p>
-              <p className="mt-4 text-[20px] font-semibold text-black/80">
-                Price:{" "}
-                <span className="text-[var(--primary-color)]">
-                  ₦{Number(selectedPackage.price).toLocaleString()}
-                </span>
-              </p>
-
-              <div className="mt-6 flex justify-end">
-                {/* Optional: Add "Book Now" button later */}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

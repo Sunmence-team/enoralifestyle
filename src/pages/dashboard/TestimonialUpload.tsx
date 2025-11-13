@@ -29,7 +29,7 @@ export default function UploadTestimonial() {
   const [editingTestimonial, setEditingTestimonial] = useState(false);
   const [currentPageFromApi, setCurrentPageFromApi] = useState(NaN);
   const [totalApiPages, setTotalApiPages] = useState(NaN);
-  const apiItemsPerPage = 1;
+  const apiItemsPerPage = 10;
   const [totalPagesInArr, setTotalPagesInArr] = useState<number[]>([]);
 
   const [testimonialDetails, setTestimonialDetails] =
@@ -44,6 +44,8 @@ export default function UploadTestimonial() {
     from: "",
     errorMessage: "",
   });
+
+  const token = localStorage.getItem("authToken");
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -126,7 +128,7 @@ export default function UploadTestimonial() {
       } else {
         toast.error(`Failed to create testimonial. ${data.message}.`);
       }
-    } catch (error) {
+    } catch (error: any) {
       if (
         error?.message?.includes("Unexpected token '<'") ||
         error?.message === "Failed to fetch"
@@ -291,7 +293,7 @@ export default function UploadTestimonial() {
       } else {
         toast.error(`Failed to edit testimonial. ${data.message}.`);
       }
-    } catch (error) {
+    } catch (error: any) {
       if (
         error?.message?.includes("Unexpected token '<'") ||
         error?.message === "Failed to fetch"
@@ -309,7 +311,7 @@ export default function UploadTestimonial() {
 
   useEffect(() => {
     fetchTestimonials();
-  }, [currentPageFromApi]);
+  }, [token, currentPageFromApi]);
 
   return (
     <>
@@ -450,13 +452,24 @@ export default function UploadTestimonial() {
 
         <div className="bg-white rounded-xl shadow border border-black/10 overflow-hidden p-4 flex flex-col gap-4">
           <h2 className="font-bold text-2xl">Manage Testimonials</h2>
-          <table className="w-full text-left">
+          <table className="w-full text-left border-collapse">
             <thead className="bg-gray-100 border-b">
-              <tr>
-                <th className="p-3">Full Name</th>
-                <th className="p-3">Occupation</th>
-                <th className="p-3">Comment</th>
-                <th className="p-3 text-center">Actions</th>
+              <tr className="text-gray-600 border-b">
+                <th className="py-6 px-6 uppercase tracking-wider text-sm font-semibold text-gray-700">
+                  ID
+                </th>
+                <th className="py-6 px-6 uppercase tracking-wider text-sm font-semibold text-gray-700">
+                  Full Name
+                </th>
+                <th className="py-6 px-6 uppercase tracking-wider text-sm font-semibold text-gray-700">
+                  Occupation
+                </th>
+                <th className="py-6 px-6 uppercase tracking-wider text-sm font-semibold text-gray-700">
+                  Comment
+                </th>
+                <th className="py-6 px-6 uppercase tracking-wider text-sm font-semibold text-gray-700">
+                  Actions
+                </th>
               </tr>
             </thead>
 
@@ -493,18 +506,19 @@ export default function UploadTestimonial() {
                 testimonials.map((t, index) => (
                   <tr
                     key={index}
-                    className="border-b hover:bg-gray-50 transition"
+                    className={`border-b hover:bg-gray-50 transition-colors duration-200 ${
+                      index % 2 === 0 ? "bg-white" : "bg-[#901E76]/20"
+                    }`}
                     onMouseOver={() => setSelectedTestimonial(t)}
                   >
-                    <td className="p-5 font-medium">{t.full_name}</td>
-                    <td className="p-5 text-sm text-gray-600">
-                      {t.occupation}
-                    </td>
-                    <td className="p-5 text-sm text-gray-700 line-clamp-2">
+                    <td className="py-4 px-6 align-middle">{index + 1}</td>
+                    <td className="py-4 px-6 align-middle">{t.full_name}</td>
+                    <td className="py-4 px-6 align-middle">{t.occupation}</td>
+                    <td className="py-7 px-6 align-middle line-clamp-1">
                       {decodeURIComponent(t.comment.slice(0, 170))}...
                     </td>
-                    <td className="p-5">
-                      <div className="flex gap-3 justify-center text-gray-700">
+                    <td className="py-4 px-6 align-middle">
+                      <div className="flex gap-3 justify-center text-[var(--primary-color)]">
                         <button
                           className="cursor-pointer hover:bg-gray-300 p-2 rounded-sm hover:text-(--primary-color)"
                           onClick={() => setIsEditOpen(true)}
@@ -529,50 +543,52 @@ export default function UploadTestimonial() {
                 ))
               )}
             </tbody>
-            <tfoot>
-              <tr className={"bg-white/61 h-[77px] border-t border-black/10"}>
-                {totalPagesInArr.length !== 0 ? (
-                  <td className="text-center p-4" colSpan={8}>
-                    <div className="flex gap-3 justify-center items-center">
-                      <button
-                        className="p-2 text-gray-600 hover:text-black cursor-pointer"
-                        disabled={
-                          currentPageFromApi === totalApiPages ? true : false
-                        }
-                        onClick={() =>
-                          setCurrentPageFromApi(currentPageFromApi - 1)
-                        }
-                      >
-                        <FaAngleLeft />
-                      </button>
-                      {totalPagesInArr.map((t, idx) => (
+            {testimonials.length === apiItemsPerPage ? (
+              <tfoot>
+                <tr className={"bg-white/61 h-[77px] border-t border-black/10"}>
+                  {totalPagesInArr.length !== 0 ? (
+                    <td className="text-center p-4" colSpan={8}>
+                      <div className="flex gap-3 justify-center items-center">
                         <button
-                          key={idx}
-                          onClick={() => setCurrentPageFromApi(t)}
-                          className={`w-8 h-8 flex items-center justify-center font-bold ${
-                            t === currentPageFromApi
-                              ? "bg-[var(--primary-color)]"
-                              : "bg-gray-300"
-                          } cursor-pointer text-white rounded-lg`}
+                          className="p-2 text-gray-600 hover:text-black cursor-pointer"
+                          disabled={
+                            currentPageFromApi === totalApiPages ? true : false
+                          }
+                          onClick={() =>
+                            setCurrentPageFromApi(currentPageFromApi - 1)
+                          }
                         >
-                          {t}
+                          <FaAngleLeft />
                         </button>
-                      ))}
-                      <span className="text-gray-500">...</span>
-                      <button
-                        className="p-2 text-gray-600 hover:text-black cursor-pointer"
-                        disabled={currentPageFromApi === 1 ? true : false}
-                        onClick={() =>
-                          setCurrentPageFromApi(currentPageFromApi + 1)
-                        }
-                      >
-                        <FaAngleRight />
-                      </button>
-                    </div>
-                  </td>
-                ) : null}
-              </tr>
-            </tfoot>
+                        {totalPagesInArr.map((t, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => setCurrentPageFromApi(t)}
+                            className={`w-8 h-8 flex items-center justify-center font-bold ${
+                              t === currentPageFromApi
+                                ? "bg-[var(--primary-color)]"
+                                : "bg-gray-300"
+                            } cursor-pointer text-white rounded-lg`}
+                          >
+                            {t}
+                          </button>
+                        ))}
+                        <span className="text-gray-500">...</span>
+                        <button
+                          className="p-2 text-gray-600 hover:text-black cursor-pointer"
+                          disabled={currentPageFromApi === 1 ? true : false}
+                          onClick={() =>
+                            setCurrentPageFromApi(currentPageFromApi + 1)
+                          }
+                        >
+                          <FaAngleRight />
+                        </button>
+                      </div>
+                    </td>
+                  ) : null}
+                </tr>
+              </tfoot>
+            ) : null}
           </table>
         </div>
       </div>

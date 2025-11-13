@@ -40,7 +40,7 @@ const Login: React.FC = () => {
           toast.success("Welcome back! Redirecting...");
 
           setTimeout(() => {
-            navigate("/dashboard/overview"); // or dashboard
+            navigate("/dashboard/services");
           }, 1500);
         }
       } catch (err: any) {

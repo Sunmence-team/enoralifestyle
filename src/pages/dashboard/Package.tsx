@@ -236,58 +236,69 @@ export default function Package() {
     <div>
       {/* Header */}
       <div className="flex justify-between items-center w-full mb-3">
-        <h2 className="font-bold text-2xl">
+        <h2 className="font-semibold! text-2xl">
           {isEditing ? "Edit Package" : "Create Package"}
         </h2>
         <div className="flex gap-3">
-          <div className="p-3 rounded-full bg-[var(--pink-color)]">
-            <IoIosNotifications size={25} className="text-[var(--primary-color)]" />
+          <div className="p-3 rounded-full bg-(--pink-color)">
+            <IoIosNotifications size={25} className="text-(--primary-color)" />
           </div>
-          <div className="p-3 rounded-full bg-[var(--pink-color)]">
-            <FaRegUserCircle size={25} className="text-[var(--primary-color)]" />
+          <div className="p-3 rounded-full bg-(--pink-color)">
+            <FaRegUserCircle size={25} className="text-(--primary-color)" />
           </div>
         </div>
       </div>
 
       {/* Form */}
       <div className="bg-white p-6 rounded-md mb-8">
-        <h2 className="text-lg font-bold mb-4">
+        <h2 className="text-lg font-semibold! mb-6">
           {isEditing ? "Update Package" : "Create New Package"}
         </h2>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid md:grid-cols-2 gap-4">
-            <input
-              type="text"
-              placeholder="Package Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              className="w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-[var(--primary-color)]"
-            />
-            <input
-              type="number"
-              placeholder="Price (e.g. 92000)"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              required
-              className="w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-[var(--primary-color)]"
+            <div className="flex flex-col items-start gap-2">
+              <label className="font-[Raleway]!" htmlFor="packageName">Package Name</label>
+              <input
+                type="text"
+                placeholder="Package Name"
+                value={name}
+                id="packageName"
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="w-full px-4 py-3 border border-(--primary-color)/30 bg-(--pending-bg)/15 font-[Raleway]! rounded-md outline-0 placeholder:text-(--primary-color)/50"
+              />
+            </div>
+            <div className="flex flex-col items-start gap-2">
+              <label className="font-[Raleway]!" htmlFor="packageName">Package Price</label>
+              <input
+                type="number"
+                placeholder="Price (e.g. 92000)"
+                value={price}
+                id="packagePrice"
+                onChange={(e) => setPrice(e.target.value)}
+                required
+                className="w-full px-4 py-3 border border-(--primary-color)/30 bg-(--pending-bg)/15 font-[Raleway]! rounded-md outline-0 placeholder:text-(--primary-color)/50"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col items-start gap-2">
+            <label className="font-[Raleway]!" htmlFor="packageName">Package Price</label>
+            <textarea
+              placeholder="Description (optional)"
+              rows={3}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full px-4 py-3 border border-(--primary-color)/30 bg-(--pending-bg)/15 font-[Raleway]! rounded-md outline-0 placeholder:text-(--primary-color)/50 resize-none"
             />
           </div>
 
-          <textarea
-            placeholder="Description (optional)"
-            rows={3}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full px-4 py-3 border rounded-md resize-none focus:ring-2 focus:ring-[var(--primary-color)]"
-          />
-
           {/* Services Multi-Select */}
           <div>
-            <label className="block text-sm font-medium mb-2">
+            <label className="block text-sm font-medium! font-[Raleway]! mb-2">
               Select Services ({selectedServices.length} selected)
             </label>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-h-64 overflow-y-auto p-4 border rounded-md bg-gray-50">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-h-64 overflow-y-auto p-4 border border-(--primary-color)/30 bg-(--pending-bg)/15 font-[Raleway]! rounded-md outline-0 placeholder:text-(--primary-color)/50">
               {services.length === 0 ? (
                 <p className="col-span-full text-center text-gray-500">Loading services...</p>
               ) : (
@@ -300,7 +311,7 @@ export default function Package() {
                       type="checkbox"
                       checked={selectedServices.includes(s.id)}
                       onChange={() => handleServiceToggle(s.id)}
-                      className="w-4 h-4 text-[var(--primary-color)] rounded focus:ring-[var(--primary-color)]"
+                      className="w-4 h-4 text-(--primary-color) rounded focus:ring-(--primary-color)"
                     />
                     <span className="text-sm font-medium">{s.name}</span>
                   </label>
@@ -320,19 +331,19 @@ export default function Package() {
             />
             <label
               htmlFor="package-image"
-              className="block border-2 border-dashed border-[var(--primary-color)] rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 transition"
+              className="block border-2 border-dashed bg-(--pending-bg)/15 border-(--primary-color) rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 transition"
             >
               {imagePreview ? (
                 <img src={imagePreview} alt="Preview" className="mx-auto max-h-48 rounded" />
               ) : (
                 <div>
-                  <BiImageAlt className="mx-auto text-5xl text-[var(--primary-color)] mb-2" />
-                  <p className="text-sm">Click to upload image</p>
+                  <BiImageAlt className="mx-auto text-5xl text-(--primary-color) mb-2" />
+                  <p className="text-sm font-[Raleway]!">Click to upload image</p>
                 </div>
               )}
             </label>
             {isEditing && imagePreview && !image && (
-              <p className="text-xs text-green-600 mt-2 text-center">
+              <p className="text-xs text-green-600 mt-2 text-center font-[Raleway]!">
                 Current image loaded. Upload new to replace.
               </p>
             )}
@@ -351,7 +362,7 @@ export default function Package() {
             <button
               type="submit"
               disabled={submitting}
-              className="flex-1 py-3 bg-[var(--primary-color)] text-white font-bold rounded-md hover:opacity-90 disabled:opacity-60 transition shadow-lg"
+              className="mt-6 flex-1 py-3 bg-(--primary-color) text-white font-bold rounded-md hover:opacity-90 disabled:opacity-60 transition shadow-lg"
             >
               {submitting ? "Saving..." : isEditing ? "Update Package" : "Create Package"}
             </button>
@@ -361,7 +372,7 @@ export default function Package() {
 
       {/* Table – using reusable DashboardTable */}
       <div className="bg-white rounded-xl shadow-xl overflow-hidden">
-        <div className="px-8 py-6 bg-[var(--primary-color)]">
+        <div className="px-8 py-6 bg-(--primary-color)">
           <h2 className="text-2xl font-bold text-white">All Packages</h2>
         </div>
 
@@ -377,7 +388,7 @@ export default function Package() {
               key: "price",
               header: "PRICE",
               render: (pkg: any) => (
-                <span className="font-bold text-pink-600">
+                <span className="font-bold text-pink-600 font-[Raleway]!">
                   ₦{parseFloat(pkg.price).toLocaleString()}
                 </span>
               ),
@@ -386,16 +397,16 @@ export default function Package() {
               key: "services",
               header: "SERVICES",
               render: (pkg: any) => (
-                <ul className="text-sm space-y-1">
+                <ul className="text-sm space-y-1 font-[Raleway]!">
                   {pkg.services?.length > 0 ? (
                     pkg.services.map((sid: any) => {
                       const service = services.find(
                         (s) => s.id === (typeof sid === "string" ? parseInt(sid) : sid)
                       );
-                      return <li key={sid}>• {service?.name || `ID: ${sid}`}</li>;
+                      return <li className="font-[Raleway]! font-medium!" key={sid}>• {service?.name || `ID: ${sid}`}</li>;
                     })
                   ) : (
-                    <span className="text-gray-400 italic">None</span>
+                    <span className="text-gray-400 italic font-[Raleway]!">None</span>
                   )}
                 </ul>
               ),

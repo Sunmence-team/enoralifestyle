@@ -36,13 +36,13 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
           onSubmit({ name, email });
         }}
       >
-        <h2 className="text-xl font-semibold mb-4 text-center">
+        <h2 className="text-2xl font-semibold! mb-4 text-center">
           Provide your details
         </h2>
 
         <div className="flex flex-col gap-3">
           <div>
-            <label className="block text-sm font-medium mb-1">Name</label>
+            <label className="block text-sm font-[Raleway]! font-medium mb-1">Name</label>
             <input
               type="text"
               required
@@ -54,7 +54,7 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
+            <label className="block text-sm font-[Raleway]! font-medium mb-1">Email</label>
             <input
               type="email"
               required

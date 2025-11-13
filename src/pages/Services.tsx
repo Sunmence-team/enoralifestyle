@@ -84,8 +84,14 @@ const Services = () => {
               ))}
           </div>
         ) : services.length === 0 ? (
-          <div className="text-center py-20 text-gray-500">
-            No services available at the moment.
+          <div className="text-center py-12 relative">
+            <div className="bg-gray-100 w-24 h-24 rounded-full flex flex-col items-center justify-center mx-auto mb-6">
+              <div className="absolute">
+                <p className="text-xl text-gray-600 font-medium">
+                  No services available at the moment.
+                </p>
+              </div>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8">

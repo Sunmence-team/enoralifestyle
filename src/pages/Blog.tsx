@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { assets } from "../assets/assests";
 import HeroSection from "../components/herosections/Herosection";
-import BlogCard from "../components/cards/Blogcard";
+import BlogCrd from "../components/cards/BlogCrd";
 import axios, { AxiosError } from "axios";
 import BlogCardSkeleton from "../components/skeletons/BlogCardSkeleton";
 
@@ -63,12 +63,18 @@ const Blog: React.FC = () => {
       <section className="bg-white py-16 lg:pt-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Title */}
-          <h1 className="text-center font-semibold! text-3xl sm:text-4xl md:text-5xl lg:text-[48px] text-gray-900 mb-4">
-            Blog <span className="text-(--primary-color) font-inherit">News</span>
-          </h1>
-          <p className="text-center text-gray-600 text-base sm:text-lg max-w-2xl mx-auto mb-12">
-            Discover skincare tips, beauty secrets, and wellness insights from our experts.
-          </p>
+          {
+            blogs.length > 0 && (
+              <>
+                <h1 className="text-center font-semibold! text-3xl sm:text-4xl md:text-5xl lg:text-[48px] text-gray-900 mb-4">
+                  Blog <span className="text-(--primary-color) font-inherit">News</span>
+                </h1>
+                <p className="text-center text-gray-600 text-base sm:text-lg max-w-2xl mx-auto mb-12">
+                  Discover skincare tips, beauty secrets, and wellness insights from our experts.
+                </p>
+              </>
+            )
+          }
 
           {/* Loading State */}
           {loading && (
@@ -96,14 +102,15 @@ const Blog: React.FC = () => {
 
           {/* Empty State */}
           {!loading && !error && blogs.length === 0 && (
-            <div className="text-center py-24">
-              <div className="bg-gray-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-4xl">Document</span>
+            <div className="text-center pt-16 relative">
+              <div className="bg-gray-100 w-24 h-24 rounded-full flex flex-col items-center justify-center mx-auto mb-6">
+                <div className="absolute">
+                  <p className="text-xl text-gray-600 font-medium">
+                    No blogs available at the moment.
+                  </p>
+                  <p className="text-gray-500 mt-2">Check back soon for fresh content!</p>
+                </div>
               </div>
-              <p className="text-xl text-gray-600 font-medium">
-                No blogs available at the moment.
-              </p>
-              <p className="text-gray-500 mt-2">Check back soon for fresh content!</p>
             </div>
           )}
 
@@ -111,7 +118,7 @@ const Blog: React.FC = () => {
           {!loading && !error && blogs.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8">
               {blogs.map((blog) => (
-                <BlogCard
+                <BlogCrd
                   key={blog.id}
                   id={String(blog.id)}
                   title={blog.title}

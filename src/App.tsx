@@ -63,7 +63,7 @@ const App: React.FC = () => {
 
         {/* Dashboard routes */}
         <Route
-          path="/dashboard/overview"
+          path="/dashboard/services"
           element={<DashboardLayout children={<Overview />} />}
         />
         <Route

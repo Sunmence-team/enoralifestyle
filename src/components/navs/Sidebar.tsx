@@ -1,13 +1,12 @@
 import React from "react";
 import { LuPackagePlus } from "react-icons/lu";
-import { MdBathroom } from "react-icons/md";
 import { FaCloudUploadAlt, FaInfoCircle } from "react-icons/fa";
-import { IoIosCreate } from "react-icons/io";
 import { NavLink } from "react-router-dom";
 import { GrContract, GrExpand } from "react-icons/gr";
 import { assets } from "../../assets/assests";
 import { MessageSquareMore } from "lucide-react";
 import { FaClipboardUser } from "react-icons/fa6";
+import { BiBox } from "react-icons/bi";
 
 interface SidebarProps {
   isExpanded: boolean;
@@ -22,14 +21,14 @@ export default function Sidebar({ isExpanded, setIsExpanded }: SidebarProps) {
       icon: <FaClipboardUser />,
     },
     {
-      name: "Add Service",
-      href: "/dashboard/overview",
+      name: "Manage Services",
+      href: "/dashboard/services",
       icon: <LuPackagePlus />,
     },
     {
-      name: "Create Package",
+      name: "Manage Packages",
       href: "/dashboard/package",
-      icon: <IoIosCreate />,
+      icon: <BiBox />,
     },
     {
       name: "Upload Blog",
@@ -52,7 +51,7 @@ export default function Sidebar({ isExpanded, setIsExpanded }: SidebarProps) {
     <div
       className={`transition-all duration-500 left-nav relative ${
         isExpanded ? "w-64" : "md:w-20 w-0"
-      } rounded-r-4xl h-full bg-(--primary-color) py-8 px-2 flex items-center flex-col gap-6`}
+      } rounded-r-4xl h-full bg-(--primary-color) pt-4 pb-8 px-2 flex items-center flex-col gap-4`}
     >
       <button
         type="button"
@@ -64,7 +63,7 @@ export default function Sidebar({ isExpanded, setIsExpanded }: SidebarProps) {
       <img
         src={assets.logo}
         alt="Enora Lifestyle and Spa Logo"
-        className="w-12 h-12"
+        className="w-16 h-16 object-cover"
       />
       <div className="w-full flex flex-col gap-2.5 border-b border-white/30 h-[calc(100%-(24px+3rem))] overflow-y-auto no-scrollbar">
         {barLinks.map((link) => (

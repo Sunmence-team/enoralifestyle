@@ -61,8 +61,8 @@ const Navbar: React.FC = () => {
     >
       <div className="made-container flex items-center justify-between w-full">
         {/* Logo */}
-        <div className="flex items-center gap-3">
-          <img src={assets.logo} alt="Logo" className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 object-contain" />
+        <div className="flex items-center gap-3 md:pb-2">
+          <img src={assets.logo} alt="Logo" className="w-25 h-25 md:w-30 md:h-30 object-contain" />
         </div>
 
         {/* Desktop Nav */}
@@ -159,7 +159,7 @@ const Navbar: React.FC = () => {
                 <CartCard key={index} {...cartItem} />
               ))}
             </div>
-            <div className="flex items-center justify-center gap-4 mt-3">
+            <div className="flex items-center justify-center gap-4 my-3">
               <button
                 onClick={clearCart}
                 className="bg-gray-400 py-3 px-3 md:px-4 rounded-sm text-white"

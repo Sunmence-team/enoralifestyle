@@ -66,6 +66,17 @@ const Home: React.FC = () => {
   const [isLoadingBlogs, setIsLoadingBlogs] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isModalOpen]);
+
   const fetchPackages = async () => {
     try {
       const response = await axios.get(`${API_URL}/packages`);

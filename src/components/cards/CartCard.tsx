@@ -31,14 +31,14 @@ const CartCard = (cartItem: cartItemProps) => {
       </div>
       <div className="flex flex-col items-start text-start md:w-[calc(100%-90px)] w-[calc(100%-72px)]">
         <h3 className="line-clamp-1">
-          {cartItem.title} x {cartItem.quantity}
+          {cartItem.title} <span className="text-(--primary-color) font-[Raleway]! font-bold! text-lg">x {cartItem.quantity}</span>
         </h3>
         <h3 className="md:hidden inline-flex">
-          {formatterUtility(Number(cartItem.price))}
+          {formatterUtility(Number(cartItem.quantity ? (cartItem.price * cartItem.quantity) : cartItem.price))}
         </h3>
       </div>
       <h3 className="md:inline-flex hidden">
-        {formatterUtility(Number(cartItem.price))}
+        {formatterUtility(Number(cartItem.quantity ? (cartItem.price * cartItem.quantity) : cartItem.price))}
       </h3>
       <button
         type="button"

@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
+import {
+  CheckCircle2,
+  XCircle,
+  Calendar,
+  Clock,
+  CreditCard,
+} from "lucide-react";
 import { toast } from "sonner";
-import { CheckCircle2, XCircle, Calendar, Clock, CreditCard } from "lucide-react";
 
 const PaymentStatus: React.FC = () => {
   const navigate = useNavigate();
@@ -12,41 +18,7 @@ const PaymentStatus: React.FC = () => {
   const typeParam = queryParams.get("type");
   const status = queryParams.get("status");
   const reference = queryParams.get("reference");
-  
-  const purchase_id = queryParams.get("purchase_id") || queryParams.get("booking");
-  
-  const handleDownload = async () => {
-    setDownloading(true);
-    const loading = toast.loading("Downloading ebook...");
-    try {
-      const res = await fetch(
-        `${
-          import.meta.env.VITE_API_BASE_URL
-        }/resources/files/WELLTHRIX.pdf?purchase_id=${purchase_id}`
-      );
-
-      let reqdata = await res.json();
-      console.log(reqdata);
-      window.open(reqdata.content, "_blank");
-      if (res.ok) {
-        const url = window.URL.createObjectURL(reqdata.content);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "E-book.pdf";
-        a.click();
-        window.URL.revokeObjectURL(url);
-      } else {
-        toast.error(reqdata.message);
-      }
-    } catch (error) {
-      console.log("Error occured while downloading e-book", error);
-      toast.error("Error occured while downloading e-book.", error.message);
-    } finally {
-      setDownloading(false);
-      toast.dismiss(loading);
-    }
-  };
-  
+  const purchase_id = queryParams.get("purchase_id");
   useEffect(() => {
     if (!reference || !status) {
       navigate("/", { replace: true });
@@ -60,7 +32,9 @@ const PaymentStatus: React.FC = () => {
       <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-red-50 to-pink-50">
         <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md text-center border border-red-100">
           <XCircle className="mx-auto text-red-600 w-16 h-16 mb-4" />
-          <h1 className="text-2xl font-bold mb-2 text-red-700">Payment Failed</h1>
+          <h1 className="text-2xl font-bold mb-2 text-red-700">
+            Payment Failed
+          </h1>
           <p className="text-gray-600 mb-6">
             We couldn't process your payment. Please try again.
           </p>
@@ -77,16 +51,34 @@ const PaymentStatus: React.FC = () => {
 
   if (typeParam === "ebook") {
     const handleDownload = async () => {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/resources/files/WELLTHRIX.pdf?id=${purchase_id}`
-      );
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "E-book.pdf";
-      a.click();
-      window.URL.revokeObjectURL(url);
+      setDownloading(true);
+      const loading = toast.loading("Downloading ebook...");
+      try {
+        const res = await fetch(
+          `${
+            import.meta.env.VITE_API_BASE_URL
+          }/resources/files/WELLTHRIX.pdf?purchase_id=${purchase_id}`
+        );
+
+        let reqdata = await res.json();
+        console.log(reqdata);
+        if (res.ok) {
+          const url = window.URL.createObjectURL(reqdata.content);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "E-book.pdf";
+          a.click();
+          window.URL.revokeObjectURL(url);
+        } else {
+          toast.error(reqdata.message);
+        }
+      } catch (error) {
+        console.log("Error occured while downloading e-book", error);
+        toast.error("Error occured while downloading e-book.", error.message);
+      } finally {
+        setDownloading(false);
+        toast.dismiss(loading);
+      }
     };
 
     return (
@@ -97,11 +89,14 @@ const PaymentStatus: React.FC = () => {
           <p className="text-gray-600 mb-6">Your eBook is ready to download.</p>
 
           <div className="bg-gray-100 p-4 rounded-xl text-sm text-gray-700 mb-6">
-            <p><strong>Reference:</strong> {reference}</p>
+            <p>
+              <strong>Reference:</strong> {reference}
+            </p>
           </div>
 
           <button
             onClick={handleDownload}
+            disabled={downloading}
             className="inline-block bg-(--primary-color) text-white px-6 py-3 rounded-xl font-medium hover:opacity-90 transition"
           >
             Download eBook
@@ -117,7 +112,9 @@ const PaymentStatus: React.FC = () => {
       <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-emerald-50 to-cyan-50">
         <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md text-center border border-emerald-100">
           <CheckCircle2 className="mx-auto text-emerald-600 w-16 h-16 mb-4" />
-          <h1 className="text-2xl font-bold mb-2 text-emerald-700">Booking Confirmed!</h1>
+          <h1 className="text-2xl font-bold mb-2 text-emerald-700">
+            Booking Confirmed!
+          </h1>
           <p className="text-gray-600 mb-6">
             Your appointment is secured. We'll see you soon!
           </p>
@@ -125,20 +122,28 @@ const PaymentStatus: React.FC = () => {
           <div className="bg-emerald-50 p-5 rounded-2xl mb-6 text-left text-sm space-y-3">
             <div className="flex items-center gap-3">
               <Calendar className="w-5 h-5 text-emerald-600" />
-              <span><strong>Date:</strong> {new Date().toLocaleDateString()}</span>
+              <span>
+                <strong>Date:</strong> {new Date().toLocaleDateString()}
+              </span>
             </div>
             <div className="flex items-center gap-3">
               <Clock className="w-5 h-5 text-emerald-600" />
-              <span><strong>Time:</strong> Confirmed upon arrival</span>
+              <span>
+                <strong>Time:</strong> Confirmed upon arrival
+              </span>
             </div>
             <div className="flex items-center gap-3">
               <CreditCard className="w-5 h-5 text-emerald-600" />
-              <span><strong>Deposit:</strong> ₦5,000 paid</span>
+              <span>
+                <strong>Deposit:</strong> ₦5,000 paid
+              </span>
             </div>
           </div>
 
           <div className="bg-gray-100 p-4 rounded-xl text-sm text-gray-700 mb-6">
-            <p><strong>Booking ID:</strong> {reference}</p>
+            <p>
+              <strong>Booking ID:</strong> {reference}
+            </p>
           </div>
 
           <div className="flex gap-3 justify-center">

@@ -11,8 +11,11 @@ import ViewTestimonialModal from "../../modals/ViewTestimonialModal";
 import EditTestimonialModal, {
   type EditTestimonialProps,
 } from "../../modals/EditTestimonialModal";
+import { useNavigate } from "react-router-dom";
 
 export default function UploadTestimonial() {
+  const navigate = useNavigate();
+
   const [prevImage, setPrevImage] = React.useState<string | null>(null);
   const [creatingTestimonial, setCreatingTestimonial] = useState(false);
   const [loadingTestimonials, setLoadingTestimonials] = useState(false);
@@ -45,7 +48,7 @@ export default function UploadTestimonial() {
     errorMessage: "",
   });
 
-  const token = localStorage.getItem("authToken");
+  const token = localStorage.getItem("token");
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -97,7 +100,7 @@ export default function UploadTestimonial() {
     try {
       const formdata = new FormData();
       const baseUrl = import.meta.env.VITE_API_BASE_URL;
-      const token = localStorage.getItem("authToken");
+      const token = localStorage.getItem("token");
       formdata.append("full_name", testimonialDetails.full_name);
       formdata.append("image", testimonialDetails.image);
       formdata.append(
@@ -148,7 +151,7 @@ export default function UploadTestimonial() {
     setLoadingTestimonials(true);
     try {
       const baseUrl = import.meta.env.VITE_API_BASE_URL;
-      const token = localStorage.getItem("authToken");
+      const token = localStorage.getItem("token");
       const res = await fetch(
         `${baseUrl}/testimonials?page=${currentPageFromApi}`,
         {
@@ -190,7 +193,7 @@ export default function UploadTestimonial() {
     setDeletingTestimonials(true);
     try {
       const baseUrl = import.meta.env.VITE_API_BASE_URL;
-      const token = localStorage.getItem("authToken");
+      const token = localStorage.getItem("token");
       const res = await fetch(
         `${baseUrl}/testimonials/${selectedTestimonial?.id}`,
         {
@@ -228,7 +231,7 @@ export default function UploadTestimonial() {
     setLoadingView(true);
     try {
       const baseUrl = import.meta.env.VITE_API_BASE_URL;
-      const token = localStorage.getItem("authToken");
+      const token = localStorage.getItem("token");
       const res = await fetch(
         `${baseUrl}/testimonials/${selectedTestimonial?.id}`,
         {
@@ -245,6 +248,7 @@ export default function UploadTestimonial() {
         toast.error(`Failed to load contact. ${data.message}.`);
       }
     } catch (error: any) {
+      setIsViewOpen(false)
       if (
         error?.message?.includes("Unexpected token '<'") ||
         error?.message === "Failed to fetch"
@@ -272,7 +276,7 @@ export default function UploadTestimonial() {
 
     try {
       const baseUrl = import.meta.env.VITE_API_BASE_URL;
-      const token = localStorage.getItem("authToken");
+      const token = localStorage.getItem("token");
       const res = await fetch(
         `${baseUrl}/testimonials/${selectedTestimonial?.id}`,
         {
@@ -310,8 +314,14 @@ export default function UploadTestimonial() {
   };
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Please log in");
+      navigate("/login");
+      return;
+    }
     fetchTestimonials();
-  }, [token, currentPageFromApi]);
+  }, [token, navigate, currentPageFromApi]);
 
   return (
     <>

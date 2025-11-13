@@ -310,7 +310,7 @@ export default function Overview() {
               <label htmlFor="image">Image</label>
             <label
               htmlFor="image-upload"
-              className="block border-2 border-dashed border-(--primary-color) rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 transition"
+              className="block border-2 border-dashed border-[var(--primary-color)] rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 transition"
             >
               {imagePreview ? (
                 <img
@@ -320,7 +320,7 @@ export default function Overview() {
                 />
               ) : (
                 <div>
-                  <BiImageAlt className="mx-auto text-5xl text-(--primary-color) mb-2" />
+                  <BiImageAlt className="mx-auto text-5xl text-[var(--primary-color)] mb-2" />
                   <p className="text-sm">Click to upload image</p>
                 </div>
               )}

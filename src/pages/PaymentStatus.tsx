@@ -1,18 +1,52 @@
-// src/pages/PaymentStatus.tsx
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
+import { toast } from "sonner";
 import { CheckCircle2, XCircle, Calendar, Clock, CreditCard } from "lucide-react";
 
 const PaymentStatus: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [downloading, setDownloading] = useState(false);
 
   const queryParams = new URLSearchParams(location.search);
   const typeParam = queryParams.get("type");
   const status = queryParams.get("status");
   const reference = queryParams.get("reference");
+  
   const purchase_id = queryParams.get("purchase_id") || queryParams.get("booking");
+  
+  const handleDownload = async () => {
+    setDownloading(true);
+    const loading = toast.loading("Downloading ebook...");
+    try {
+      const res = await fetch(
+        `${
+          import.meta.env.VITE_API_BASE_URL
+        }/resources/files/WELLTHRIX.pdf?purchase_id=${purchase_id}`
+      );
 
+      let reqdata = await res.json();
+      console.log(reqdata);
+      window.open(reqdata.content, "_blank");
+      if (res.ok) {
+        const url = window.URL.createObjectURL(reqdata.content);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "E-book.pdf";
+        a.click();
+        window.URL.revokeObjectURL(url);
+      } else {
+        toast.error(reqdata.message);
+      }
+    } catch (error) {
+      console.log("Error occured while downloading e-book", error);
+      toast.error("Error occured while downloading e-book.", error.message);
+    } finally {
+      setDownloading(false);
+      toast.dismiss(loading);
+    }
+  };
+  
   useEffect(() => {
     if (!reference || !status) {
       navigate("/", { replace: true });

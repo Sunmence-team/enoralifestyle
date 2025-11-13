@@ -168,9 +168,9 @@ export default function BlogDetails() {
         <p className="text-gray-700 text-[16px] leading-relaxed whitespace-pre-line font-[Inter]! font-semibold! mb-4">
           {blog.short_description}
         </p>
-        <p className="text-gray-700 text-[16px] leading-relaxed whitespace-pre-line font-[Inter]!">
+        {/* <p className="text-gray-700 text-[16px] leading-relaxed whitespace-pre-line font-[Inter]!">
           {blog?.body?.content}
-        </p>
+        </p> */}
       </div>
 
       {/* Comment Section */}

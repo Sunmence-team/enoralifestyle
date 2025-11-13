@@ -339,7 +339,7 @@ const Home: React.FC = () => {
         </section>
 
         {/* ABOUT SECTION */}
-        <section className="relative w-full bg-white mt-10 lg:px-10 px-5 md:pb-60">
+        <section className="relative w-full bg-white mt-10 lg:px-10 px- md:pb-60">
           <div className="relative h-[350px] overflow-hidden rounded-[20px] md:block hidden">
             <img
               src={assets.newabout}
@@ -348,13 +348,13 @@ const Home: React.FC = () => {
             />
           </div>
 
-          <div className="md:absolute inset-0 h-max md:top-30 bottom-5 left-1/2 transform md:-translate-x-1/2 md:translate-y-10 bg-[#fff9f7] shadow-lg rounded-2xl w-full md:w-5/6 lg:w-5/6 p-6 md:p-10 text-center">
+          <div className="md:absolute inset-0 h-max md:top-30 bottom-5 left-1/2 transform md:-translate-x-1/2 md:translate-y-10 bg-[#fff9f7] md:shadow-lg md:rounded-2xl w-full md:w-5/6 lg:w-5/6 p-6 md:p-10 text-center">
             <h2 className="text-3xl md:text-4xl font-semibold mb-4">
               <span className="text-[#b23a8a] font-semibold">About</span>{" "}
               <span className="text-(--accent-color)">Us</span>
             </h2>
 
-            <div className="text-gray-700 leading-relaxed space-y-4 text-xs md:text-sm lg:text-base">
+            <div className="text-gray-700 leading-relaxed space-y-4 text-[15px] md:text-sm lg:text-base">
               <p className="font-[inter]">
                 At Enoralifestyle Spa, we believe self-care is not a luxury—it
                 is a lifestyle.

@@ -1,7 +1,6 @@
 // src/pages/Appointments.tsx
 import React, { useEffect, useState, useCallback } from "react";
-import { IoSearch, IoNotifications } from "react-icons/io5";
-import { MdFilterList } from "react-icons/md";
+import { IoNotifications } from "react-icons/io5";
 import { FaRegUserCircle } from "react-icons/fa";
 import DashboardTable from "./DashboardTable";
 import axios from "axios";
@@ -10,6 +9,7 @@ import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
+
 interface Booking {
   id: number;
   name: string;
@@ -18,7 +18,7 @@ interface Booking {
   booking_date: string;
   booking_time: string;
   notes?: string;
-  status: "pending" | "confirmed" | "attended";
+  status: "pending" | "confirmed" | "attended" | "cancelled";
   created_at: string;
   updated_at: string;
 }
@@ -26,19 +26,21 @@ interface Booking {
 const Appointments: React.FC = () => {
   const navigate = useNavigate();
 
-  // UI
+  // Filter states
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const hasActiveFilters = search || statusFilter || fromDate || toDate;
 
-  // Stats (for cards)
+  // Stats
   const [totalAppointment, setTotalAppointment] = useState("0");
   const [pending, setPending] = useState("0");
   const [completed, setCompleted] = useState("0");
-  const [Cancelled, setCancelled] = useState("0");
-
-  // Data
-  // const [stats, setStats] = useState<BookingStats | null>(null);
+  const [cancelled, setCancelled] = useState("0");
   const [statsLoading, setStatsLoading] = useState(true);
+
+  // Table
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [tableLoading, setTableLoading] = useState(true);
   const [total, setTotal] = useState(0);
@@ -73,13 +75,11 @@ const Appointments: React.FC = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       const statsData = data.data;
-      // setStats(statsData);
 
-      // Update card values
-      setTotalAppointment(String(statsData.total_bookings) ?? 0);
-      setPending(String(statsData.bookings_by_status.pending) ?? 0);
-      setCompleted(String(statsData.bookings_by_status.confirmed) ?? 0);
-      setCancelled(String(statsData.bookings_by_status.attended) ?? 0);
+      setTotalAppointment(String(statsData.total_bookings) ?? "0");
+      setPending(String(statsData.bookings_by_status.pending) ?? "0");
+      setCompleted(String(statsData.bookings_by_status.confirmed) ?? "0");
+      setCancelled(String(statsData.bookings_by_status.attended) ?? "0");
     } catch (err: any) {
       toast.error(err.response?.data?.message || "Failed to load stats");
       if (err.response?.status === 401) {
@@ -91,7 +91,7 @@ const Appointments: React.FC = () => {
     }
   }, [navigate]);
 
-  // === FETCH BOOKINGS (PAGINATED BY BACKEND) ===
+  // === FETCH BOOKINGS WITH FILTERS ===
   const fetchBookings = useCallback(
     async (page: number) => {
       const token = localStorage.getItem("token");
@@ -99,10 +99,18 @@ const Appointments: React.FC = () => {
 
       try {
         setTableLoading(true);
+
+        const params: any = { page, per_page: perPage };
+        if (search.trim()) params.search = search.trim();
+        if (statusFilter) params.status = statusFilter;
+        if (fromDate) params.from_date = fromDate;
+        if (toDate) params.to_date = toDate;
+
         const { data } = await axios.get(`${API_URL}/bookings`, {
-          params: { page, per_page: perPage },
+          params,
           headers: { Authorization: `Bearer ${token}` },
         });
+
         setBookings(data.data?.data || []);
         setTotal(data.data?.total || 0);
         setCurrentPage(page);
@@ -116,14 +124,22 @@ const Appointments: React.FC = () => {
         setTableLoading(false);
       }
     },
-    [navigate]
+    [navigate, search, statusFilter, fromDate, toDate]
   );
 
-  // === VIEW ===
+  const handleApplyFilters = () => fetchBookings(1);
+  const handleClearFilters = () => {
+    setSearch("");
+    setStatusFilter("");
+    setFromDate("");
+    setToDate("");
+    fetchBookings(1);
+  };
+
+  // === MODAL HANDLERS ===
   const handleView = async (booking: Booking) => {
     const token = localStorage.getItem("token");
     if (!token) return;
-
     try {
       const { data } = await axios.get(`${API_URL}/bookings/${booking.id}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -134,7 +150,6 @@ const Appointments: React.FC = () => {
     }
   };
 
-  // === EDIT ===
   const handleEdit = (booking: Booking) => setEditBooking({ ...booking });
 
   const saveEdit = async () => {
@@ -154,7 +169,6 @@ const Appointments: React.FC = () => {
     }
   };
 
-  // === DELETE ===
   const confirmDelete = async () => {
     if (!deleteId) return;
     const token = localStorage.getItem("token");
@@ -172,12 +186,6 @@ const Appointments: React.FC = () => {
     }
   };
 
-  // === AUTO-REFRESH STATS ===
-  useEffect(() => {
-    const interval = setInterval(fetchStats, 10_000);
-    return () => clearInterval(interval);
-  }, [fetchStats]);
-
   // === TABLE COLUMNS ===
   const columns = [
     { key: "id" as const, header: "ID" },
@@ -188,7 +196,7 @@ const Appointments: React.FC = () => {
       key: "booking_date" as const,
       header: "Date",
       render: (b: Booking) => (
-        <span className="font-bold! whitespace-nowrap text-[#901E76] ">
+        <span className="font-medium whitespace-nowrap" style={{ color: "var(--primary-color)" }}>
           {format(new Date(b.booking_date), "MMM dd, yyyy")}
         </span>
       ),
@@ -199,16 +207,39 @@ const Appointments: React.FC = () => {
       header: "Status",
       render: (b: Booking) => (
         <span
-          className={`px-4 py-2 rounded-lg text-sm font-bold ${b.status === "pending"
-            ? "bg-[#D9D9D9] text-black/50 border border-[#D9D9D9]/15"     // yellow for pending
-            : b.status === "confirmed"
-              ? "bg-[#DFF7EE]/80 border border-[#2F5318]/15 text-[#065F46]"     // green for confirmed
-              : b.status === "attended"
-                ? "bg-[#BFDBFE] text-[#1E3A8A]"     // blue for attended
+          className="px-3 py-1.5 rounded-full text-xs font-medium border"
+          style={{
+            backgroundColor:
+              b.status === "pending"
+                ? "var(--pending-bg)"
+                : b.status === "confirmed"
+                ? "var(--another-green)"
+                : b.status === "attended"
+                ? "#dbeafe"
                 : b.status === "cancelled"
-                  ? "bg-[#EAC4C2]/80 text-[#D1503D] border border-[#E73A3A]/15"     // red for cancelled
-                  : "bg-gray-200 text-gray-700"
-            }`}
+                ? "var(--transparent-red)"
+                : "#f3f4f6",
+            color:
+              b.status === "pending"
+                ? "var(--pending-color)"
+                : b.status === "confirmed"
+                ? "var(--completed-color)"
+                : b.status === "attended"
+                ? "#1e40af"
+                : b.status === "cancelled"
+                ? "var(--cancelled-color)"
+                : "#4b5563",
+            borderColor:
+              b.status === "pending"
+                ? "#d9d9d9"
+                : b.status === "confirmed"
+                ? "#2f5318"
+                : b.status === "attended"
+                ? "#3b82f6"
+                : b.status === "cancelled"
+                ? "#dc2626"
+                : "#d1d5db",
+          }}
         >
           {b.status.charAt(0).toUpperCase() + b.status.slice(1)}
         </span>
@@ -218,69 +249,140 @@ const Appointments: React.FC = () => {
   ];
 
   return (
-    <div className="w-full flex flex-col space-y-3">
+    <div className="w-full space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center w-full">
-        <h2 className="font-bold text-2xl">Appointments</h2>
-        <div className="flex space-x-3">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h1 className="text-2xl md:text-3xl font-bold" style={{ color: "var(--accent-color)" }}>
+          Appointments
+        </h1>
+
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
+            <IoNotifications size={22} style={{ color: "var(--primary-color)" }} />
+          </div>
+          <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
+            <FaRegUserCircle size={22} style={{ color: "var(--primary-color)" }} />
+          </div>
+        </div>
+      </div>
+
+      {/* FILTER BAR */}
+      <div
+        className="rounded-2xl p-5 shadow-sm border"
+        style={{
+          backgroundColor: "var(--secondary-color)",
+          borderColor: "var(--pink-color)",
+        }}
+      >
+        <div className="flex flex-col lg:flex-row gap-4 items-stretch lg:items-center">
+          <input
+            type="text"
+            placeholder="Search by name, email, or phone..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="flex-1 px-5 py-3.5 text-base rounded-xl focus:outline-none focus:ring-2 transition"
+            style={{
+              backgroundColor: "white",
+              border: "1px solid var(--pink-color)",
+              color: "var(--accent-color)",
+            }}
+          />
+
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="px-5 py-3.5 text-base rounded-xl focus:outline-none focus:ring-2 transition"
+            style={{
+              backgroundColor: "white",
+              border: "1px solid var(--pink-color)",
+              color: "var(--accent-color)",
+            }}
+          >
+            <option value="">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="attended">Attended</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+
           <div className="flex gap-2">
-            <div className="flex items-center border rounded-full p-2 md:border-(--primary-color)/30 bg-white">
-              <input
-                type="text"
-                placeholder="Search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="hidden md:flex flex-1 outline-none px-1 bg-transparent"
-              />
-              <IoSearch size={20} className="text-gray-500" />
-            </div>
-            <div className="flex items-center border rounded-full p-2 md:border-(--primary-color)/30 bg-white">
-              <input
-                type="text"
-                placeholder="Filter"
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-                className="hidden md:flex flex-1 outline-none px-1 bg-transparent"
-              />
-              <MdFilterList size={20} className="text-gray-500" />
-            </div>
+            <input
+              type="date"
+              value={fromDate}
+              onChange={(e) => setFromDate(e.target.value)}
+              className="px-4 py-3.5 text-sm rounded-xl focus:outline-none focus:ring-2 transition"
+              style={{
+                backgroundColor: "white",
+                border: "1px solid var(--pink-color)",
+                color: "var(--accent-color)",
+              }}
+            />
+            <input
+              type="date"
+              value={toDate}
+              onChange={(e) => setToDate(e.target.value)}
+              className="px-4 py-3.5 text-sm rounded-xl focus:outline-none focus:ring-2 transition"
+              style={{
+                backgroundColor: "white",
+                border: "1px solid var(--pink-color)",
+                color: "var(--accent-color)",
+              }}
+            />
           </div>
-          <div className="flex gap-3">
-            <div className="p-3 rounded-full bg-[var(--pink-color)]">
-              <IoNotifications size={25} className="text-(--primary-color)" />
-            </div>
-            <div className="p-3 rounded-full bg-[var(--pink-color)]">
-              <FaRegUserCircle size={25} className="text-(--primary-color)" />
-            </div>
+
+          <div className="flex gap-3 lg:ml-auto">
+            <button
+              onClick={handleApplyFilters}
+              className="px-6 py-3.5 font-medium rounded-xl text-white transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2"
+              style={{ backgroundColor: "var(--primary-color)" }}
+            >
+              Apply Filters
+            </button>
+            {hasActiveFilters && (
+              <button
+                onClick={handleClearFilters}
+                className="px-6 py-3.5 font-medium rounded-xl border transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2"
+                style={{
+                  borderColor: "var(--pink-color)",
+                  color: "var(--primary-color)",
+                }}
+              >
+                Clear
+              </button>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Stats Cards - YOUR DESIGN */}
-      <div className='grid grid-cols-1 md:grid-cols-4 gap-4 mt-3'>
-        <div className='bg-(--primary-color) text-white p-6 rounded-xl flex flex-col items-start justify-center h-26'>
-          <span className='text-sm'>Total Appointment</span>
-          <p className='text-2xl font-[Raleway]! font-bold!'>{statsLoading ? "..." : (totalAppointment ?? 0)}</p>
-        </div>
-
-        <div className='bg-[#ffff] p-6 rounded-xl flex flex-col items-start justify-center h-26'>
-          <span className='text-sm text-gray-500'>Pending</span>
-          <p className='text-2xl font-[Raleway]! font-bold! text-[#00382B]'>{statsLoading ? "..." : (pending ?? 0)}</p>
-        </div>
-
-        <div className='bg-[var(--color-green)] p-6 rounded-xl flex flex-col items-start justify-center h-26'>
-          <span className='text-sm text-black'>Completed</span>
-          <p className='text-2xl font-[Raleway]! font-bold! text-black'>{statsLoading ? "..." : (completed ?? 0)}</p>
-        </div>
-
-        <div className='bg-[var(--cancelled-color)] p-6 rounded-xl flex flex-col items-start justify-center h-26'>
-          <span className='text-sm text-black'>Cancelled</span>
-          <p className='text-2xl font-[Raleway]! font-bold! text-black'>{statsLoading ? "..." : (Cancelled ?? 0)}</p>
-        </div>
+      {/* STATS CARDS */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {[
+          { label: "Total", value: totalAppointment, bg: "var(--primary-color)", text: "white" },
+          { label: "Pending", value: pending, bg: "white", text: "#00382B", border: true },
+          { label: "Completed", value: completed, bg: "var(--color-green)", text: "black" },
+          { label: "Cancelled", value: cancelled, bg: "var(--cancelled-color)", text: "black" },
+        ].map((stat, i) => (
+          <div
+            key={i}
+            className={`p-6 rounded-2xl flex flex-col justify-center shadow-sm transition hover:shadow-md ${
+              stat.border ? "border" : ""
+            }`}
+            style={{
+              backgroundColor: stat.bg,
+              color: stat.text,
+              borderColor: stat.border ? "var(--pink-color)" : undefined,
+            }}
+          >
+            <span className="text-sm opacity-90">{stat.label}</span>
+            <p className="text-3xl font-bold mt-1">
+              {statsLoading ? "..." : stat.value}
+            </p>
+          </div>
+        ))}
       </div>
 
-      {/* Table with Backend Pagination */}
-      <div>
+      {/* TABLE */}
+      <div className="bg-white rounded-2xl shadow-sm border" style={{ borderColor: "var(--pink-color)" }}>
         <DashboardTable
           data={bookings}
           columns={columns}
@@ -295,11 +397,13 @@ const Appointments: React.FC = () => {
         />
       </div>
 
-      {/* VIEW MODAL */}
+      {/* === MODALS (Professional & Branded) === */}
       {viewBooking && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-lg w-full max-h-screen overflow-y-auto">
-            <h3 className="text-xl font-bold mb-4">Booking Details</h3>
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl">
+            <h3 className="text-xl font-bold mb-4" style={{ color: "var(--accent-color)" }}>
+              Booking Details
+            </h3>
             <div className="space-y-3 text-sm">
               <p><strong>Name:</strong> {viewBooking.name}</p>
               <p><strong>Email:</strong> {viewBooking.email}</p>
@@ -311,7 +415,8 @@ const Appointments: React.FC = () => {
             </div>
             <button
               onClick={() => setViewBooking(null)}
-              className="mt-6 w-full bg-(--primary-color) text-white py-2 rounded-lg"
+              className="mt-6 w-full py-3 rounded-xl text-white font-medium transition hover:opacity-90"
+              style={{ backgroundColor: "var(--primary-color)" }}
             >
               Close
             </button>
@@ -319,34 +424,55 @@ const Appointments: React.FC = () => {
         </div>
       )}
 
-      {/* EDIT MODAL */}
       {editBooking && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-lg w-full">
-            <h3 className="text-xl font-bold mb-4">Edit Booking</h3>
-            <div className="space-y-3">
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl">
+            <h3 className="text-xl font-bold mb-4" style={{ color: "var(--accent-color)" }}>
+              Edit Booking
+            </h3>
+            <div className="space-y-4">
               <input
                 type="text"
                 value={editBooking.name}
                 onChange={(e) => setEditBooking({ ...editBooking, name: e.target.value })}
-                className="w-full p-2 border rounded"
+                className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2"
+                style={{
+                  borderColor: "var(--pink-color)",
+                  ringColor: "var(--primary-color)",
+                }}
                 placeholder="Name"
               />
               <select
                 value={editBooking.status}
                 onChange={(e) => setEditBooking({ ...editBooking, status: e.target.value as any })}
-                className="w-full p-2 border rounded"
+                className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2"
+                style={{
+                  borderColor: "var(--pink-color)",
+                  ringColor: "var(--primary-color)",
+                }}
               >
                 <option value="pending">Pending</option>
                 <option value="confirmed">Confirmed</option>
                 <option value="attended">Attended</option>
+                <option value="cancelled">Cancelled</option>
               </select>
             </div>
             <div className="flex gap-3 mt-6">
-              <button onClick={saveEdit} className="flex-1 bg-(--primary-color) text-white py-2 rounded-lg">
+              <button
+                onClick={saveEdit}
+                className="flex-1 py-3 rounded-xl text-white font-medium transition hover:opacity-90"
+                style={{ backgroundColor: "var(--primary-color)" }}
+              >
                 Save
               </button>
-              <button onClick={() => setEditBooking(null)} className="flex-1 border py-2 rounded-lg">
+              <button
+                onClick={() => setEditBooking(null)}
+                className="flex-1 py-3 rounded-xl border font-medium transition hover:bg-gray-50"
+                style={{
+                  borderColor: "var(--pink-color)",
+                  color: "var(--primary-color)",
+                }}
+              >
                 Cancel
               </button>
             </div>
@@ -354,17 +480,30 @@ const Appointments: React.FC = () => {
         </div>
       )}
 
-      {/* DELETE CONFIRMATION */}
       {deleteId && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-sm w-full">
-            <h3 className="text-lg font-bold mb-3">Delete Booking?</h3>
-            <p className="text-sm text-gray-600 mb-6">This action cannot be undone.</p>
+          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl">
+            <h3 className="text-lg font-bold mb-2" style={{ color: "var(--accent-color)" }}>
+              Delete Booking?
+            </h3>
+            <p className="text-sm mb-6" style={{ color: "var(--accent-color)" }}>
+              This action cannot be undone.
+            </p>
             <div className="flex gap-3">
-              <button onClick={confirmDelete} className="flex-1 bg-red-600 text-white py-2 rounded-lg">
+              <button
+                onClick={confirmDelete}
+                className="flex-1 py-3 rounded-xl bg-red-600 text-white font-medium transition hover:bg-red-700"
+              >
                 Delete
               </button>
-              <button onClick={() => setDeleteId(null)} className="flex-1 border py-2 rounded-lg">
+              <button
+                onClick={() => setDeleteId(null)}
+                className="flex-1 py-3 rounded-xl border font-medium transition hover:bg-gray-50"
+                style={{
+                  borderColor: "var(--pink-color)",
+                  color: "var(--primary-color)",
+                }}
+              >
                 Cancel
               </button>
             </div>
@@ -373,6 +512,6 @@ const Appointments: React.FC = () => {
       )}
     </div>
   );
-}
+};
 
-export default Appointments
+export default Appointments;

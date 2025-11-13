@@ -245,47 +245,51 @@ const Reservation: React.FC = () => {
               {formik.touched.phone && formik.errors.phone && <div className="text-red-500 text-sm mt-1">{formik.errors.phone}</div>}
             </div>
 
-            {/* DATE & TIME */}
-            <div className="floating-label-group relative">
-              <input
-                type="date"
-                id="booking_date"
-                name="booking_date"
-                min={getTodayDate()}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.booking_date}
-                className="indent-3 text-base floating-label-input w-full h-[56px] rounded-md transition-all duration-200 outline-0 bg-[#d9d9d9]/15 border border-(--primary-color)/20"
-                placeholder=" "
-              />
-              <label htmlFor="booking_date" className="floating-label absolute top-1 text-(--accent-color) text-base pointer-events-none transition-all duration-200 left-3">
-                Booking Date
-              </label>
-              {formik.touched.booking_date && formik.errors.booking_date && (
-                <div className="text-red-500 text-sm mt-1">{formik.errors.booking_date}</div>
-              )}
-            </div>
+{/* DATE FIELD */}
+<div className="relative">
+  <input
+    type={formik.values.booking_date ? "date" : "text"}
+    id="booking_date"
+    name="booking_date"
+    min={getTodayDate()}
+    onFocus={(e) => (e.target.type = "date")}
+    onBlur={(e) => {
+      if (!formik.values.booking_date) e.target.type = "text";
+      formik.handleBlur(e);
+    }}
+    onChange={formik.handleChange}
+    value={formik.values.booking_date}
+    className="indent-3 text-base h-[56px] w-full rounded-md transition-all duration-200 outline-0 bg-[#d9d9d9]/15 border border-(--primary-color)/20 text-gray-800 placeholder-gray-500"
+    placeholder="Booking Date (mm-dd-yy)"
+  />
+  {formik.touched.booking_date && formik.errors.booking_date && (
+    <div className="text-red-500 text-sm mt-1">{formik.errors.booking_date}</div>
+  )}
+</div>
 
-            <div className="floating-label-group relative">
-              <input
-                type="time"
-                id="booking_time"
-                name="booking_time"
-                min="09:00"
-                max="17:59"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.booking_time}
-                className="indent-3 text-base floating-label-input w-full h-[56px] rounded-md transition-all duration-200 outline-0 bg-[#d9d9d9]/15 border border-(--primary-color)/20"
-                placeholder=" "
-              />
-              <label htmlFor="booking_time" className="floating-label absolute top-1 text-(--accent-color) text-base pointer-events-none transition-all duration-200 left-3">
-                Booking Time (9 AM – 6 PM)
-              </label>
-              {formik.touched.booking_time && formik.errors.booking_time && (
-                <div className="text-red-500 text-sm mt-1">{formik.errors.booking_time}</div>
-              )}
-            </div>
+{/* TIME FIELD */}
+<div className="relative">
+  <input
+    type={formik.values.booking_time ? "time" : "text"}
+    id="booking_time"
+    name="booking_time"
+    min="09:00"
+    max="17:59"
+    onFocus={(e) => (e.target.type = "time")}
+    onBlur={(e) => {
+      if (!formik.values.booking_time) e.target.type = "text";
+      formik.handleBlur(e);
+    }}
+    onChange={formik.handleChange}
+    value={formik.values.booking_time}
+    className="indent-3 text-base h-[56px] w-full rounded-md transition-all duration-200 outline-0 bg-[#d9d9d9]/15 border border-(--primary-color)/20 text-gray-800 placeholder-gray-500"
+    placeholder="Booking Time (hh:mm AM/PM)"
+  />
+  {formik.touched.booking_time && formik.errors.booking_time && (
+    <div className="text-red-500 text-sm mt-1">{formik.errors.booking_time}</div>
+  )}
+</div>
+
 
             {/* NOTES */}
             <div className="floating-label-group relative md:col-span-2">

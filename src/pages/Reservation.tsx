@@ -246,13 +246,23 @@ const Reservation: React.FC = () => {
             </div>
 
 {/* DATE FIELD */}
+{/* DATE FIELD */}
 <div className="relative">
   <input
     type={formik.values.booking_date ? "date" : "text"}
     id="booking_date"
     name="booking_date"
     min={getTodayDate()}
-    onFocus={(e) => (e.target.type = "date")}
+    onFocus={(e) => {
+      e.target.type = "date";
+      e.target.showPicker?.(); // ensures date picker opens immediately
+    }}
+    onClick={(e) => {
+      if (e.target.type !== "date") {
+        e.target.type = "date";
+        e.target.showPicker?.();
+      }
+    }}
     onBlur={(e) => {
       if (!formik.values.booking_date) e.target.type = "text";
       formik.handleBlur(e);
@@ -275,7 +285,16 @@ const Reservation: React.FC = () => {
     name="booking_time"
     min="09:00"
     max="17:59"
-    onFocus={(e) => (e.target.type = "time")}
+    onFocus={(e) => {
+      e.target.type = "time";
+      e.target.showPicker?.(); // open immediately
+    }}
+    onClick={(e) => {
+      if (e.target.type !== "time") {
+        e.target.type = "time";
+        e.target.showPicker?.();
+      }
+    }}
     onBlur={(e) => {
       if (!formik.values.booking_time) e.target.type = "text";
       formik.handleBlur(e);
@@ -289,6 +308,7 @@ const Reservation: React.FC = () => {
     <div className="text-red-500 text-sm mt-1">{formik.errors.booking_time}</div>
   )}
 </div>
+
 
 
             {/* NOTES */}
@@ -348,7 +368,7 @@ const Reservation: React.FC = () => {
       {showPaymentModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
           <div
-            className="bg-white rounded-3xl shadow-2xl w-full max-w-md h-[80vh] flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200"
+            className="bg-white rounded-3xl shadow-2xl w-full max-w-md h-[55vh] md:h-[80vh] flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}

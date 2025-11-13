@@ -114,7 +114,7 @@ const Services = () => {
                 placeholder="Min"
                 value={minPrice}
                 onChange={(e) => setMinPrice(e.target.value)}
-                className="md:w-28 w-1/2 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border focus:border-(--primary-color) transition"
+                className="lg:w-28 w-1/2 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border focus:border-(--primary-color) transition"
                 style={{
                   backgroundColor: "white",
                   border: "1px solid var(--pink-color)",
@@ -127,7 +127,7 @@ const Services = () => {
                 placeholder="Max"
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(e.target.value)}
-                className="md:w-28 w-1/2 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border focus:border-(--primary-color) transition"
+                className="lg:w-28 w-1/2 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border focus:border-(--primary-color) transition"
                 style={{
                   backgroundColor: "white",
                   border: "1px solid var(--pink-color)",
@@ -140,7 +140,7 @@ const Services = () => {
             <div className="flex gap-3 lg:ml-auto">
               <button
                 onClick={handleApplyFilters}
-                className="px-6 py-3.5 font-medium rounded-lg text-white transition hover:opacity-90 focus:outline-none focus:border focus:border-(--primary-color) focus:ring-offset-2 md:w-max w-full"
+                className="px-6 py-3.5 font-medium rounded-lg text-white transition hover:opacity-90 focus:outline-none focus:border focus:border-(--primary-color) focus:ring-offset-2 lg:w-max  md:w-1/2 mx-auto w-full"
                 style={{
                   backgroundColor: "var(--primary-color)",
                 }}

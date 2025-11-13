@@ -118,7 +118,7 @@ const Packages: React.FC = () => {
                 placeholder="Min"
                 value={minPrice}
                 onChange={(e) => setMinPrice(e.target.value)}
-                className="md:w-28 w-full px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border focus:border-(--primary-color) transition"
+                className="lg:w-28 w-full px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border focus:border-(--primary-color) transition"
                 style={{
                   backgroundColor: "white",
                   border: "1px solid var(--pink-color)",
@@ -131,7 +131,7 @@ const Packages: React.FC = () => {
                 placeholder="Max"
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(e.target.value)}
-                className="md:w-28 w-full px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border focus:border-(--primary-color) transition"
+                className="lg:w-28 w-full px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border focus:border-(--primary-color) transition"
                 style={{
                   backgroundColor: "white",
                   border: "1px solid var(--pink-color)",
@@ -144,7 +144,7 @@ const Packages: React.FC = () => {
             <div className="flex gap-3 lg:ml-auto">
               <button
                 onClick={handleApplyFilters}
-                className="md:w-max w-full px-6 py-3.5 font-medium rounded-lg text-white transition hover:opacity-90 focus:outline-none focus:border focus:border-(--primary-color) focus:ring-offset-2"
+                className="lg:w-max md:w-1/2 mx-auto w-full px-6 py-3.5 font-medium rounded-lg text-white transition hover:opacity-90 focus:outline-none focus:border focus:border-(--primary-color) focus:ring-offset-2"
                 style={{
                   backgroundColor: "var(--primary-color)",
                 }}

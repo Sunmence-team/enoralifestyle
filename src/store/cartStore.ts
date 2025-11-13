@@ -5,7 +5,7 @@ interface Package {
   id: string;
   title: string;
   price: number;
-  image?: string; // Optional, matches your usage
+  image?: string;
   quantity?: number; // Added quantity property
 }
 

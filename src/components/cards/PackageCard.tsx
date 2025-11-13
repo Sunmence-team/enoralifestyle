@@ -67,27 +67,28 @@ const PackageCard = (item: PackageCardProps) => {
             Price: {formatterUtility(Number(item.price))}
           </p>
 
-          <div className="flex gap-3 mt-auto">
+          <div className="flex items-center gap-3 mt-auto justify-center w-full">
             {/* Add to Cart Button */}
             <button
               onClick={handleAddToCart}
-              className="cursor-pointer flex items-center justify-center gap-2 bg-(--primary-color) hover:bg-(--primary-color) text-white font-medium px-3 py-3 rounded-sm transition-colors duration-200 shadow-sm"
+              className="md:w-max w-1/2 cursor-pointer flex items-center justify-center gap-2 bg-(--primary-color) hover:bg-(--primary-color) text-white font-medium md:px-3 px-1 py-3 rounded-sm transition-colors duration-200 shadow-sm"
             >
-              <FiShoppingCart className="w-5 h-5" />
+              <FiShoppingCart className="md:size-5 size-4" />
               Add to Cart
             </button>
 
             {/* View Details Button */}
             <button
-              className="cursor-pointer flex items-center justify-center gap-1 bg-transparent text-(--primary-color) font-medium px-3 py-3 transition-colors duration-200 border border-(--primary-color)"
+              className="md:w-max w-1/2 cursor-pointer flex items-center justify-center gap-1 bg-transparent text-(--primary-color) font-medium md:px-3 px-1 py-3 transition-colors duration-200 border border-(--primary-color)"
               onClick={() => setSelectedPackage(item)}
             >
               View Details
-              <FiArrowRight className="w-4 h-4 ml-1" />
+              <FiArrowRight className="md:size-4 size-3 ml-1" />
             </button>
           </div>
         </div>
       </div>
+
       {selectedPackage && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-5">
           <div className="bg-white rounded-3xl max-w-lg w-full relative shadow-2xl overflow-hidden animate-fadeIn">

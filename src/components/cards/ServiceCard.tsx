@@ -67,8 +67,8 @@ const ServiceCard = (item: ServiceCardProps) => {
                             onClick={handleAddToCart}
                             className="w-1/2 cursor-pointer flex items-center justify-center gap-2 bg-(--primary-color) hover:bg-(--primary-color) text-white font-medium md:px-3 px-1 py-3 rounded-sm transition-colors duration-200 shadow-sm"
                         >
-                        <FiShoppingCart className="md:size-5 size-4" />
-                        Add to Cart
+                            <FiShoppingCart className="md:size-5 size-4" />
+                            Add to Cart
                         </button>
 
                         {/* View Details Button */}
@@ -76,8 +76,8 @@ const ServiceCard = (item: ServiceCardProps) => {
                             className="w-1/2 cursor-pointer flex items-center justify-center gap-1 bg-transparent text-(--primary-color) font-medium md:px-3 px-1 py-3 transition-colors duration-200 border border-(--primary-color)"
                             onClick={() => setSelectedService(item)}
                         >
-                        View Details
-                        <FiArrowRight className="md:size-4 size-3 ml-1" />
+                            View Details
+                            <FiArrowRight className="md:size-4 size-3 ml-1" />
                         </button>
                     </div>
                 </div>

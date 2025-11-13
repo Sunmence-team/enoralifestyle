@@ -313,7 +313,10 @@ const Reservation: React.FC = () => {
             <div className="max-h-64 overflow-y-auto pr-2 space-y-2 text-base">
               {items.map((i) => (
                 <div key={i.id} className="flex justify-between">
-                  <span className="font-medium">{i.title}</span>
+                  <div className="">
+                    <span className="font-medium!">{i.title}</span>
+                    &nbsp;&nbsp;&nbsp;<span className="text-(--primary-color) font-medium! font-[Inter]!">X {i.quantity}</span>
+                  </div>
                   <span>₦{i.price.toLocaleString()}</span>
                 </div>
               ))}
@@ -368,7 +371,10 @@ const Reservation: React.FC = () => {
               <div className="space-y-3">
                 {items.map((i) => (
                   <div key={i.id} className="flex justify-between text-base">
-                    <span>{i.title}</span>
+                    <div className="">
+                      <span>{i.title}</span>
+                      X<span>{i.quantity}</span>
+                    </div>
                     <span className="font-medium">₦{i.price.toLocaleString()}</span>
                   </div>
                 ))}

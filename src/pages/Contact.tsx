@@ -15,7 +15,7 @@ const Contact = () => {
 
       <div className='text-center mt-8'>
         <h2 className='text-[30px] md:text-[50px] font-bold'>Reach out to Us anytime</h2>
-        <p className='font-semibold translate-x-3'>Feel free to ask us any questions</p>
+        <p className='font-semibold '>Feel free to ask us any questions</p>
 
       </div>
       <div className='flex flex-col gap-6 items-center justify-center h-[50vh] '>

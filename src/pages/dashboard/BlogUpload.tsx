@@ -18,7 +18,7 @@ export default function UploadBlog() {
       setImage(URL.createObjectURL(file));
     }
   };
-
+  
   return (
     <div>
       <div className='flex justify-between items-center w-full mb-3'>

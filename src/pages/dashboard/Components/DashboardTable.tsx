@@ -77,9 +77,9 @@ export default function DashboardTable() {
                                 </td>
                                 <td className="py-4 px-6">
                                     <span
-                                        className={`${appt.status === 'Completed' ? 'bg-(--another-green) text-(--completed-color) p-1 rounded-md pr-2 pl-2 ' :
-                                        appt.status === 'Cancelled' ? 'bg-(--transparent-red) text-(--cancelled-color) p-1 pr-2 pl-2  rounded-md' :
-                                            appt.status === 'Pending' ? 'bg-(--pending-bg) text-(--pending-color) p-1 pr-2 pl-2  rounded-md' : ''
+                                        className={`${appt.status === 'Completed' ? 'bg-(--another-green) text-[var(--completed-color)] p-1 rounded-md pr-2 pl-2 ' :
+                                        appt.status === 'Cancelled' ? 'bg-(--transparent-red) text-[var(--cancelled-color)] p-1 pr-2 pl-2  rounded-md' :
+                                            appt.status === 'Pending' ? 'bg-(--pending-bg) text-[var(--pending-color)] p-1 pr-2 pl-2  rounded-md' : ''
 
                                     }`}
                                     >

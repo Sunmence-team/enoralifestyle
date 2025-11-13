@@ -62,7 +62,7 @@ export default function Appointments() {
                 placeholder="filter"
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
-                className="hidden md:flex flex-1 outline-none px-1 bg-transparent"
+                className="hidden md:flex fle outline-none px-1 bg-transparent"
               />
               <MdFilterList size={20} className="text-gray-500" />
             </div>

@@ -53,10 +53,7 @@ const App: React.FC = () => {
           path="/reservation"
           element={<MainLayout children={<Reservation />} />}
         />
-        <Route
-          path="/payment-status"
-          element={<MainLayout children={<PaymentStatus />} />}
-        />
+       
 
         {/* Blog details route WITHOUT navbar */}
         <Route path="/blog/:id" element={<BlogDetails />} />
@@ -86,7 +83,11 @@ const App: React.FC = () => {
           path="/dashboard/testimonial"
           element={<DashboardLayout children={<UploadTestimonial />} />}
         />
+        <Route path="/payment-status" element={<PaymentStatus />} />
+
       </Routes>
+
+       
     </>
   );
 };

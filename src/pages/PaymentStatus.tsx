@@ -61,14 +61,8 @@ const PaymentStatus: React.FC = () => {
         );
 
         let reqdata = await res.json();
-        console.log(reqdata);
         if (res.ok) {
-          const url = window.URL.createObjectURL(reqdata.content);
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = "E-book.pdf";
-          a.click();
-          window.URL.revokeObjectURL(url);
+          window.open(reqdata.download_url, "_blank");
         } else {
           toast.error(reqdata.message);
         }
@@ -97,7 +91,7 @@ const PaymentStatus: React.FC = () => {
           <button
             onClick={handleDownload}
             disabled={downloading}
-            className="inline-block bg-(--primary-color) text-white px-6 py-3 rounded-xl font-medium hover:opacity-90 transition"
+            className="inline-block bg-(--primary-color) text-white px-6 py-3 rounded-xl font-medium hover:opacity-90 transition cursor-pointer"
           >
             Download eBook
           </button>

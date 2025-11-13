@@ -438,7 +438,6 @@ const Appointments: React.FC = () => {
                 className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2"
                 style={{
                   borderColor: "var(--pink-color)",
-                  ringColor: "var(--primary-color)",
                 }}
                 placeholder="Name"
               />
@@ -448,7 +447,6 @@ const Appointments: React.FC = () => {
                 className="w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2"
                 style={{
                   borderColor: "var(--pink-color)",
-                  ringColor: "var(--primary-color)",
                 }}
               >
                 <option value="pending">Pending</option>

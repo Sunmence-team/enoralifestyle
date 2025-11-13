@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { assets } from "../assets/assests";
 import HeroSection from "../components/herosections/Herosection";
-import BlogCard from "../components/cards/Blogcard";
+import BlogCrd from "../components/cards/BlogCrd";
 import axios, { AxiosError } from "axios";
 import BlogCardSkeleton from "../components/skeletons/BlogCardSkeleton";
 
@@ -118,7 +118,7 @@ const Blog: React.FC = () => {
           {!loading && !error && blogs.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8">
               {blogs.map((blog) => (
-                <BlogCard
+                <BlogCrd
                   key={blog.id}
                   id={String(blog.id)}
                   title={blog.title}

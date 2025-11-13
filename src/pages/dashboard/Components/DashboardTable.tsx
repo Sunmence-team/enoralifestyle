@@ -70,11 +70,11 @@ export default function DashboardTable<T extends { id: number }>({
             {data.map((item, index) => (
               <tr
                 key={item.id}
-                className={`border-b hover:bg-gray-50 transition-colors duration-200 ${index % 2 === 0 ? "bg-white" : "bg-[#901E76]/20" // 👈 replace with your color code
+                className={`border-b hover:bg-gray-50 transition-colors duration-200 font-[Raleway]! ${index % 2 === 0 ? "bg-white" : "bg-[#901E76]/20" // 👈 replace with your color code
                   }`}
               >
                 {columns.map((col) => (
-                  <td key={col.key as string} className="py-4 px-6 align-middle">
+                  <td key={col.key as string} className="py-4 px-6 align-middle font-[Raleway]!">
                     {col.render ? (
                       col.render(item)
                     ) : col.key === "image" ? (
@@ -91,7 +91,7 @@ export default function DashboardTable<T extends { id: number }>({
                         }
                       />
                     ) : col.key === "actions" ? (
-                      <div className="flex justify-center space-x-5 text-[var(--primary-color)]">
+                      <div className="flex justify-center space-x-5 text-(--primary-color)">
                         {onView && (
                           <button
                             onClick={() => onView(item)}
@@ -155,7 +155,7 @@ export default function DashboardTable<T extends { id: number }>({
                 key={pageNum}
                 onClick={() => onPageChange?.(pageNum)}
                 className={`w-10 h-10 rounded-lg font-bold transition ${currentPage === pageNum
-                    ? "bg-[var(--primary-color)] text-white"
+                    ? "bg-(--primary-color) text-white"
                     : "text-gray-700 hover:bg-gray-200"
                   }`}
               >

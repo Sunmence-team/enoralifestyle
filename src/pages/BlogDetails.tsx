@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { GoArrowLeft } from "react-icons/go";
 import Footer from "../components/Footer";
+import { toast } from "sonner";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
@@ -41,7 +42,20 @@ export default function BlogDetails() {
   const [submitting, setSubmitting] = useState(false);
   const [loadingComments, setLoadingComments] = useState(true);
 
-  // Fetch blog
+  const fetchComments = async () => {
+    if (!id) return;
+    setLoadingComments(true);
+    try {
+      const res = await axios.get(`${API_URL}/blogs/${id}/comments`);
+      const data = res.data?.data || [];
+      setComments(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Failed to load comments: ", err);
+    } finally {
+      setLoadingComments(false);
+    }
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
     const fetchBlog = async () => {
@@ -57,35 +71,7 @@ export default function BlogDetails() {
     fetchBlog();
   }, [id]);
 
-  // FETCH COMMENTS
-  // const fetchComments = async () => {
-  //   if (!id) return;
-  //   setLoadingComments(true);
-  //   try {
-  //     const res = await axios.get(`${API_URL}/blogs/${id}/comments?per_page=20`);
-  //     const data = res.data?.data || [];
-  //     setComments(Array.isArray(data) ? data : []);
-  //   } catch (err) {
-  //     console.error("Failed to load comments");
-  //   } finally {
-  //     setLoadingComments(false);
-  //   }
-  // };
-
   useEffect(() => {
-    const fetchComments = async () => {
-      if (!id) return;
-      setLoadingComments(true);
-      try {
-        const res = await axios.get(`${API_URL}/blogs/${id}/comments`);
-        const data = res.data?.data || [];
-        setComments(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error("Failed to load comments");
-      } finally {
-        setLoadingComments(false);
-      }
-    };
     fetchComments();
   }, [id]);
 
@@ -96,15 +82,16 @@ export default function BlogDetails() {
 
     setSubmitting(true);
     try {
-      const res = await axios.post(`${API_URL}/blogs/${id}/comments`, {
+      await axios.post(`${API_URL}/blogs/${id}/comments`, {
         name: name.trim(),
         text: comment.trim(),
       });
-      setComments((prev) => [res.data.data, ...prev]);
+      fetchComments(); // Refetch comments
       setName("");
       setComment("");
     } catch (err: any) {
-      alert(err.response?.data?.message || "Failed to post comment");
+      toast.error(err.response?.data?.message || "Failed to post comment");
+      console.error("Failed to post comment: ", err);
     } finally {
       setSubmitting(false);
     }
@@ -124,7 +111,7 @@ export default function BlogDetails() {
         <p className="text-2xl text-red-600 mb-6">{error || "Blog not found"}</p>
         <button
           onClick={() => navigate("/blog")}
-          className="px-8 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:opacity-90 transition"
+          className="px-8 py-3 bg-(--primary-color) text-white rounded-lg hover:opacity-90 transition"
         >
           Back to Blogs
         </button>
@@ -138,7 +125,7 @@ export default function BlogDetails() {
       <div className="flex items-center gap-3 px-5 lg:px-10 pt-8">
         <button
           onClick={() => navigate("/blog")}
-          className="flex items-center gap-1 text-[var(--primary-color)] hover:text-black transition"
+          className="flex items-center gap-1 text-(--primary-color) hover:text-black transition"
         >
           <GoArrowLeft size={30} />
           <span className="font-medium text-lg"></span>
@@ -198,9 +185,9 @@ export default function BlogDetails() {
                     }
                   `}
                 </style>
-                {comments.map((c) => (
+                {comments.map((c, index) => (
                   <div
-                    key={c?.id}
+                    key={index+c?.id}
                     className="bg-white rounded-lg p-4 shadow-sm border border-gray-200"
                   >
                     <h4 className="font-medium! text-gray-900 font-[Inter]!">{c?.name}</h4>
@@ -225,7 +212,7 @@ export default function BlogDetails() {
                 placeholder="Full name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]/20 transition"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-(--primary-color)/20 transition"
                 required
               />
               <textarea
@@ -233,12 +220,12 @@ export default function BlogDetails() {
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 rows={4}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]/20 transition resize-none"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-(--primary-color)/20 transition resize-none"
                 required
               />
               <button
                 type="submit"
-                className="w-full bg-[var(--primary-color)] text-white font-medium py-3 rounded-lg hover:bg-opacity-90 transition"
+                className="w-full bg-(--primary-color) text-white font-medium py-3 rounded-lg hover:bg-opacity-90 transition"
                 disabled={submitting}
               >
                 {submitting ? "Posting..." : "Submit Comment"}

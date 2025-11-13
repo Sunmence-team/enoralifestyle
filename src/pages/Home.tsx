@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { BiSolidQuoteSingleLeft } from "react-icons/bi";
 import HeroSection from "../components/herosections/Herosection";
 import { IoIosArrowRoundForward } from "react-icons/io";
-import BlogCard from "../components/cards/Blogcard";
+import BlogCrd from "../components/cards/BlogCrd";
 import PackageCard from "../components/cards/PackageCard";
 import ServiceCard from "../components/cards/ServiceCard";
 import axios, { AxiosError } from "axios";
@@ -14,6 +14,7 @@ import BlogCardSkeleton from "../components/skeletons/BlogCardSkeleton";
 import ServiceCardSkeleton from "../components/skeletons/ServiceCardSkeleton";
 import PackageCardSkeleton from "../components/skeletons/PackageCardSkeleton";
 import TestimonialCardSkeleton from "../components/skeletons/TestimonialCardSkeleton";
+import type { testimonialProps } from "../utilities/sharedInterFaces";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
@@ -247,7 +248,6 @@ const Home: React.FC = () => {
         toast.success(
           "Payment initialize successfull, redirecting to pyment page..."
         );
-        toast.dismiss(loading);
         setIsModalOpen(false);
         // console.log(data);
         window.open(data.authorization_url, "_blank");
@@ -268,6 +268,7 @@ const Home: React.FC = () => {
       }
     } finally {
       setInitializingPayment(false);
+      toast.dismiss(loading);
     }
   };
 
@@ -291,27 +292,39 @@ const Home: React.FC = () => {
           </h1>
 
           <div className="mt-10 flex overflow-x-scroll gap-4 no-scrollbar pb-2">
-            {isLoadingBlogs
-              ? Array(5)
-                  .fill(0)
-                  .map((_, index) => (
-                    <div className="md:min-w-[340px] min-w-[320px]" key={index}>
-                      <BlogCardSkeleton />
-                    </div>
-                  ))
-              : !isLoadingBlogs &&
-                !error &&
-                blogs.length > 0 &&
-                blogs.slice(0, 6).map((blog, index) => (
+            {isLoadingBlogs ? (
+              Array(5)
+                .fill(0)
+                .map((_, index) => (
                   <div className="md:min-w-[340px] min-w-[320px]" key={index}>
-                    <BlogCard
-                      id={String(blog?.id)}
-                      title={blog?.title}
-                      description={blog?.short_description}
-                      image={`${IMAGE_URL}/${blog?.cover_image}`}
-                    />
+                    <BlogCardSkeleton />
                   </div>
-                ))}
+                ))
+            ) : !isLoadingBlogs && !error && blogs.length === 0 ? (
+              <div className="text-center pt-16 relative w-full">
+                <div className="bg-gray-100 w-24 h-24 rounded-full flex flex-col items-center justify-center mx-auto mb-6">
+                  <div className="absolute">
+                    <p className="text-xl text-gray-600 font-medium">
+                      No blogs available at the moment.
+                    </p>
+                    <p className="text-gray-500 mt-2">
+                      Check back soon for fresh content!
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              blogs.slice(0, 6).map((blog, index) => (
+                <div className="md:max-w-[340px] max-w-[320px]" key={index}>
+                  <BlogCrd
+                    id={String(blog?.id)}
+                    title={blog?.title}
+                    description={blog?.short_description}
+                    image={`${IMAGE_URL}/${blog?.cover_image}`}
+                  />
+                </div>
+              ))
+            )}
           </div>
 
           <div className="flex justify-end mt-10">
@@ -464,19 +477,19 @@ const Home: React.FC = () => {
 
         {/* EBOOK SECTION */}
         <section className="mt-10 lg:px-10 px-5 py-10 grid md:grid-cols-2 grid-cols-1 gap-10 items-center">
-          <div className="rounded-xl overflow-hidden md:h-80">
+          <div className="lg:flex hidden rounded-xl overflow-hidden h-[455px] w-[404px]">
             <img
               src={assets.ebook}
               alt="Weight loss hack for busy people"
-              className="h-full w-full object-cover object-top"
+              className="h-full w-full object-cover"
             />
           </div>
 
-          <div className="text">
+          <div className={`text bg-image-gradient`}>
             <h1 className="md:text-[48px] text-[30px] md:text-start text-center font-bold! text-(--accent-color) mb-3">
               Our <span className="text-(--primary-color)">Ebook</span>
             </h1>
-            <p className="md:text-start text-center font-[inter] text-sm">
+            <p className="md:text-start text-center font-[Inter]! text-sm">
               This course is designed to simplify weight loss cutting through
               the jargon and confusion, so you can achieve results that fit
               seamlessly into your busy lifestyle. With practical strategies,
@@ -533,18 +546,19 @@ const Home: React.FC = () => {
           </h1>
 
           {/* Scrollable container for sm & md; static grid on lg */}
-          <div className="flex gap-6 overflow-x-auto overflow-y-hidden lg:overflow-x-visible lg:justify-center pb-5 snap-x snap-mandatory lg:flex-row lg:flex-wrap">
+          <div className="flex gap-6 overflow-x-auto lg:overflow-y-visible overflow-y-hidden lg:overflow-x-visible lg:justify-center pb-5 snap-x snap-mandatory lg:flex-row lg:flex-wrap">
             {loadingTestimonials
-              ? [1, 2, 3].map((s, idx) => <TestimonialCardSkeleton key={idx} />)
-              : testimonials.length === 0
+              ? [1, 2, 3].map((_, idx) => <TestimonialCardSkeleton key={idx} />)
+              : testimonials.length < 3
               ? reviews.map((review, index) => (
                   <div
                     key={index}
                     className={`
-          flex flex-col flex-shrink-0 w-[300px] h-[360px] snap-center 
-          lg:flex-1 lg:min-w-[350px] lg:h-[380px]
-          transition-all duration-300
-        `}
+                        flex flex-col shrink-0 w-[300px] h-[360px] snap-center 
+                        lg:flex-1 lg:min-w-[350px] lg:h-[380px]
+                        transition-all duration-300
+                        ${index % 2 !== 0 && "lg:-translate-y-14"}
+                      `}
                   >
                     {/* Top section (review content) */}
                     <div className="border border-black/20 rounded-t-2xl px-4 py-8 flex-1 flex flex-col bg-white">
@@ -595,10 +609,11 @@ const Home: React.FC = () => {
                   <div
                     key={idx}
                     className={`
-          flex flex-col flex-shrink-0 w-[300px] h-[360px] snap-center 
-          lg:flex-1 lg:min-w-[350px] lg:h-[380px]
-          transition-all duration-300
-        `}
+                      flex flex-col shrink-0 w-[300px] h-[360px] snap-center 
+                      lg:flex-1 lg:min-w-[350px] lg:h-[380px]
+                      transition-all duration-300
+                      ${idx % 2 !== 0 && "lg:-translate-y-14"}
+                    `}
                   >
                     {/* Top section (review content) */}
                     <div className="border border-black/20 rounded-t-2xl px-4 py-8 flex-1 flex flex-col bg-white">
@@ -633,7 +648,7 @@ const Home: React.FC = () => {
                       }}
                     >
                       <div className="flex items-center gap-2">
-                        <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden flex-shrink-0">
+                        <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden shrink-0">
                           <img
                             src={`${import.meta.env.VITE_IMAGE_BASE_URL}/${
                               t.image

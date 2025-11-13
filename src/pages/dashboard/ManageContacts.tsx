@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import ConfirmModal from "../../modals/ConfirmDialog";
 import ViewContactModal from "../../modals/ViewContact";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 interface Contact {
   id: number;
   name: string;
@@ -14,6 +15,7 @@ interface Contact {
 }
 
 const ManageContacts: React.FC = () => {
+  const navigate = useNavigate();
   const [loadingContacts, setLoadingContacts] = useState(false);
   const [deletingContacts, setDeletingContacts] = useState(false);
   const [loadingView, setLoadingView] = useState(false);
@@ -24,8 +26,10 @@ const ManageContacts: React.FC = () => {
   const [isViewOpen, setIsViewOpen] = useState(false);
   const [currentPageFromApi, setCurrentPageFromApi] = useState(NaN);
   const [totalApiPages, setTotalApiPages] = useState(NaN);
-  const apiItemsPerPage = 1;
   const [totalPagesInArr, setTotalPagesInArr] = useState<number[]>([]);
+  const token = localStorage.getItem("token");
+  const apiItemsPerPage = 20;
+
   const fetchContacts = async () => {
     setLoadingContacts(true);
     try {
@@ -97,7 +101,7 @@ const ManageContacts: React.FC = () => {
     }
   };
 
-  const fetchSingleContact = async () => {
+  async function fetchSingleContact() {
     setLoadingView(true);
     try {
       const baseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -127,7 +131,7 @@ const ManageContacts: React.FC = () => {
     } finally {
       setLoadingView(false);
     }
-  };
+  }
 
   const handleViewContact = () => {
     setIsViewOpen(true);
@@ -135,8 +139,14 @@ const ManageContacts: React.FC = () => {
   };
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Please log in");
+      navigate("/login");
+      return;
+    }
     fetchContacts();
-  }, [currentPageFromApi]);
+  }, [token, navigate, currentPageFromApi]);
 
   return (
     <>
@@ -147,14 +157,11 @@ const ManageContacts: React.FC = () => {
             <div className="p-3 rounded-full bg-[var(--pink-color)]">
               <IoIosNotifications
                 size={25}
-                className="text-[var(--primary-color)]"
+                className="text-(--primary-color)"
               />
             </div>
             <div className="p-3 rounded-full bg-[var(--pink-color)]">
-              <FaRegUserCircle
-                size={25}
-                className="text-[var(--primary-color)]"
-              />
+              <FaRegUserCircle size={25} className="text-(--primary-color)" />
             </div>
           </div>
         </div>
@@ -174,7 +181,7 @@ const ManageContacts: React.FC = () => {
                 <th className="py-6 px-6 uppercase tracking-wider text-sm font-semibold text-gray-700">
                   Message
                 </th>
-                <th className="py-6 px-6 uppercase tracking-wider text-sm font-semibold text-gray-700">
+                <th className="py-6 px-6 uppercase tracking-wider text-sm text-center font-semibold text-gray-700">
                   Actions
                 </th>
               </tr>
@@ -214,21 +221,27 @@ const ManageContacts: React.FC = () => {
                 contacts.map((c, index) => (
                   <tr
                     key={index}
-                    className={`border-b hover:bg-gray-50 transition-colors duration-200 ${
+                    className={`border-b hover:bg-gray-50 font-[Raleway]! transition-colors duration-200 ${
                       index % 2 === 0 ? "bg-white" : "bg-[#901E76]/20"
                     }`}
                     onMouseOver={() => setSelectedContact(c)}
                   >
-                    <td className="py-4 px-6 align-middle">{index + 1}</td>
-                    <td className="py-4 px-6 align-middle">{c.name}</td>
-                    <td className="py-4 px-6 align-middle">{c.email}</td>
-                    <td className="py-4 px-6 align-middle">
-                      {c.message.slice(0, 170)}...
+                    <td className="py-4 px-6 font-[Raleway]! align-middle">
+                      {index + 1}
                     </td>
-                    <td className="py-4 px-6 align-middle">
-                      <div className="flex gap-3 justify-center text-[var(--primary-color)]">
+                    <td className="py-4 px-6 font-[Raleway]! align-middle">
+                      {c.name}
+                    </td>
+                    <td className="py-4 px-6 font-[Raleway]! align-middle">
+                      {c.email}
+                    </td>
+                    <td className="py-4 px-6 font-[Raleway]! align-middle">
+                      <p className="line-clamp-1">{c.message}</p>
+                    </td>
+                    <td className="py-4 px-6 font-[Raleway]! align-middle">
+                      <div className="flex gap-3 justify-center text-(--primary-color)">
                         <button
-                          className="cursor-pointer hover:bg-gray-200 p-2 rounded-md hover:text-[var(--primary-color)]"
+                          className="cursor-pointer hover:bg-gray-200 p-2 rounded-md hover:text-(--primary-color)"
                           onClick={handleViewContact}
                         >
                           <Eye size={18} />
@@ -245,48 +258,50 @@ const ManageContacts: React.FC = () => {
                 ))
               )}
             </tbody>
-            <tfoot>
-              <tr className="bg-white/60 h-[77px] border-t border-black/10">
-                {totalPagesInArr.length !== 0 && (
-                  <td className="py-4 px-6 text-center" colSpan={8}>
-                    <div className="flex gap-3 justify-center items-center">
-                      <button
-                        className="p-2 text-gray-600 hover:text-black cursor-pointer"
-                        disabled={currentPageFromApi === totalApiPages}
-                        onClick={() =>
-                          setCurrentPageFromApi(currentPageFromApi - 1)
-                        }
-                      >
-                        <FaAngleLeft />
-                      </button>
-                      {totalPagesInArr.map((t, idx) => (
+            {contacts.length === apiItemsPerPage ? (
+              <tfoot>
+                <tr className="bg-white/60 h-[77px] border-t border-black/10">
+                  {totalPagesInArr.length !== 0 && (
+                    <td className="py-4 px-6 text-center" colSpan={8}>
+                      <div className="flex gap-3 justify-center items-center">
                         <button
-                          key={idx}
-                          onClick={() => setCurrentPageFromApi(t)}
-                          className={`w-8 h-8 flex items-center justify-center font-bold ${
-                            t === currentPageFromApi
-                              ? "bg-[var(--primary-color)] text-white"
-                              : "bg-gray-300 text-gray-700"
-                          } cursor-pointer rounded-lg`}
+                          className="p-2 text-gray-600 hover:text-black cursor-pointer"
+                          disabled={currentPageFromApi === totalApiPages}
+                          onClick={() =>
+                            setCurrentPageFromApi(currentPageFromApi - 1)
+                          }
                         >
-                          {t}
+                          <FaAngleLeft />
                         </button>
-                      ))}
-                      <span className="text-gray-500">...</span>
-                      <button
-                        className="p-2 text-gray-600 hover:text-black cursor-pointer"
-                        disabled={currentPageFromApi === 1}
-                        onClick={() =>
-                          setCurrentPageFromApi(currentPageFromApi + 1)
-                        }
-                      >
-                        <FaAngleRight />
-                      </button>
-                    </div>
-                  </td>
-                )}
-              </tr>
-            </tfoot>
+                        {totalPagesInArr.map((t, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => setCurrentPageFromApi(t)}
+                            className={`w-8 h-8 flex items-center justify-center font-bold ${
+                              t === currentPageFromApi
+                                ? "bg-(--primary-color) text-white"
+                                : "bg-gray-300 text-gray-700"
+                            } cursor-pointer rounded-lg`}
+                          >
+                            {t}
+                          </button>
+                        ))}
+                        <span className="text-gray-500">...</span>
+                        <button
+                          className="p-2 text-gray-600 hover:text-black cursor-pointer"
+                          disabled={currentPageFromApi === 1}
+                          onClick={() =>
+                            setCurrentPageFromApi(currentPageFromApi + 1)
+                          }
+                        >
+                          <FaAngleRight />
+                        </button>
+                      </div>
+                    </td>
+                  )}
+                </tr>
+              </tfoot>
+            ) : null}
           </table>
         </div>
       </div>

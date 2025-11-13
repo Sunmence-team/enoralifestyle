@@ -62,7 +62,7 @@ const Navbar: React.FC = () => {
       <div className="made-container flex items-center justify-between w-full">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <img src={assets.logo} alt="Logo" className="w-12 h-12 md:w-14 md:h-14 object-cover" />
+          <img src={assets.logo} alt="Logo" className="w-12 h-12 md:w-16 md:h-16 object-cover" />
         </div>
 
         {/* Desktop Nav */}
@@ -116,7 +116,7 @@ const Navbar: React.FC = () => {
 
       {/* Mobile Sidebar */}
       <div
-        className={`fixed top-0 left-0 w-3/4 h-screen bg-white shadow-lg transform transition-transform duration-300 z-50 flex flex-col text-[15px] font-medium ${
+        className={`fixed top-0 left-0 w-3/4 h-dvh bg-white shadow-lg transform transition-transform duration-300 z-50 flex flex-col text-[15px] font-medium ${
           isOpen.sidebar ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -143,7 +143,7 @@ const Navbar: React.FC = () => {
 
       {/* Cart Drawer */}
       <div
-        className={`fixed top-0 right-0 lg:w-1/2 w-4/5 h-screen bg-white shadow-lg transform transition-transform duration-300 z-50 flex flex-col text-[15px] font-medium ${
+        className={`fixed top-0 right-0 lg:w-1/2 w-4/5 h-dvh bg-white shadow-lg transform transition-transform duration-300 z-50 flex flex-col text-[15px] font-medium ${
           isOpen.cart ? "translate-x-0" : "translate-x-full"
         }`}
       >

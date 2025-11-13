@@ -156,7 +156,7 @@ const Navbar: React.FC = () => {
 
       {/* Cart Drawer – Independent Scroll */}
       <div
-        className={`fixed top-0 right-0 lg:w-1/2 w-[90%] h-[100dvh] max-h-[100svh] bg-white shadow-lg transform transition-transform duration-300 z-50 flex flex-col text-[15px] font-medium ${
+        className={`fixed top-0 right-0 lg:w-1/2 w-[90%] h-dvh max-h-svh bg-white shadow-lg transform transition-transform duration-300 z-50 flex flex-col text-[15px] font-medium ${
           isOpen.cart ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -168,37 +168,51 @@ const Navbar: React.FC = () => {
         {/* Body with Independent Scroll */}
         <div className="flex-1 overflow-y-auto px-4 py-4">
           {items.length > 0 ? (
-            <div className="space-y-4">
-              {items.map((cartItem, index) => (
-                <CartCard key={index} {...cartItem} />
-              ))}
+            <div className="flex flex-col items-start justify-between h-full">
+              <div className="space-y-4 w-full">
+                {items.map((cartItem, index) => (
+                  <CartCard key={index} {...cartItem} />
+                ))}
+              </div>
+              <div className="flex items-center justify-center w-full md:gap-4 gap-2 my-3 pb-[env(safe-area-inset-bottom)]">
+                <button
+                  onClick={clearCart}
+                  className="bg-gray-400 py-3 md:px-4 px-2 md:text-base text-sm rounded-sm text-white md:w-full w-[50%] font-medium"
+                >
+                  Clear Cart
+                </button>
+                <Link
+                  to="/reservation"
+                  onClick={closeAll}
+                  className="bg-(--primary-color) py-3 md:px-4 px-2 md:text-base text-sm rounded-sm text-white w-full font-medium text-center"
+                >
+                  Proceed to Reservation
+                </Link>
+              </div>
             </div>
-            <div className="flex items-center justify-center gap-4 my-3 pb-[env(safe-area-inset-bottom)]">
-              <button
-                onClick={clearCart}
-                className="bg-gray-400 py-3 px-4 rounded-sm text-white w-full font-medium"
-              >
-                Clear Cart
-              </button>
+          ) : (
+            <div className="flex flex-col gap-4 items-center justify-center h-full">
+              <h3 className="text-(--accent-color) text-3xl font-semibold">No Item In Cart...</h3>
               <Link
-                to="/reservation"
+                to="/services"
+                className="bg-(--primary-color) py-2 px-4 rounded-sm text-white cursor-pointer"
                 onClick={closeAll}
-                className="bg-(--primary-color) py-3 px-4 rounded-sm text-white w-full font-medium text-center"
               >
-                Proceed to Reservation
+                Keep Shopping
               </Link>
             </div>
-          </div>
-        )}
+          )}
+        </div>
+        
+        {/* Overlay */}
       </div>
-
-      {/* Overlay */}
       {(isOpen.cart || isOpen.sidebar) && (
         <div
           className="fixed inset-0 bg-black/40 z-40 cursor-pointer"
           onClick={closeAll}
         />
       )}
+
     </nav>
   );
 };

@@ -152,12 +152,12 @@ export default function BlogDetails() {
 
       {/* Blog Content */}
       <div className="px-5 lg:px-10 py-10">
-        <p className="text-gray-700 text-[16px] leading-relaxed whitespace-pre-line font-[Inter]! font-semibold! mb-4">
+        {/* <p className="text-gray-700 text-[16px] leading-relaxed whitespace-pre-line font-[Inter]! font-semibold! mb-4">
           {blog.short_description}
-        </p>
-        {/* <p className="text-gray-700 text-[16px] leading-relaxed whitespace-pre-line font-[Inter]!">
-          {blog?.body?.content}
         </p> */}
+        <p className="text-gray-700 text-[16px] leading-relaxed whitespace-pre-line font-[Inter]!">
+          {blog?.body?.content}
+        </p>
       </div>
 
       {/* Comment Section */}

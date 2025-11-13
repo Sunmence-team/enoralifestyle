@@ -19,14 +19,13 @@ const usePaystackSuccess = () => {
 
     if (ref && status === "success") {
       clearCart();
-      // Clean URL
       window.history.replaceState({}, "", location.pathname);
     }
   }, [location, clearCart]);
 };
 
 const Navbar: React.FC = () => {
-  usePaystackSuccess(); // Runs on every page
+  usePaystackSuccess();
 
   const [isOpen, setIsOpen] = useState({ sidebar: false, cart: false });
   const [isScrolled, setIsScrolled] = useState(false);
@@ -47,11 +46,25 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Prevent background scroll when drawer is open
+  useEffect(() => {
+    if (isOpen.cart || isOpen.sidebar) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen.cart, isOpen.sidebar]);
+
   const handleLinkClick = () => {
     if (window.innerWidth < 1024) {
       setIsOpen({ sidebar: false, cart: false });
     }
   };
+
+  const closeAll = () => setIsOpen({ sidebar: false, cart: false });
 
   return (
     <nav
@@ -116,14 +129,14 @@ const Navbar: React.FC = () => {
 
       {/* Mobile Sidebar */}
       <div
-        className={`fixed top-0 left-0 w-3/4 h-dvh bg-white shadow-lg transform transition-transform duration-300 z-50 flex flex-col text-[15px] font-medium ${
+        className={`fixed top-0 left-0 w-3/4 h-screen bg-white shadow-lg transform transition-transform duration-300 z-50 flex flex-col text-[15px] font-medium ${
           isOpen.sidebar ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="w-full flex items-center justify-center border-b border-gray-200 py-5 shadow-sm">
           <img src={assets.logo} alt="Logo" className="w-20 h-20 object-contain" />
         </div>
-        <div className="flex flex-col items-center justify-start flex-1 gap-6 mt-10">
+        <div className="flex flex-col items-center justify-start flex-1 gap-6 mt-10 px-4">
           {navLinks.map((link) => (
             <NavLink
               key={link.path}
@@ -141,7 +154,7 @@ const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Cart Drawer */}
+      {/* Cart Drawer – Independent Scroll */}
       <div
         className={`fixed top-0 right-0 lg:w-1/2 w-[90%] h-[100dvh] max-h-[100svh] bg-white shadow-lg transform transition-transform duration-300 z-50 flex flex-col text-[15px] font-medium ${
           isOpen.cart ? "translate-x-0" : "translate-x-full"
@@ -152,9 +165,10 @@ const Navbar: React.FC = () => {
           <h3 className="text-2xl font-bold">Cart</h3>
         </div>
 
-        {items.length > 0 ? (
-          <div className="text-center pe-2 h-[calc(100%-78px)] flex flex-col justify-between">
-            <div className="flex flex-col items-center justify-start flex-1 gap-6 md:px-6 px-2 py-2 h-[calc(100vh-140px)] overflow-y-auto styled-scrollbar">
+        {/* Body with Independent Scroll */}
+        <div className="flex-1 overflow-y-auto px-4 py-4">
+          {items.length > 0 ? (
+            <div className="space-y-4">
               {items.map((cartItem, index) => (
                 <CartCard key={index} {...cartItem} />
               ))}
@@ -162,29 +176,18 @@ const Navbar: React.FC = () => {
             <div className="flex items-center justify-center gap-4 my-3 pb-[env(safe-area-inset-bottom)]">
               <button
                 onClick={clearCart}
-                className="bg-gray-400 py-3 px-3 md:px-4 rounded-sm text-white"
+                className="bg-gray-400 py-3 px-4 rounded-sm text-white w-full font-medium"
               >
                 Clear Cart
               </button>
               <Link
                 to="/reservation"
-                onClick={() => setIsOpen({ sidebar: false, cart: false })}
-                className="bg-(--primary-color) py-3 px-3 md:px-4 rounded-sm text-white"
+                onClick={closeAll}
+                className="bg-(--primary-color) py-3 px-4 rounded-sm text-white w-full font-medium text-center"
               >
                 Proceed to Reservation
               </Link>
             </div>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-4 items-center justify-center h-[50vh]">
-            <h3 className="text-(--accent-color) text-3xl font-semibold">No Item In Cart...</h3>
-            <Link
-              to="/services"
-              className="bg-(--primary-color) py-2 px-4 rounded-sm text-white cursor-pointer"
-              onClick={() => setIsOpen({ sidebar: false, cart: false })}
-            >
-              Keep Shopping
-            </Link>
           </div>
         )}
       </div>
@@ -193,7 +196,7 @@ const Navbar: React.FC = () => {
       {(isOpen.cart || isOpen.sidebar) && (
         <div
           className="fixed inset-0 bg-black/40 z-40 cursor-pointer"
-          onClick={() => setIsOpen({ sidebar: false, cart: false })}
+          onClick={closeAll}
         />
       )}
     </nav>

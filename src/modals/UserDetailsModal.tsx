@@ -46,7 +46,7 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
             <input
               type="text"
               required
-              className="w-full p-2 border rounded-md"
+              className="w-full p-2 border rounded-md font-[Inter]!"
               placeholder="Enter full name"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -58,7 +58,7 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
             <input
               type="email"
               required
-              className="w-full p-2 border rounded-md"
+              className="w-full p-2 border rounded-md font-[Inter]!"
               placeholder="Enter email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

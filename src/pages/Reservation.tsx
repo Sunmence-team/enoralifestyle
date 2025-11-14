@@ -253,18 +253,18 @@ const Reservation: React.FC = () => {
     id="booking_date"
     name="booking_date"
     min={getTodayDate()}
-    onFocus={(e) => {
-      e.target.type = "date";
-      e.target.showPicker?.(); // ensures date picker opens immediately
+    onFocus={(e: React.FocusEvent<HTMLInputElement>) => {
+      e.currentTarget.type = "date";
+      (e.currentTarget as any).showPicker?.(); // ensures date picker opens immediately
     }}
-    onClick={(e) => {
-      if (e.target.type !== "date") {
-        e.target.type = "date";
-        e.target.showPicker?.();
+    onClick={(e: React.MouseEvent<HTMLInputElement>) => {
+      if (e.currentTarget.type !== "date") {
+        e.currentTarget.type = "date";
+        (e.currentTarget as any).showPicker?.();
       }
     }}
-    onBlur={(e) => {
-      if (!formik.values.booking_date) e.target.type = "text";
+    onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+      if (!formik.values.booking_date) e.currentTarget.type = "text";
       formik.handleBlur(e);
     }}
     onChange={formik.handleChange}
@@ -285,18 +285,18 @@ const Reservation: React.FC = () => {
     name="booking_time"
     min="09:00"
     max="17:59"
-    onFocus={(e) => {
-      e.target.type = "time";
-      e.target.showPicker?.(); // open immediately
+    onFocus={(e: React.FocusEvent<HTMLInputElement>) => {
+      e.currentTarget.type = "time";
+      (e.currentTarget as any).showPicker?.(); // open immediately
     }}
-    onClick={(e) => {
-      if (e.target.type !== "time") {
-        e.target.type = "time";
-        e.target.showPicker?.();
+    onClick={(e: React.MouseEvent<HTMLInputElement>) => {
+      if (e.currentTarget.type !== "time") {
+        e.currentTarget.type = "time";
+        (e.currentTarget as any).showPicker?.();
       }
     }}
-    onBlur={(e) => {
-      if (!formik.values.booking_time) e.target.type = "text";
+    onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+      if (!formik.values.booking_time) e.currentTarget.type = "text";
       formik.handleBlur(e);
     }}
     onChange={formik.handleChange}
@@ -372,7 +372,7 @@ const Reservation: React.FC = () => {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b">
+            <div className="flex items-center justify-between p-6 border-b border-b-(--accent-color)/20">
               <h3 className="text-2xl font-bold text-(--accent-color)">Confirm Deposit</h3>
               <button
                 onClick={closeModalAndReset}
@@ -386,7 +386,7 @@ const Reservation: React.FC = () => {
             </div>
 
             {/* Scrollable Body */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-5">
+            <div className="flex-1 overflow-y-auto styled-scrollbar p-6 space-y-5">
               <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-2xl">
                 <p className="font-bold text-lg">₦5,000 Deposit Required</p>
                 <p className="text-sm text-gray-600">To secure your booking</p>
@@ -501,7 +501,7 @@ const Reservation: React.FC = () => {
             </div>
 
             {/* Footer */}
-            <div className="p-6 border-t">
+            <div className="p-6 border-t border-t-(--accent-color)/20">
               <button
                 onClick={closeModalAndReset}
                 disabled={submitting}

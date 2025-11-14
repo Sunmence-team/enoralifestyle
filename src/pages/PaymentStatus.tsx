@@ -81,7 +81,7 @@ const PaymentStatus: React.FC = () => {
 
     return (
       <div className="min-h-screen flex items-center justify-center px-4 bg-[#901e76]/10">
-        <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md text-center border border-[#901e76]">
+        <div className="bg-white rounded-3xl shadow-xl p-8 w-md text-center border border-[#901e76]/50">
           <CheckCircle2 className="mx-auto text-[#901e76] w-16 h-16 mb-4" />
           <h1 className="text-2xl font-bold mb-2">Payment Successful!</h1>
           <p className="text-gray-600 mb-6">Your eBook is ready to download.</p>
@@ -92,13 +92,21 @@ const PaymentStatus: React.FC = () => {
             </p>
           </div>
 
-          <button
-            onClick={handleDownload}
-            disabled={downloading}
-            className="inline-block bg-(--primary-color) text-white px-6 py-3 rounded-xl font-medium hover:opacity-90 transition cursor-pointer"
-          >
-            Download eBook
-          </button>
+          <div className="flex flex-wrap sm:flex-nowrap gap-3 justify-center">
+            <Link
+              to="/"
+              className="whitespace-nowrap px-5 py-2.5 border border-(--primary-color) text-(--primary-color) rounded-lg font-medium hover:bg-(--primary-color)/5 transition"
+            >
+              Back Home
+            </Link>
+            <button
+              onClick={handleDownload}
+              disabled={downloading}
+              className="inline-block bg-(--primary-color) text-white px-6 py-3 rounded-lg font-medium hover:opacity-90 transition cursor-pointer"
+            >
+              Download eBook
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -109,7 +117,7 @@ const PaymentStatus: React.FC = () => {
     return (
       <>
         <div className="min-h-screen flex items-center justify-center px-4">
-          <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md text-center border border-[#901e76]">
+          <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md text-center border border-[#901e76]/50">
             <CheckCircle2 className="mx-auto text-[#901e76] w-16 h-16 mb-4" />
             <h1 className="text-2xl font-bold mb-2 text-[#901e76]">
               Booking Confirmed!

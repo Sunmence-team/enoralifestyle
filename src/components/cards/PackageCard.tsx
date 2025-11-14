@@ -67,7 +67,7 @@ const PackageCard = (item: PackageCardProps) => {
             Price: {formatterUtility(Number(item.price))}
           </p>
 
-          <div className="flex mt-auto gap-3 justify-between w-full">
+          <div className="flex mt-auto gap-3 justify-center w-full">
             {/* Add to Cart Button */}
             <button
               onClick={handleAddToCart}

@@ -207,38 +207,39 @@ const Appointments: React.FC = () => {
       header: "Status",
       render: (b: Booking) => (
         <span
-          className="px-3 py-1.5 rounded-full text-xs font-medium border"
+          className="px-3 py-1.5 rounded-lg text-xs font-medium border"
           style={{
             backgroundColor:
               b.status === "pending"
                 ? "var(--pending-bg)"
                 : b.status === "confirmed"
-                ? "var(--another-green)"
-                : b.status === "attended"
-                ? "#dbeafe"
-                : b.status === "cancelled"
-                ? "var(--transparent-red)"
-                : "#f3f4f6",
+                  ? "var(--another-green)"
+                  : b.status === "attended"
+                    ? "#dbeafe"
+                    : b.status === "cancelled"
+                      ? "var(--transparent-red)"
+                      : "#f3f4f6",
             color:
               b.status === "pending"
                 ? "var(--pending-color)"
                 : b.status === "confirmed"
-                ? "var(--completed-color)"
-                : b.status === "attended"
-                ? "#1e40af"
-                : b.status === "cancelled"
-                ? "var(--cancelled-color)"
-                : "#4b5563",
+                  ? "var(--completed-color)"
+                  : b.status === "attended"
+                    ? "#1e40af"
+                    : b.status === "cancelled"
+                      ? "var(--cancelled-color)"
+                      : "#4b5563",
             borderColor:
               b.status === "pending"
                 ? "#d9d9d9"
                 : b.status === "confirmed"
-                ? "#2f5318"
-                : b.status === "attended"
-                ? "#3b82f6"
-                : b.status === "cancelled"
-                ? "#dc2626"
-                : "#d1d5db",
+                  ? "#2f5318/50"
+                  : b.status === "attended"
+                    ? "#3b82f6/50"
+                    : b.status === "cancelled"
+                      ? "#dc2626/50"
+                      : "#d1d5db/50",
+
           }}
         >
           {b.status.charAt(0).toUpperCase() + b.status.slice(1)}
@@ -364,9 +365,8 @@ const Appointments: React.FC = () => {
         ].map((stat, i) => (
           <div
             key={i}
-            className={`p-6 rounded-2xl flex flex-col justify-center shadow-sm transition hover:shadow-md ${
-              stat.border ? "border" : ""
-            }`}
+            className={`p-6 rounded-2xl flex flex-col justify-center shadow-sm transition hover:shadow-md ${stat.border ? "border" : ""
+              }`}
             style={{
               backgroundColor: stat.bg,
               color: stat.text,

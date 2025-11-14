@@ -7,6 +7,7 @@ import ConfirmModal from "../../modals/ConfirmDialog";
 import ViewContactModal from "../../modals/ViewContact";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import { IoNotifications } from "react-icons/io5";
 interface Contact {
   id: number;
   name: string;
@@ -153,15 +154,15 @@ const ManageContacts: React.FC = () => {
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center w-full mb-3">
           <h2 className="font-bold text-2xl">Manage Contact</h2>
-          <div className="flex gap-3">
-            <div className="p-3 rounded-full bg-[var(--pink-color)]">
-              <IoIosNotifications
-                size={25}
-                className="text-(--primary-color)"
-              />
-            </div>
-            <div className="p-3 rounded-full bg-[var(--pink-color)]">
-              <FaRegUserCircle size={25} className="text-(--primary-color)" />
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
+                <IoNotifications size={22} style={{ color: "var(--primary-color)" }} />
+              </div>
+              <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
+                <FaRegUserCircle size={22} style={{ color: "var(--primary-color)" }} />
+              </div>
             </div>
           </div>
         </div>
@@ -221,9 +222,8 @@ const ManageContacts: React.FC = () => {
                 contacts.map((c, index) => (
                   <tr
                     key={index}
-                    className={`border-b hover:bg-gray-50 font-[Raleway]! transition-colors duration-200 ${
-                      index % 2 === 0 ? "bg-white" : "bg-[#901E76]/20"
-                    }`}
+                    className={`border-b hover:bg-gray-50 font-[Raleway]! transition-colors duration-200 ${index % 2 === 0 ? "bg-white" : "bg-[#901E76]/20"
+                      }`}
                     onMouseOver={() => setSelectedContact(c)}
                   >
                     <td className="py-4 px-6 font-[Raleway]! align-middle">
@@ -277,11 +277,10 @@ const ManageContacts: React.FC = () => {
                           <button
                             key={idx}
                             onClick={() => setCurrentPageFromApi(t)}
-                            className={`w-8 h-8 flex items-center justify-center font-bold ${
-                              t === currentPageFromApi
+                            className={`w-8 h-8 flex items-center justify-center font-bold ${t === currentPageFromApi
                                 ? "bg-(--primary-color) text-white"
                                 : "bg-gray-300 text-gray-700"
-                            } cursor-pointer rounded-lg`}
+                              } cursor-pointer rounded-lg`}
                           >
                             {t}
                           </button>

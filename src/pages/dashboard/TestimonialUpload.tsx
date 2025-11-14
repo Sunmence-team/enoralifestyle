@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { IoIosNotifications } from "react-icons/io";
 import { FaRegUserCircle } from "react-icons/fa";
 import { BiImageAlt } from "react-icons/bi";
 import type { testimonialProps } from "../../utilities/sharedInterFaces";
@@ -12,6 +11,7 @@ import EditTestimonialModal, {
   type EditTestimonialProps,
 } from "../../modals/EditTestimonialModal";
 import { useNavigate } from "react-router-dom";
+import { IoNotifications } from "react-icons/io5";
 
 export default function UploadTestimonial() {
   const navigate = useNavigate();
@@ -328,18 +328,15 @@ export default function UploadTestimonial() {
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center w-full mb-3">
           <h2 className="font-bold text-2xl">Uplaod Testimonial</h2>
-          <div className="flex gap-3">
-            <div className="p-3 rounded-full bg-[var(--pink-color)] ">
-              <IoIosNotifications
-                size={25}
-                className="text-[var(--primary-color)]"
-              />
-            </div>
-            <div className="p-3 rounded-full bg-[var(--pink-color)]">
-              <FaRegUserCircle
-                size={25}
-                className="text-[var(--primary-color)]"
-              />
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
+                <IoNotifications size={22} style={{ color: "var(--primary-color)" }} />
+              </div>
+              <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
+                <FaRegUserCircle size={22} style={{ color: "var(--primary-color)" }} />
+              </div>
             </div>
           </div>
         </div>
@@ -361,8 +358,8 @@ export default function UploadTestimonial() {
                 className="w-full border border-(--primary-color) rounded-lg p-3 text-sm placeholder:text-[var(--primary-color)] bg-[var(--light-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
               />
               {error &&
-              !testimonialDetails.full_name &&
-              error.from === "full_name" ? (
+                !testimonialDetails.full_name &&
+                error.from === "full_name" ? (
                 <span className="text-base mt-6 font-semibold text-red-700">
                   {error.errorMessage}
                 </span>
@@ -423,8 +420,8 @@ export default function UploadTestimonial() {
               className="w-full border border-[var(--primary-color)] rounded-lg p-3 text-sm placeholder:text-[var(--primary-color)] bg-[var(--light-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--primary-color)]"
             />
             {error &&
-            !testimonialDetails.comment &&
-            error.from === "comment" ? (
+              !testimonialDetails.comment &&
+              error.from === "comment" ? (
               <span className="text-base mt-6 font-semibold text-red-700">
                 {error.errorMessage}
               </span>
@@ -441,8 +438,8 @@ export default function UploadTestimonial() {
               className="w-full border border-[var(--primary-color)] rounded-lg p-3 text-sm placeholder:text-[var(--primary-color)] bg-[var(--light-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--primary-color)]"
             />
             {error &&
-            !testimonialDetails.occupation &&
-            error.from === "occupation" ? (
+              !testimonialDetails.occupation &&
+              error.from === "occupation" ? (
               <span className="text-base mt-6 font-semibold text-red-700">
                 {error.errorMessage}
               </span>
@@ -516,9 +513,8 @@ export default function UploadTestimonial() {
                 testimonials.map((t, index) => (
                   <tr
                     key={index}
-                    className={`border-b hover:bg-gray-50 transition-colors duration-200 ${
-                      index % 2 === 0 ? "bg-white" : "bg-[#901E76]/20"
-                    }`}
+                    className={`border-b hover:bg-gray-50 transition-colors duration-200 ${index % 2 === 0 ? "bg-white" : "bg-[#901E76]/20"
+                      }`}
                     onMouseOver={() => setSelectedTestimonial(t)}
                   >
                     <td className="py-4 px-6 align-middle">{index + 1}</td>
@@ -531,16 +527,17 @@ export default function UploadTestimonial() {
                       <div className="flex gap-3 justify-center text-[var(--primary-color)]">
                         <button
                           className="cursor-pointer hover:bg-gray-300 p-2 rounded-sm hover:text-(--primary-color)"
-                          onClick={() => setIsEditOpen(true)}
-                        >
-                          <FaPencil size={18} />
-                        </button>
-                        <button
-                          className="cursor-pointer hover:bg-gray-300 p-2 rounded-sm hover:text-(--primary-color)"
                           onClick={handleViewTestimonial}
                         >
                           <Eye size={18} />
                         </button>
+                        <button
+                          className="cursor-pointer hover:bg-gray-300 p-2 rounded-sm hover:text-(--primary-color)"
+                          onClick={() => setIsEditOpen(true)}
+                        >
+                          <FaPencil size={18} />
+                        </button>
+
                         <button
                           onClick={() => setShowDeleteModal(true)}
                           className="cursor-pointer hover:bg-gray-300 p-2 rounded-sm hover:text-red-600"
@@ -574,11 +571,10 @@ export default function UploadTestimonial() {
                           <button
                             key={idx}
                             onClick={() => setCurrentPageFromApi(t)}
-                            className={`w-8 h-8 flex items-center justify-center font-bold ${
-                              t === currentPageFromApi
+                            className={`w-8 h-8 flex items-center justify-center font-bold ${t === currentPageFromApi
                                 ? "bg-[var(--primary-color)]"
                                 : "bg-gray-300"
-                            } cursor-pointer text-white rounded-lg`}
+                              } cursor-pointer text-white rounded-lg`}
                           >
                             {t}
                           </button>

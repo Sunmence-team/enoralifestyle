@@ -7,6 +7,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import DashboardTable from "./Components/DashboardTable";
+import { IoNotifications } from "react-icons/io5";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
@@ -239,14 +240,17 @@ export default function Package() {
         <h2 className="font-semibold! text-2xl">
           {isEditing ? "Edit Package" : "Create Package"}
         </h2>
-        <div className="flex gap-3">
-          <div className="p-3 rounded-full bg-(--pink-color)">
-            <IoIosNotifications size={25} className="text-(--primary-color)" />
-          </div>
-          <div className="p-3 rounded-full bg-(--pink-color)">
-            <FaRegUserCircle size={25} className="text-(--primary-color)" />
-          </div>
-        </div>
+           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        
+                  <div className="flex items-center gap-3">
+                    <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
+                      <IoNotifications size={22} style={{ color: "var(--primary-color)" }} />
+                    </div>
+                    <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
+                      <FaRegUserCircle size={22} style={{ color: "var(--primary-color)" }} />
+                    </div>
+                  </div>
+                </div>
       </div>
 
       {/* Form */}

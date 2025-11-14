@@ -1,7 +1,9 @@
 // src/components/DashboardTable.tsx
+import { Trash2 } from "lucide-react";
 import React from "react";
-import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
+// import { Eye, FaEdit, FaTrash } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight,  FaPencil } from "react-icons/fa6";
+import { Eye} from "lucide-react";
 
 interface Column<T> {
   key: keyof T | "image" | "actions" | "status";
@@ -53,7 +55,7 @@ export default function DashboardTable<T extends { id: number }>({
   return (
     <div className="w-full flex flex-col items-center py-4">
       <div className="bg-white rounded-xl shadow-sm w-full overflow-x-auto">
-        <table className="w-full text-left border-collapse">
+        <table className="w-full text-left border-collapse text-(--accent-color)">
           <thead>
             <tr className="text-gray-600 border-b">
               {columns.map((col) => (
@@ -70,11 +72,11 @@ export default function DashboardTable<T extends { id: number }>({
             {data.map((item, index) => (
               <tr
                 key={item.id}
-                className={`border-b hover:bg-gray-50 transition-colors duration-200 font-[Raleway]! ${index % 2 === 0 ? "bg-white" : "bg-[#901E76]/20" // 👈 replace with your color code
+                className={`border-b-2 border-black/10  hover:bg-gray-50 transition-colors duration-200 font-[Raleway]! ${index % 2 === 0 ? "bg-white" : "bg-[#901E76]/10" // 👈 replace with your color code
                   }`}
               >
                 {columns.map((col) => (
-                  <td key={col.key as string} className="py-4 px-6 align-middle font-[Raleway]!">
+                  <td key={col.key as string} className="py-6 px-6 align-middle font-[Playfair Display]!">
                     {col.render ? (
                       col.render(item)
                     ) : col.key === "image" ? (
@@ -98,7 +100,7 @@ export default function DashboardTable<T extends { id: number }>({
                             className="hover:text-blue-600 transition"
                             title="View"
                           >
-                            <FaEye size={18} />
+                            <Eye size={18} />
                           </button>
                         )}
                         {onEdit && (
@@ -107,7 +109,7 @@ export default function DashboardTable<T extends { id: number }>({
                             className="hover:text-green-600 transition"
                             title="Edit"
                           >
-                            <FaEdit size={18} />
+                            <FaPencil size={18} />
                           </button>
                         )}
                         {onDelete && (
@@ -116,7 +118,7 @@ export default function DashboardTable<T extends { id: number }>({
                             className="hover:text-red-600 transition"
                             title="Delete"
                           >
-                            <FaTrash size={18} />
+                            <Trash2 size={18} />
                           </button>
                         )}
                       </div>

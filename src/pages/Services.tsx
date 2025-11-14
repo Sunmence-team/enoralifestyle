@@ -1,74 +1,76 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import HeroSection from "../components/herosections/Herosection";
 import { assets } from "../assets/assests";
-import { FiShoppingCart, FiArrowRight, FiX } from "react-icons/fi";
+import ServiceCard from "../components/cards/ServiceCard";
+import axios from "axios";
+import ServiceCardSkeleton from "../components/skeletons/ServiceCardSkeleton";
+
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
+
+interface Service {
+  id: number;
+  name: string;
+  description: string;
+  price: string;
+  image: string | null;
+  created_at: string;
+  type: "service" | "package";
+}
 
 const Services = () => {
-  const [selectedService, setSelectedService] = useState<any>(null);
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // --- Array of services ---
-  const services = [
-    {
-      title: "Soaks & Bath",
-      description:
-        "Choose from options like lavender/green tea/oat/goat milk etc. Please check whatsapp link for detailed options.",
-      price: "₦30,000",
-      image: assets.ser1,
-    },
-    {
-      title: "Cupping Massage Therapy",
-      description:
-        "This massage is ideal for pain management, improves blood circulation, relieves tension and promotes healing.",
-      price: "₦35,000",
-      image: assets.ser2,
-    },
-    {
-      title: "Blissful Me",
-      description: "Treatments include Pedicure/Manicure with Swedish Massage.",
-      price: "₦40,000",
-      image: assets.ser3,
-    },
-    {
-      title: "Soaks & Bath",
-      description:
-        "Choose from options like lavender/green tea/oat/goat milk etc. Please check whatsapp link for detailed options.",
-      price: "₦30,000",
-      image: assets.ser1,
-    },
-    {
-      title: "Cupping Massage Therapy",
-      description:
-        "This massage is ideal for pain management, improves blood circulation, relieves tension and promotes healing.",
-      price: "₦35,000",
-      image: assets.ser2,
-    },
-    {
-      title: "Blissful Me",
-      description: "Treatments include Pedicure/Manicure with Swedish Massage.",
-      price: "₦40,000",
-      image: assets.ser3,
-    },
-    {
-      title: "Soaks & Bath",
-      description:
-        "Choose from options like lavender/green tea/oat/goat milk etc. Please check whatsapp link for detailed options.",
-      price: "₦30,000",
-      image: assets.ser1,
-    },
-    {
-      title: "Cupping Massage Therapy",
-      description:
-        "This massage is ideal for pain management, improves blood circulation, relieves tension and promotes healing.",
-      price: "₦35,000",
-      image: assets.ser2,
-    },
-    {
-      title: "Blissful Me",
-      description: "Treatments include Pedicure/Manicure with Swedish Massage.",
-      price: "₦40,000",
-      image: assets.ser3,
-    },
-  ];
+  // Filter states
+  const [search, setSearch] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+
+  const hasActiveFilters = search || minPrice || maxPrice;
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.title = "Services - Enora Lifestyle And Spa";
+  }, []);
+
+  const fetchServices = async (filters?: { search?: string; min_price?: string; max_price?: string }) => {
+    try {
+      setLoading(true);
+
+      const params: any = {};
+      if (filters?.search?.trim()) params.search = filters.search.trim();
+      if (filters?.min_price) params.min_price = filters.min_price;
+      if (filters?.max_price) params.max_price = filters.max_price;
+
+      const response = await axios.get(`${API_URL}/services`, { params });
+
+      if (response.status === 200) {
+        const { data } = response.data.data;
+        setServices(data);
+      }
+    } catch (err) {
+      console.error("Failed to load services:", err);
+      setServices([]);
+    } finally {
+      setTimeout(() => setLoading(false), 1000);
+    }
+  };
+
+  useEffect(() => {
+    fetchServices();
+  }, []);
+
+  const handleApplyFilters = () => {
+    fetchServices({ search, min_price: minPrice, max_price: maxPrice });
+  };
+
+  const handleClearFilters = () => {
+    setSearch("");
+    setMinPrice("");
+    setMaxPrice("");
+    fetchServices();
+  };
 
   return (
     <div>
@@ -79,97 +81,146 @@ const Services = () => {
         height="lg:h-[65vh] h-[35vh]"
       />
 
-      {/* SERVICES GRID */}
-      <div className="mt-20 lg:px-10 px-5">
-
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {services.map((item, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-3xl pb-5 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col items-center text-start"
-            >
-              <img
-                src={item.image}
-                alt={item.title}
-                className="w-full h-[300px] object-cover rounded-t-2xl mb-4"
+      {/* FILTER BAR - BRANDED & RESPONSIVE */}
+      <div className="mt-12 px-5 lg:px-10">
+        <div
+          className="rounded-2xl p-5 md:p-6 shadow-sm border"
+          style={{
+            backgroundColor: "var(--secondary-color)",
+            borderColor: "var(--pink-color)",
+          }}
+        >
+          <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 items-stretch lg:items-center">
+            {/* Search Input */}
+            <div className="flex-1">
+              <input
+                type="text"
+                placeholder="Search services..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full px-5 py-3.5 text-base rounded-lg focus:outline-none focus:border focus:border-(--primary-color) transition"
+                style={{
+                  backgroundColor: "white",
+                  border: "1px solid var(--pink-color)",
+                  color: "var(--accent-color)",
+                }}
               />
-              <div className="px-5">
-                <h2 className="text-[22px] font-semibold text-black">
-                  {item.title}
-                </h2>
-                <p className="text-gray-600 mt-2 text-sm">{item.description}</p>
-                <p className="mt-3 font-bold text-black/80 md:text-[24px] text-[20px]">
-                  Price: {item.price}
-                </p>
-
-                <div className="flex gap-3 mt-10">
-                  {/* Add to Cart Button */}
-                  <button className="flex items-center justify-center gap-2 bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-white font-medium px-6 py-3 rounded-md transition-colors duration-200 shadow-sm">
-                    <FiShoppingCart className="w-5 h-5" />
-                    Add to Cart
-                  </button>
-
-                  {/* View Details Button */}
-                  <button
-                    onClick={() => setSelectedService(item)}
-                    className="flex items-center justify-center gap-1 bg-transparent hover:bg-gray-200 text-[var(--primary-color)] font-medium px-6 py-3 rounded-md transition-colors duration-200 border border-[var(--primary-color)]"
-                  >
-                    View Details
-                    <FiArrowRight className="w-4 h-4 ml-1" />
-                  </button>
-                </div>
-              </div>
             </div>
-          ))}
-        </div>
-      </div>
 
-      {/* MODAL */}
-      {selectedService && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-5">
-          <div className="bg-white rounded-3xl max-w-lg w-full relative shadow-2xl overflow-hidden animate-fadeIn">
-            {/* Close Button */}
-            <button
-              onClick={() => setSelectedService(null)}
-              className="absolute top-4 right-4 bg-gray-200 hover:bg-gray-300 text-gray-600 p-2 rounded-full transition-all"
-            >
-              <FiX size={20} />
-            </button>
+            {/* Price Range */}
+            <div className="flex items-center gap-3">
+              <input
+                type="number"
+                placeholder="Min"
+                value={minPrice}
+                onChange={(e) => setMinPrice(e.target.value)}
+                className="lg:w-28 w-1/2 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border focus:border-(--primary-color) transition"
+                style={{
+                  backgroundColor: "white",
+                  border: "1px solid var(--pink-color)",
+                  color: "var(--accent-color)",
+                }}
+              />
+              <span className="text-gray-500 hidden sm:inline">—</span>
+              <input
+                type="number"
+                placeholder="Max"
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(e.target.value)}
+                className="lg:w-28 w-1/2 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border focus:border-(--primary-color) transition"
+                style={{
+                  backgroundColor: "white",
+                  border: "1px solid var(--pink-color)",
+                  color: "var(--accent-color)",
+                }}
+              />
+            </div>
 
-            {/* Modal Content */}
-            <img
-              src={selectedService.image}
-              alt={selectedService.title}
-              className="w-full h-[300px] object-cover rounded-t-3xl"
-            />
+            {/* Action Buttons */}
+            <div className="flex gap-3 lg:ml-auto">
+              <button
+                onClick={handleApplyFilters}
+                className="px-6 py-3.5 font-medium rounded-lg text-white transition hover:opacity-90 focus:outline-none focus:border focus:border-(--primary-color) focus:ring-offset-2 lg:w-max  md:w-1/2 mx-auto w-full"
+                style={{
+                  backgroundColor: "var(--primary-color)",
+                }}
+              >
+                Apply Filters
+              </button>
 
-            <div className="p-6">
-              <h2 className="text-[24px] font-semibold text-black mb-2">
-                {selectedService.title}
-              </h2>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                {selectedService.description}
-              </p>
-              <p className="mt-4 text-[20px] font-semibold text-black/80">
-                Price:{" "}
-                <span className="text-[var(--primary-color)]">
-                  {selectedService.price}
-                </span>
-              </p>
-
-              <div className="mt-6 flex justify-end">
-                {/* <button
-                  onClick={() => setSelectedService(null)}
-                  className="bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-white px-6 py-2 rounded-md font-medium transition-all"
+              {hasActiveFilters && (
+                <button
+                  onClick={handleClearFilters}
+                  className="px-6 py-3.5 font-medium rounded-lg border transition hover:bg-gray-50 focus:outline-none focus:border focus:border-(--primary-color) focus:ring-offset-2"
+                  style={{
+                    borderColor: "var(--pink-color)",
+                    color: "var(--primary-color)"
+                  }}
                 >
-                  Close
-                </button> */}
-              </div>
+                  Clear
+                </button>
+              )}
             </div>
           </div>
         </div>
-      )}
+      </div>
+
+      {/* SERVICES GRID */}
+      <div className="mt-12 lg:px-10 px-5 pb-20">
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {Array(6)
+              .fill(0)
+              .map((_, i) => (
+                <ServiceCardSkeleton key={i} />
+              ))}
+          </div>
+        ) : services.length === 0 ? (
+          <div className="text-center py-16">
+            <div
+              className="w-28 h-28 rounded-full flex items-center justify-center mx-auto mb-6"
+              style={{ backgroundColor: "var(--light-primary)" }}
+            >
+              <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeWidth={1.5}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  style={{ stroke: "var(--accent-color)" }}
+                />
+              </svg>
+            </div>
+            <p className="text-lg font-medium mb-2" style={{ color: "var(--accent-color)" }}>
+              {hasActiveFilters
+                ? "No services match your filters."
+                : "No services available at the moment."}
+            </p>
+            {hasActiveFilters && (
+              <button
+                onClick={handleClearFilters}
+                className="text-sm font-medium underline mt-2"
+                style={{ color: "var(--primary-color)" }}
+              >
+                Clear filters and try again
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {services.map((item, index) => (
+              <ServiceCard
+                key={item.id}
+                id={item.id.toString()}
+                index={index}
+                title={item.name}
+                price={parseFloat(item.price)}
+                description={item.description}
+                image={`${IMAGE_URL}/${item.image}`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

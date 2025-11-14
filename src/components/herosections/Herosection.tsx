@@ -7,7 +7,7 @@ interface HeroSectionProps {
   button1Text?: string;
   button2Text?: string;
   backgroundImage: string;
-  height?: string; // e.g. "h-[90vh]" or "h-[70vh]"
+  height?: string;
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({
@@ -28,28 +28,30 @@ const HeroSection: React.FC<HeroSectionProps> = ({
       }}
     >
       {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/40"></div>
+      <div className="absolute inset-0 bg-black/60"></div>
 
       {/* Content */}
       <div className="relative z-10 max-w-3xl px-4">
-        <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-4">
+        <h1 className="text-4xl md:text-6xl font-semibold! leading-tight mb-4">
           {title}
         </h1>
         {subtitle && (
-          <p className="text-[14px] md:text-[19px] mb-6 text-white">
+          <p className="text-[14px] md:text-base mb-6 text-white">
             {subtitle}
           </p>
         )}
         <div className="flex justify-center gap-4">
           {button1Text && (
-            <Link className="bg-[#a1007e] text-white px-10 py-2 rounded-full hover:bg-[#820065] transition cursor-pointer">
+            <Link 
+              to="/services"
+              className="bg-[#a1007e] text-white px-10 py-2 rounded-sm hover:bg-[#820065] transition cursor-pointer">
               {button1Text}
             </Link>
           )}
           {button2Text && (
             <Link
               to="/services"
-              className="border border-white px-6 py-2 rounded-full hover:bg-white hover:text-black transition cursor-pointer"
+              className="border-2 border-white px-6 py-2 rounded-lg hover:bg-white hover:text-black transition cursor-pointer"
             >
               {button2Text}
             </Link>

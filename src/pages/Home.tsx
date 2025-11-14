@@ -126,8 +126,8 @@ const Home = () => {
 
       {/* BLOG SECTION */}
       <div className="bg-white mt-16 lg:px-10 px-5">
-        <h1 className="md:text-[48px] text-[30px] text-center font-semibold">
-          Blog <span className="text-[var(--primary-color)]">News</span>
+        <h1 className="md:text-[48px] text-[30px] text-center font-bold!">
+          Blog <span className="text-[var(--primary-color)] font-bold!">News</span>
         </h1>
 
           <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
@@ -138,10 +138,10 @@ const Home = () => {
               >
                 {/* Text before image */}
                 <div className="px-5 pt-6 text-start">
-                  <h2 className="text-[20px] font-semibold text-black mb-2">
+                  <h2 className="text-[20px] font-semibold! text-black mb-2">
                     {blog.title}
                   </h2>
-                  <p className="text-gray-600 text-sm">{blog.description}</p>
+                  <p className="text-gray-600 text-sm font-[inter]! ">{blog.description}</p>
                 </div>
 
                 {/* Blog image with smooth concave bottom */}
@@ -176,7 +176,7 @@ const Home = () => {
         <div className="flex justify-end mt-10">
           <Link
             to="/blog"
-            className="flex items-center text-[var(--primary-color)] font-semibold hover:text-black transition-colors"
+            className="flex items-center text-[var(--primary-color)] font-semibold! hover:text-black transition-colors"
           >
             <span>See more</span>
             <IoIosArrowRoundForward size={30} />
@@ -197,33 +197,33 @@ const Home = () => {
 
         {/* Text Card Overlay */}
         <div className="absolute lg:bottom-20 md:top-30 bottom-5 left-1/2 transform -translate-x-1/2 translate-y-10 bg-[#fff9f7] shadow-lg rounded-2xl w-[80%] md:w-5/6 lg:w-5/6 p-6  md:p-10 text-center">
-          <h2 className="text-3xl md:text-4xl font-semibold mb-4">
-            <span className="text-[#b23a8a] font-bold">About</span>{" "}
-            <span className="text-gray-800">Us</span>
+          <h2 className="text-3xl md:text-4xl font-semibold! mb-4">
+            <span className="text-[#b23a8a] font-semibold!">About</span>{" "}
+            <span className="text-gray-800 font-semibold!">Us</span>
           </h2>
 
-          <div className="text-gray-700 leading-relaxed space-y-4 text-sm md:text-base">
-            <p>
+          <div className="text-gray-700 leading-relaxed space-y-4 text-sm md:text-base ">
+            <p className="font-[inter]!">
               At Enoralifestyle Spa, we believe self-care is not a luxury—it is
               a lifestyle.
             </p>
-            <p>
+            <p className="font-[inter]!">
               We are a world-class spa destination offering a full range of
               wellness and beauty treatments designed to relax your body,
               refresh your mind, and restore your natural glow.
             </p>
-            <p>
+            <p className="font-[inter]!">
               Our mission is to promote total body wellness through personalized
               therapies that relieve pain, reduce stress, and enhance overall
               health. Each session is thoughtfully crafted to balance your body
               and mind while reviving your inner calm.
             </p>
-            <p>
+            <p className="font-[inter]!">
               Step into our serene environment where expert hands, soothing
               aromas, and natural products come together to create an experience
               of true relaxation and renewal.
             </p>
-            <p>
+            <p className="font-[inter]!">
               At Enoralifestyle Spa, your well-being is our priority—because you
               deserve to feel your best, inside and out.
             </p>
@@ -234,8 +234,8 @@ const Home = () => {
       {/* PACKAGES SECTION */}
       <div className="Our bg-white mt-10 lg:px-10 px-5 py-10">
         <div>
-          <h1 className="md:text-[48px] text-[30px] text-center font-semibold text-[var(--primary-color)]">
-            Our <span className="text-black">Packages</span>
+          <h1 className="md:text-[48px] text-[30px] text-center font-semibold! text-[var(--primary-color)]">
+            Our <span className="text-black font-semibold!">Packages</span>
           </h1>
         </div>
 
@@ -257,10 +257,10 @@ const Home = () => {
                   alt={item.title}
                   className="w-[180px] h-[180px] object-cover rounded-full mb-4"
                 />
-                <h2 className="text-[22px] font-semibold text-[var(--primary-color)]">
+                <h2 className="text-[22px] font-semibold! text-[var(--primary-color)]">
                   {item.title}
                 </h2>
-                <p className="text-gray-600 mt-2">{item.description}</p>
+                <p className="text-gray-600 mt-2 font-[inter]!">{item.description}</p>
                 <p className="mt-3 font-bold text-black/80 md:text-[24px] text-[20px]">
                   {item.price}
                 </p>
@@ -297,8 +297,8 @@ const Home = () => {
       {/* services SECTION */}
       <div className="bg-[var(--secondary-color)] mt-10 lg:px-10 px-5 py-10">
         <div>
-          <h1 className="md:text-[48px] text-[30px] text-center font-semibold text-black">
-            Our <span className="text-[var(--primary-color)]">Services</span>
+          <h1 className="md:text-[48px] text-[30px] text-center font-bold! text-black">
+            Our <span className="text-[var(--primary-color)] font-bold!">Services</span>
           </h1>
         </div>
 
@@ -315,10 +315,10 @@ const Home = () => {
                 className="w-full h-[300px] object-cover rounded-t-2xl mb-4"
               />
               <div className="px-5">
-                <h2 className="text-[22px] font-semibold text-black">
+                <h2 className="text-[22px] font-semibold! text-black">
                   {item.title}
                 </h2>
-                <p className="text-gray-600 mt-2 text-sm">{item.description}</p>
+                <p className="text-gray-600 mt-2 text-sm font-[inter]!">{item.description}</p>
                 <p className="mt-3 font-bold text-black/80 md:text-[24px] text-[20px]">
                   Price: {item.price}
                 </p>
@@ -363,10 +363,10 @@ const Home = () => {
         </div>
 
         <div className="text">
-          <h1 className="md:text-[48px] text-[30px] md:text-start text-center font-semibold text-black mb-5">
-            Our <span className="text-[var(--primary-color)]">Ebook</span>
+          <h1 className="md:text-[48px] text-[30px] md:text-start text-center font-bold! text-black mb-5">
+            Our <span className="text-[var(--primary-color)] font-bold!">Ebook</span>
           </h1>
-          <p className="md:text-start text-center">
+          <p className="md:text-start text-center font-[inter]!">
             A beginner-friendly guide that breaks down skin types, facial
             routines, and how to choose the right treatments for glowing,
             healthy skin. <br /> Discover expert tips on cleansing, exfoliation,
@@ -386,9 +386,9 @@ const Home = () => {
       {/* FAQ SECTION */}
       {/* FAQ SECTION */}
       <section className="bg-[var(--secondary-color)] mt-20 lg:px-10 px-5 py-16">
-        <h1 className="md:text-[48px] text-[30px] text-center font-semibold mb-12">
+        <h1 className="md:text-[48px] text-[30px] text-center font-semibold! mb-12">
           Frequently{" "}
-          <span className="text-[var(--primary-color)]">Asked Questions</span>
+          <span className="text-[var(--primary-color)] font-semibold!">Asked Questions</span>
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8  mx-auto">
@@ -434,10 +434,10 @@ const Home = () => {
               </div>
 
               <div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                <h3 className="text-lg font-semibold! text-gray-800 mb-2">
                   {faq.q}
                 </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{faq.a}</p>
+                <p className="text-gray-600 text-sm leading-relaxed font-[inter]!">{faq.a}</p>
               </div>
             </div>
           ))}
@@ -484,10 +484,9 @@ const Home = () => {
       {/* REVIEW SECTION */}
       {/* REVIEW SECTION */}
       <div className="mt-10 px-5 lg:px-10">
-        <h1 className="md:text-[48px] text-[30px] text-center font-semibold md:mb-25 mb-10">
-          <span className="text-[var(--primary-color)]">Client’s Review</span>
+        <h1 className="md:text-[48px] text-[30px] text-center md:mb-25 mb-10">
+          <span className="text-[var(--primary-color)] font-semibold!">Client’s Review</span>
         </h1>
-
         {/* Scrollable container for sm & md; static grid on lg */}
         <div className="flex gap-6 overflow-x-auto overflow-y-hidden lg:overflow-x-visible lg:justify-center pb-5 snap-x snap-mandatory lg:flex-row lg:flex-wrap">
           {reviews.map((review, index) => (
@@ -513,7 +512,7 @@ const Home = () => {
                 </div>
 
                 <div className="text mt-5 flex-1">
-                  <p className="text-gray-700 text-sm md:text-base leading-relaxed">
+                  <p className="text-gray-700 text-sm md:text-base leading-relaxed font-[inter]!">
                     {review.reviewText}
                   </p>
                 </div>
@@ -536,7 +535,7 @@ const Home = () => {
                     <h4 className="font-semibold text-white text-sm md:text-base">
                       {review.name}
                     </h4>
-                    <p className="text-xs md:text-sm text-white">
+                    <p className="text-xs md:text-sm text-white italic!">
                       {review.role}
                     </p>
                   </div>

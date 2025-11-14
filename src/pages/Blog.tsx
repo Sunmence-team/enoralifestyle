@@ -159,10 +159,10 @@ const Blog: React.FC = () => {
           {blogs.length > 0 && !loading && (
             <>
               <h1
-                className="text-center text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-semibold mb-4"
+                className="text-center text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-semibold! mb-4"
                 style={{ color: "var(--accent-color)" }}
               >
-                Blog <span style={{ color: "var(--primary-color)" }}>News</span>
+                Blog <span className="font-semibold!" style={{ color: "var(--primary-color)"}}>News</span>
               </h1>
               <p className="text-center text-base sm:text-lg max-w-2xl mx-auto mb-12" style={{ color: "var(--accent-color)" }}>
                 Discover skincare tips, beauty secrets, and wellness insights from our experts.

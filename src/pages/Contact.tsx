@@ -64,10 +64,10 @@ const Contact = () => {
       />
 
       <div className="text-center mt-8">
-        <h2 className="text-[30px] md:text-[50px] font-bold">
+        <h2 className="text-[30px] md:text-[50px] font-semibold!">
           Reach out to Us anytime
         </h2>
-        <p className="font-semibold">
+        <p className="font-semibold! font-[inter]!">
           Feel free to ask us any questions
         </p>
       </div>

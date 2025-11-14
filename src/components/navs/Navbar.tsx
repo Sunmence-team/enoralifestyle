@@ -156,12 +156,12 @@ const Navbar: React.FC = () => {
 
       {/* Cart Drawer – Independent Scroll */}
       <div
-        className={`fixed top-0 right-0 lg:w-1/2 w-[90%] h-dvh max-h-svh bg-white shadow-lg transform transition-transform duration-300 z-50 flex flex-col text-[15px] font-medium ${
+        className={`fixed top-0 right-0 lg:w-1/2 md:w-[90%] w-[95%] h-dvh max-h-svh bg-white shadow-lg transform transition-transform duration-300 z-50 flex flex-col text-[15px] font-medium ${
           isOpen.cart ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="w-full flex gap-2 items-center justify-center border-b border-gray-200 py-3 shadow-sm">
-          <img src={assets.logo} alt="Logo" className="md:size-12 size-20 object-cover" />
+          <img src={assets.logo} alt="Logo" className="size-20 object-cover" />
           <h3 className="text-2xl font-bold">Cart</h3>
         </div>
 

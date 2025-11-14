@@ -172,19 +172,8 @@ export default function BlogDetails() {
               <p className="text-white italic">No comments yet. Be the first!</p>
             ) : (
               <div
-                className="space-y-4 max-h-[280px] overflow-y-auto pr-2"
-                style={{
-                  scrollbarWidth: "none",
-                  msOverflowStyle: "none",
-                }}
+                className="space-y-4 max-h-[280px] overflow-y-auto pr-2 styled-scrollbar2"
               >
-                <style>
-                  {`
-                    div::-webkit-scrollbar {
-                      display: none;
-                    }
-                  `}
-                </style>
                 {comments.map((c, index) => (
                   <div
                     key={index+c?.id}

@@ -40,7 +40,7 @@ const Login: React.FC = () => {
           toast.success("Welcome back! Redirecting...");
 
           setTimeout(() => {
-            navigate("/dashboard/services");
+            navigate("/dashboard/appointments");
           }, 1500);
         }
       } catch (err: any) {
@@ -74,7 +74,7 @@ const Login: React.FC = () => {
                 formik.touched.login && formik.errors.login
                   ? "border-red-500"
                   : "border-(--accent-color)"
-              } focus:outline-none focus:ring-2 focus:ring-(--primary-color)`}
+              } focus:outline-none`}
               placeholder="you@example.com"
             />
             {formik.touched.login && formik.errors.login && (
@@ -96,7 +96,7 @@ const Login: React.FC = () => {
                   formik.touched.password && formik.errors.password
                     ? "border-red-500"
                     : "border-(--accent-color)"
-                } focus:outline-none focus:ring-2 focus:ring-(--primary-color)`}
+                } focus:outline-none`}
                 placeholder="••••••••"
               />
               <button

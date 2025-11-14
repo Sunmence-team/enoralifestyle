@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { assets } from "../assets/assests";
 import { Link } from "react-router-dom";
-import { BiSolidQuoteSingleLeft } from "react-icons/bi";
 import HeroSection from "../components/herosections/Herosection";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import BlogCrd from "../components/cards/BlogCrd";
@@ -298,8 +297,8 @@ const Home: React.FC = () => {
 
         {/* BLOG SECTION */}
         <section className="bg-white mt-16 lg:px-10 px-5">
-          <h1 className="md:text-[48px] text-[30px] text-center font-semibold text-(--accent-color)">
-            Blog <span className="text-(--primary-color)">News</span>
+          <h1 className="md:text-[48px] text-[30px] text-center font-semibold! text-(--accent-color)">
+            Blog <span className="text-(--primary-color) font-semibold!">News</span>
           </h1>
 
           <div className="mt-10 flex overflow-x-scroll gap-4 no-scrollbar pb-2">
@@ -360,32 +359,32 @@ const Home: React.FC = () => {
           </div>
 
           <div className="md:absolute inset-0 h-max md:top-30 bottom-5 left-1/2 transform md:-translate-x-1/2 md:translate-y-10 bg-[#fff9f7] md:shadow-lg md:rounded-2xl w-full md:w-5/6 lg:w-5/6 p-6 md:p-10 text-center">
-            <h2 className="text-3xl md:text-4xl font-semibold mb-4">
-              <span className="text-[#b23a8a] font-semibold">About</span>{" "}
-              <span className="text-(--accent-color)">Us</span>
+            <h2 className="text-3xl md:text-4xl mb-4">
+              <span className="text-[#b23a8a] font-semibold!">About</span>{" "}
+              <span className="text-(--accent-color) font-semibold!">Us</span>
             </h2>
 
             <div className="text-gray-700 leading-relaxed space-y-4 text-[15px] md:text-sm lg:text-base">
-              <p className="font-[inter]">
+              <p className="font-[inter]!">
                 At Enoralifestyle Spa, we believe self-care is not a luxury—it
                 is a lifestyle.
               </p>
-              <p className="font-[inter]">
+              <p className="font-[inter]!">
                 We are a world-class spa destination offering a full range of
                 wellness and beauty treatments designed to relax your body,
                 refresh your mind, and restore your natural glow.
               </p>
-              <p className="font-[inter]">
+              <p className="font-[inter]!">
                 Our mission is to promote total body wellness through
                 personalized therapies that relieve pain, reduce stress, and
                 enhance overall health.
               </p>
-              <p className="font-[inter]">
+              <p className="font-[inter]!">
                 Step into our serene environment where expert hands, soothing
                 aromas, and natural products come together to create an
                 experience of true relaxation and renewal.
               </p>
-              <p className="font-[inter]">
+              <p className="font-[inter]!">
                 At Enoralifestyle Spa, your well-being is our priority—because
                 you deserve to feel your best, inside and out.
               </p>
@@ -395,8 +394,8 @@ const Home: React.FC = () => {
 
         {/* PACKAGES SECTION */}
         <section className="bg-white mt-10 lg:px-10 px-5 py-10">
-          <h1 className="md:text-[48px] text-[30px] text-center font-semibold text-(--primary-color)">
-            Our <span className="text-black">Packages</span>
+          <h1 className="md:text-[48px] text-[30px] text-center font-semibold! text-(--primary-color)">
+            Our <span className="text-black font-semibold!">Packages</span>
           </h1>
 
           <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -444,7 +443,7 @@ const Home: React.FC = () => {
         {/* SERVICES SECTION */}
         <section className="bg-(--secondary-color) mt-10 lg:px-10 px-5 py-10">
           <h1 className="md:text-[48px] text-[30px] text-center font-semibold! text-(--accent-color)">
-            Our <span className="text-(--primary-color)">Services</span>
+            Our <span className="text-(--primary-color) font-semibold!">Services</span>
           </h1>
 
           <div className="mt-10 lg:grid grid-cols-3 md:gap-6 gap-4 flex lg:overflow-auto overflow-x-scroll no-scrollbar py-4">
@@ -498,7 +497,7 @@ const Home: React.FC = () => {
 
           <div className={`text bg-image-gradient w-[60%]`}>
             <h1 className="md:text-[48px] text-[30px] md:text-start text-center font-bold! text-white lg:text-(--accent-color) mb-3">
-              Our <span className="text-(--primary-color)">Ebook</span>
+              Our <span className="text-(--primary-color) font-semibold!">Ebook</span>
             </h1>
             <p className="md:text-start text-center font-[Inter]! text-[16px]">
               This course is designed to simplify weight loss cutting through
@@ -524,9 +523,9 @@ const Home: React.FC = () => {
 
         {/* FAQ SECTION */}
         <div className="bg-(--secondary-color) mt-20 lg:px-10 px-5 py-16">
-          <h1 className="md:text-[48px] text-[30px] text-center font-semibold mb-12">
+          <h1 className="md:text-[48px] text-[30px] text-center font-semibold! mb-12">
             Frequently{" "}
-            <span className="text-(--primary-color)">Asked Questions</span>
+            <span className="text-(--primary-color) font-semibold!">Asked Questions</span>
           </h1>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mx-auto">
@@ -535,14 +534,14 @@ const Home: React.FC = () => {
                 key={idx}
                 className="relative bg-white rounded-2xl px-6 py-8 border border-black/20 hover:shadow-lg transition-shadow duration-300 flex gap-4"
               >
-                <div className="shrink-0 md:w-15 md:h-15 w-12 h-12 bg-[#C97BB7] text-white rounded-full flex items-center justify-center text-2xl font-bold">
+                <div className="shrink-0 md:w-15 md:h-15 w-12 h-12 bg-[#C97BB7] text-white rounded-full flex items-center justify-center text-2xl font-bold!">
                   {faq.num}
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-(--accent-color) mb-2">
+                  <h3 className="text-lg font-bold! text-(--accent-color) mb-2">
                     {faq.q}
                   </h3>
-                  <p className="text-gray-600 text-sm leading-relaxed font-[inter]">
+                  <p className="text-gray-600 text-sm leading-relaxed font-[inter]!">
                     {faq.a}
                   </p>
                 </div>
@@ -552,8 +551,8 @@ const Home: React.FC = () => {
         </div>
 
         <section className="mt-10 px-5 lg:px-10">
-          <h1 className="md:text-[48px] text-[30px] text-center font-semibold md:mb-25 mb-10">
-            <span className="text-(--primary-color)">Client’s Review</span>
+          <h1 className="md:text-[48px] text-[30px] text-center font-semibold! md:mb-25 mb-10">
+            <span className="text-(--primary-color) font-semibold!">Client’s Review</span>
           </h1>
 
           {/* Scrollable container for sm & md; static grid on lg */}
@@ -574,18 +573,11 @@ const Home: React.FC = () => {
                     {/* Top section (review content) */}
                     <div className="border border-black/20 rounded-t-2xl px-4 py-8 flex-1 flex flex-col bg-white">
                       <div className="flex items-center gap-1">
-                        <BiSolidQuoteSingleLeft
-                          className="w-8 h-8 md:w-10 md:h-10"
-                          style={{ color: review.iconColor }}
-                        />
-                        <BiSolidQuoteSingleLeft
-                          className="w-8 h-8 md:w-10 md:h-10"
-                          style={{ color: review.iconColor }}
-                        />
+                        <img src={assets.blac} alt="" />
                       </div>
 
-                      <div className="text mt-5 flex-1">
-                        <p className="text-gray-700 text-sm md:text-base leading-relaxed">
+                      <div className="text mt-5">
+                        <p className="text-gray-700 text-sm md:text-base leading-relaxed font-[inter]!">
                           {review.reviewText}
                         </p>
                       </div>
@@ -608,7 +600,7 @@ const Home: React.FC = () => {
                           <h4 className="font-semibold text-white text-sm md:text-base">
                             {review.name}
                           </h4>
-                          <p className="text-xs md:text-sm text-white">
+                          <p className="text-xs md:text-sm text-white italic!">
                             {review.role}
                           </p>
                         </div>
@@ -629,21 +621,11 @@ const Home: React.FC = () => {
                     {/* Top section (review content) */}
                     <div className="border border-black/20 rounded-t-2xl px-4 py-8 flex-1 flex flex-col bg-white">
                       <div className="flex items-center gap-1">
-                        <BiSolidQuoteSingleLeft
-                          className="w-8 h-8 md:w-10 md:h-10"
-                          style={{
-                            color: idx % 2 === 0 ? "#000000CC" : "#C97BB7",
-                          }}
-                        />
-                        <BiSolidQuoteSingleLeft
-                          className="w-8 h-8 md:w-10 md:h-10"
-                          style={{
-                            color: idx % 2 === 0 ? "#000000CC" : "#C97BB7",
-                          }}
-                        />
+                        <img src={idx % 2 === 0 ? assets.pur : assets.blac} alt="" />
+                      
                       </div>
 
-                      <div className="text mt-5 flex-1">
+                      <div className="text mt-5">
                         <p className="text-gray-700 text-sm md:text-base leading-relaxed">
                           {decodeURIComponent(t.comment)}
                         </p>

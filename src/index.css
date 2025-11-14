@@ -63,12 +63,12 @@ button:disabled:hover {
   cursor: not-allowed;
 }
 
-/* .styled-scrollbar::-webkit-scrollbar {
+.styled-scrollbar2::-webkit-scrollbar {
   @apply lg:w-2 w-1 h-1;
 }
-.styled-scrollbar::-webkit-scrollbar-thumb {
+.styled-scrollbar2::-webkit-scrollbar-thumb {
   @apply bg-[#cbd5e1] rounded-full;
-} */
+}
 
 .blog-action {
   width: 100%;

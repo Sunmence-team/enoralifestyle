@@ -1,7 +1,6 @@
-// src/pages/dashboard/BlogUpload.tsx
 import React, { useState, useEffect } from "react";
-import { IoIosNotifications } from "react-icons/io";
-import { FaRegUserCircle, FaTimes } from "react-icons/fa";
+import { FaTimes } from "react-icons/fa";
+import { MdLogout } from "react-icons/md";
 import { BiImageAlt } from "react-icons/bi";
 import axios from "axios";
 import { toast } from "sonner";
@@ -274,7 +273,7 @@ export default function BlogUpload() {
       toast.error("Update failed");
     }
   };
-
+  
   return (
     <div className="min-h-screen pb-20">
       {/* Header */}
@@ -284,10 +283,7 @@ export default function BlogUpload() {
         
                   <div className="flex items-center gap-3">
                     <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
-                      <IoNotifications size={22} style={{ color: "var(--primary-color)" }} />
-                    </div>
-                    <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
-                      <FaRegUserCircle size={22} style={{ color: "var(--primary-color)" }} />
+                      <MdLogout size={22} style={{ color: "var(--primary-color)" }} />
                     </div>
                   </div>
                 </div>

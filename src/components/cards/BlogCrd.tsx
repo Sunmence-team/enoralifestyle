@@ -19,10 +19,10 @@ const BlogCrd = ({ id, title, description, image }: BlogCrdProps) => {
     >
       {/* Text before image */}
       <div className="px-5 pt-6 text-start">
-        <h2 className="text-[20px] font-semibold leading-6 text-black mb-2 line-clamp-2">
+        <h2 className="text-[20px] font-bold! leading-6 text-black mb-2 line-clamp-2">
           {title}
         </h2>
-        <p className="text-gray-600 text-sm line-clamp-2 font-[inter]">
+        <p className="text-gray-600 text-sm line-clamp-2 font-[inter]!">
           {description}
         </p>
       </div>

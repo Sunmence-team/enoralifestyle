@@ -535,11 +535,11 @@ const Home: React.FC = () => {
                 key={idx}
                 className="relative bg-white rounded-2xl px-6 py-8 border border-black/20 hover:shadow-lg transition-shadow duration-300 flex gap-4"
               >
-                <div className="shrink-0 md:w-15 md:h-15 w-12 h-12 bg-[#C97BB7] text-white rounded-full flex items-center justify-center text-2xl font-bold">
+                <div className="shrink-0 md:w-15 md:h-15 w-12 h-12 bg-[#C97BB7] text-white rounded-full flex items-center justify-center text-2xl font-bold!">
                   {faq.num}
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-(--accent-color) mb-2">
+                  <h3 className="text-lg font-bold! text-(--accent-color) mb-2">
                     {faq.q}
                   </h3>
                   <p className="text-gray-600 text-sm leading-relaxed font-[inter]">
@@ -574,17 +574,10 @@ const Home: React.FC = () => {
                     {/* Top section (review content) */}
                     <div className="border border-black/20 rounded-t-2xl px-4 py-8 flex-1 flex flex-col bg-white">
                       <div className="flex items-center gap-1">
-                        <BiSolidQuoteSingleLeft
-                          className="w-8 h-8 md:w-10 md:h-10"
-                          style={{ color: review.iconColor }}
-                        />
-                        <BiSolidQuoteSingleLeft
-                          className="w-8 h-8 md:w-10 md:h-10"
-                          style={{ color: review.iconColor }}
-                        />
+                        <img src={assets.blac} alt="" />
                       </div>
 
-                      <div className="text mt-5 flex-1">
+                      <div className="text mt-5">
                         <p className="text-gray-700 text-sm md:text-base leading-relaxed">
                           {review.reviewText}
                         </p>
@@ -629,21 +622,11 @@ const Home: React.FC = () => {
                     {/* Top section (review content) */}
                     <div className="border border-black/20 rounded-t-2xl px-4 py-8 flex-1 flex flex-col bg-white">
                       <div className="flex items-center gap-1">
-                        <BiSolidQuoteSingleLeft
-                          className="w-8 h-8 md:w-10 md:h-10"
-                          style={{
-                            color: idx % 2 === 0 ? "#000000CC" : "#C97BB7",
-                          }}
-                        />
-                        <BiSolidQuoteSingleLeft
-                          className="w-8 h-8 md:w-10 md:h-10"
-                          style={{
-                            color: idx % 2 === 0 ? "#000000CC" : "#C97BB7",
-                          }}
-                        />
+                        <img src={idx % 2 === 0 ? assets.pur : assets.blac} alt="" />
+                      
                       </div>
 
-                      <div className="text mt-5 flex-1">
+                      <div className="text mt-5">
                         <p className="text-gray-700 text-sm md:text-base leading-relaxed">
                           {decodeURIComponent(t.comment)}
                         </p>

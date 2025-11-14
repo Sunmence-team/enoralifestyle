@@ -245,7 +245,7 @@ export default function UploadTestimonial() {
         toast.error(`Failed to load contact. ${data.message}.`);
       }
     } catch (error: any) {
-      setIsViewOpen(false)
+      setIsViewOpen(false);
       if (
         error?.message?.includes("Unexpected token '<'") ||
         error?.message === "Failed to fetch"
@@ -326,7 +326,6 @@ export default function UploadTestimonial() {
         <div className="flex justify-between items-center w-full mb-3">
           <h2 className="font-bold text-2xl">Uplaod Testimonial</h2>
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
                 <MdLogout size={22} style={{ color: "var(--primary-color)" }} />
@@ -352,8 +351,8 @@ export default function UploadTestimonial() {
                 className="w-full border border-(--primary-color) rounded-lg p-3 text-sm placeholder:text-(--primary-color) bg-[var(--light-primary)] focus:outline-none focus:ring-2 focus:ring-(--primary-color)"
               />
               {error &&
-                !testimonialDetails.full_name &&
-                error.from === "full_name" ? (
+              !testimonialDetails.full_name &&
+              error.from === "full_name" ? (
                 <span className="text-base mt-6 font-semibold text-red-700">
                   {error.errorMessage}
                 </span>
@@ -414,8 +413,8 @@ export default function UploadTestimonial() {
               className="w-full border border-(--primary-color) rounded-lg p-3 text-sm placeholder:text-(--primary-color) bg-[var(--light-primary)] focus:outline-none focus:ring-1 focus:ring-(--primary-color)"
             />
             {error &&
-              !testimonialDetails.comment &&
-              error.from === "comment" ? (
+            !testimonialDetails.comment &&
+            error.from === "comment" ? (
               <span className="text-base mt-6 font-semibold text-red-700">
                 {error.errorMessage}
               </span>
@@ -432,8 +431,8 @@ export default function UploadTestimonial() {
               className="w-full border border-(--primary-color) rounded-lg p-3 text-sm placeholder:text-(--primary-color) bg-[var(--light-primary)] focus:outline-none focus:ring-1 focus:ring-(--primary-color)"
             />
             {error &&
-              !testimonialDetails.occupation &&
-              error.from === "occupation" ? (
+            !testimonialDetails.occupation &&
+            error.from === "occupation" ? (
               <span className="text-base mt-6 font-semibold text-red-700">
                 {error.errorMessage}
               </span>
@@ -571,7 +570,7 @@ export default function UploadTestimonial() {
                             className={`w-8 h-8 flex items-center justify-center font-bold ${t === currentPageFromApi
                                 ? "bg-(--primary-color)"
                                 : "bg-gray-300"
-                              } cursor-pointer text-white rounded-lg`}
+                            } cursor-pointer text-white rounded-lg`}
                           >
                             {t}
                           </button>

@@ -36,6 +36,7 @@ input, textarea, select {
     padding: 18px;
     border-radius: 12px;
     color: white;
+    width: 100%;
   }
 }
 

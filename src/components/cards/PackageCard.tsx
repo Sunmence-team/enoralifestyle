@@ -67,7 +67,7 @@ const PackageCard = (item: PackageCardProps) => {
             Price: {formatterUtility(Number(item.price))}
           </p>
 
-          <div className="flex items-center gap-3 mt-auto justify-center w-full">
+          <div className="flex mt-auto gap-3 justify-between w-full">
             {/* Add to Cart Button */}
             <button
               onClick={handleAddToCart}
@@ -79,11 +79,11 @@ const PackageCard = (item: PackageCardProps) => {
 
             {/* View Details Button */}
             <button
-              className="md:w-max w-1/2 cursor-pointer flex items-center justify-center gap-1 bg-transparent text-(--primary-color) font-medium md:px-3 px-1 py-3 transition-colors duration-200 border border-(--primary-color)"
+              className="md:w-max w-1/2 cursor-pointer flex items-center justify-center gap-1 bg-transparent text-(--primary-color) font-medium md:px-3 px-1 py-3 transition-colors duration-200 border border-(--primary-color) rounded-sm"
               onClick={() => setSelectedPackage(item)}
             >
               View Details
-              <FiArrowRight className="md:size-4 size-3 ml-1" />
+              <FiArrowRight className="md:size-4 size-3 ml-1 -rotate-40" />
             </button>
           </div>
         </div>

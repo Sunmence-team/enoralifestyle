@@ -80,18 +80,17 @@ const PaymentStatus: React.FC = () => {
     };
 
     return (
-      <>
-        <div className="min-h-screen flex items-center justify-center px-4 bg-[#901e76]/10">
-          <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md text-center border border-[#901e76]">
-            <CheckCircle2 className="mx-auto text-[#901e76] w-16 h-16 mb-4" />
-            <h1 className="text-2xl font-bold mb-2">Payment Successful!</h1>
-            <p className="text-gray-600 mb-6">Your eBook is ready to download.</p>
+      <div className="min-h-screen flex items-center justify-center px-4 bg-[#901e76]/10">
+        <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md text-center border border-[#901e76]">
+          <CheckCircle2 className="mx-auto text-[#901e76] w-16 h-16 mb-4" />
+          <h1 className="text-2xl font-bold mb-2">Payment Successful!</h1>
+          <p className="text-gray-600 mb-6">Your eBook is ready to download.</p>
 
-            <div className="bg-gray-100 p-4 rounded-xl text-sm text-gray-700 mb-6">
-              <p>
-                <strong>Reference:</strong> {reference}
-              </p>
-            </div>
+          <div className="bg-gray-100 p-4 rounded-xl text-sm text-gray-700 mb-6">
+            <p>
+              <strong>Reference:</strong> {reference}
+            </p>
+          </div>
 
           <button
             onClick={handleDownload}
@@ -146,27 +145,25 @@ const PaymentStatus: React.FC = () => {
               </p>
             </div>
 
-          <div className="flex flex-wrap sm:flex-nowrap gap-3 justify-center">
-  <Link
-    to="/"
-    className="whitespace-nowrap px-5 py-2.5 bg-(--primary-color) text-white rounded-xl font-medium hover:opacity-90 transition"
-  >
-    Back to Home
-  </Link>
+            <div className="flex flex-wrap sm:flex-nowrap gap-3 justify-center">
+              <Link
+                to="/"
+                className="whitespace-nowrap px-5 py-2.5 bg-(--primary-color) text-white rounded-xl font-medium hover:opacity-90 transition"
+              >
+                Back to Home
+              </Link>
 
-  <Link
-    to="/services"
-    className="whitespace-nowrap px-5 py-2.5 border border-(--primary-color) text-(--primary-color) rounded-xl font-medium hover:bg-(--primary-color)/5 transition"
-  >
-    Book Again
-  </Link>
-</div>
-
+              <Link
+                to="/services"
+                className="whitespace-nowrap px-5 py-2.5 border border-(--primary-color) text-(--primary-color) rounded-xl font-medium hover:bg-(--primary-color)/5 transition"
+              >
+                Book Again
+              </Link>
+            </div>
           </div>
         </div>
         <Footer />
       </>
-      
     );
   }
 

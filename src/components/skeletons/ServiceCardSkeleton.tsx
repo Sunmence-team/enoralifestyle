@@ -34,20 +34,20 @@ const ServiceCardSkeleton : React.FC = () => {
 
                 <div className="flex gap-3 mt-8">
                     {/* Skeleton "Add to Cart" Button */}
-                    <div
+                    <button
                         className="w-1/2 flex items-center justify-center gap-2 bg-gray-400 text-white font-medium px-3 py-3 rounded-sm"
                     >
                         <FiShoppingCart className="w-5 h-5" />
                         <span className="h-4 w-16 bg-gray-300 rounded"></span>
-                    </div>
+                    </button>
 
                     {/* Skeleton "View Details" Button */}
-                    <div
+                    <button
                         className="w-1/2 flex items-center justify-center gap-1 bg-transparent border border-gray-400 text-gray-400 font-medium px-3 py-3 rounded-sm"
                     >
                         <span className="h-4 w-16 bg-gray-300 rounded"></span>
                         <FiArrowRight className="w-4 h-4 ml-1" />
-                    </div>
+                    </button>
                 </div>
             </div>
         </div>

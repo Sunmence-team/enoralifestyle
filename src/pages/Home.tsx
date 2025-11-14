@@ -487,7 +487,7 @@ const Home: React.FC = () => {
         </section>
 
         {/* EBOOK SECTION */}
-        <section className="mt-10 lg:px-10 px-5 py-10 grid md:grid-cols-2 grid-cols-1 gap-10 items-center">
+        <section className="mt-10 lg:px-10 px-5 py-10 flex justify-between items-center gap-10">
           <div className="lg:flex hidden rounded-xl overflow-hidden h-[455px] w-[404px]">
             <img
               src={assets.ebook}
@@ -496,11 +496,11 @@ const Home: React.FC = () => {
             />
           </div>
 
-          <div className={`text bg-image-gradient`}>
-            <h1 className="md:text-[48px] text-[30px] md:text-start text-center font-bold! text-(--accent-color) mb-3">
+          <div className={`text bg-image-gradient w-[60%]`}>
+            <h1 className="md:text-[48px] text-[30px] md:text-start text-center font-bold! text-white lg:text-(--accent-color) mb-3">
               Our <span className="text-(--primary-color)">Ebook</span>
             </h1>
-            <p className="md:text-start text-center font-[Inter]! text-sm">
+            <p className="md:text-start text-center font-[Inter]! text-[16px]">
               This course is designed to simplify weight loss cutting through
               the jargon and confusion, so you can achieve results that fit
               seamlessly into your busy lifestyle. With practical strategies,

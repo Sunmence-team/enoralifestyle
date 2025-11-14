@@ -62,11 +62,11 @@ const ServiceCard = (item: ServiceCardProps) => {
             </p>
           </div>
 
-          <div className="flex justify-between gap-8">
+          <div className="flex justify-start gap-3">
             {/* Add to Cart Button */}
             <button
               onClick={handleAddToCart}
-              className="w-1/2 cursor-pointer flex items-center justify-center gap-2 bg-(--primary-color) hover:bg-(--primary-color) text-white font-medium md:px-3 px-1 py-3 rounded-sm transition-colors duration-200 shadow-sm"
+              className="md:w-auto w-1/2 cursor-pointer flex items-center justify-center gap-2 bg-(--primary-color) hover:bg-(--primary-color) text-white font-medium md:px-3 px-1 py-3 rounded-sm transition-colors duration-200 shadow-sm"
             >
               <FiShoppingCart className="md:size-5 size-4" />
               Add to Cart
@@ -74,7 +74,7 @@ const ServiceCard = (item: ServiceCardProps) => {
 
             {/* View Details Button */}
             <button
-              className="w-1/2 cursor-pointer flex items-center justify-center gap-1 bg-transparent text-(--primary-color) font-medium md:px-3 px-1 py-3 transition-colors duration-200 border border-(--primary-color) rounded-sm"
+              className="md:w-auto w-1/2 cursor-pointer flex items-center justify-center gap-1 bg-transparent text-(--primary-color) font-medium md:px-3 px-1 py-3 transition-colors duration-200 border border-(--primary-color) rounded-sm"
               onClick={() => setSelectedService(item)}
             >
               View Details

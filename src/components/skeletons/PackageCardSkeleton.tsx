@@ -32,7 +32,7 @@ const PackageCardSkeleton: React.FC = () => {
           <div className="h-6 bg-gray-200 rounded w-1/3 mx-auto"></div>
         </div>
 
-        <div className="flex justify-between mt-10 w-full">
+        <div className="flex gap-3 justify-between mt-10 w-full">
           {/* Skeleton "Add to Cart" Button */}
           <button className="w-1/2 flex items-center justify-center gap-2 bg-gray-400 text-white font-medium px-3 py-3 rounded-sm">
             <FiShoppingCart className="w-5 h-5" />

@@ -67,7 +67,7 @@ const Contact = () => {
         <h2 className="text-[30px] md:text-[50px] font-bold">
           Reach out to Us anytime
         </h2>
-        <p className="font-semibold translate-x-3">
+        <p className="font-semibold">
           Feel free to ask us any questions
         </p>
       </div>
@@ -84,7 +84,7 @@ const Contact = () => {
               value={name}
               required
               onChange={(e) => setName(e.target.value)}
-              className="flex-1 px-4 py-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-[var(--primary-color)]/20 transition focus:outline-none"
+              className="flex-1 px-4 py-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-(--primary-color)/20 transition focus:outline-none"
             />
 
             <input
@@ -93,7 +93,7 @@ const Contact = () => {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 px-4 py-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-[var(--primary-color)]/20 transition focus:outline-none "
+              className="flex-1 px-4 py-3 rounded-md border border-gray-300 focus:ring-2 focus:ring-(--primary-color)/20 transition focus:outline-none "
             />
           </div>
 
@@ -104,13 +104,13 @@ const Contact = () => {
             onChange={(e) => setMessage(e.target.value)}
             rows={4}
             required
-            className="w-full mt-4 px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]/20 transition resize-none"
+            className="w-full mt-4 px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-(--primary-color)/20 transition resize-none"
           />
         </div>
 
         <button
           disabled={postingMessage}
-          className="w-72 md:w-[810px] cursor-pointer bg-[var(--primary-color)] text-white font-medium py-3 rounded-lg cursor-pointer transition"
+          className="w-72 md:w-[810px] cursor-pointer bg-(--primary-color) text-white font-medium py-3 rounded-lg cursor-pointer transition"
         >
           {postingMessage ? "Please wait..." : "Contact Us"}
         </button>

@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import DashboardTable from "./Components/DashboardTable";
 import { formatterUtility } from "../../utilities/formatterutility";
+import { IoNotifications } from "react-icons/io5";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
@@ -236,18 +237,15 @@ export default function Overview() {
         <h2 className="font-bold text-2xl">
           {isEditing ? "Edit Service" : "Add Service"}
         </h2>
-        <div className="flex gap-3">
-          <div className="p-3 rounded-full bg-[var(--pink-color)]">
-            <IoIosNotifications
-              size={25}
-              className="text-(--primary-color)"
-            />
-          </div>
-          <div className="p-3 rounded-full bg-[var(--pink-color)]">
-            <FaRegUserCircle
-              size={25}
-              className="text-(--primary-color)"
-            />
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
+              <IoNotifications size={22} style={{ color: "var(--primary-color)" }} />
+            </div>
+            <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
+              <FaRegUserCircle size={22} style={{ color: "var(--primary-color)" }} />
+            </div>
           </div>
         </div>
       </div>
@@ -308,23 +306,23 @@ export default function Overview() {
             />
             <div className="flex gap-2 flex-col font-[Raleway]!">
               <label htmlFor="image">Image</label>
-            <label
-              htmlFor="image-upload"
-              className="block border-2 border-dashed border-[var(--primary-color)] rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 transition"
-            >
-              {imagePreview ? (
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="mx-auto max-h-48 rounded"
-                />
-              ) : (
-                <div>
-                  <BiImageAlt className="mx-auto text-5xl text-[var(--primary-color)] mb-2" />
-                  <p className="text-sm">Click to upload image</p>
-                </div>
-              )}
-            </label>
+              <label
+                htmlFor="image-upload"
+                className="block border-2 border-dashed border-[var(--primary-color)] rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 transition"
+              >
+                {imagePreview ? (
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="mx-auto max-h-48 rounded"
+                  />
+                ) : (
+                  <div>
+                    <BiImageAlt className="mx-auto text-5xl text-[var(--primary-color)] mb-2" />
+                    <p className="text-sm">Click to upload image</p>
+                  </div>
+                )}
+              </label>
 
             </div>
             {isEditing && imagePreview && !image && (
@@ -352,8 +350,8 @@ export default function Overview() {
               {submitting
                 ? "Saving..."
                 : isEditing
-                ? "Update Service"
-                : "Add Service"}
+                  ? "Update Service"
+                  : "Add Service"}
             </button>
           </div>
         </form>

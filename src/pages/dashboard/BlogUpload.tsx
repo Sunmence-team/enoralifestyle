@@ -273,7 +273,7 @@ export default function BlogUpload() {
       toast.error("Update failed");
     }
   };
-
+  
   return (
     <div className="min-h-screen pb-20">
       {/* Header */}

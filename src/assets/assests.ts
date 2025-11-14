@@ -24,6 +24,8 @@ import dets from "./images/details.jpg"
 import newblog from "./images/blog.jpg"
 import pac from "./images/pack.jpg"
 import login from "./images/login.jpg"
+import blac from "./images/black.png"
+import pur from "./images/pur.png"
 
 export const assets = {
     logo,
@@ -51,5 +53,7 @@ export const assets = {
     dets,
     newblog,
     pac,
-    login
+    login,
+    blac,
+    pur,
 };

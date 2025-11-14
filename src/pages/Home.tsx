@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { assets } from "../assets/assests";
 import { Link } from "react-router-dom";
-import { BiSolidQuoteSingleLeft } from "react-icons/bi";
 import HeroSection from "../components/herosections/Herosection";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import BlogCrd from "../components/cards/BlogCrd";

@@ -76,10 +76,10 @@ const Appointments: React.FC = () => {
       });
       const statsData = data.data;
 
-      setTotalAppointment(String(statsData.total_bookings) ?? "0");
-      setPending(String(statsData.bookings_by_status.pending) ?? "0");
-      setCompleted(String(statsData.bookings_by_status.confirmed) ?? "0");
-      setCancelled(String(statsData.bookings_by_status.attended) ?? "0");
+      setTotalAppointment(String(statsData.total_bookings || 0) ?? "0");
+      setPending(String(statsData.bookings_by_status.pending || 0) ?? "0");
+      setCompleted(String(statsData.bookings_by_status.confirmed || 0) ?? "0");
+      setCancelled(String(statsData.bookings_by_status.attended || 0) ?? "0");
     } catch (err: any) {
       toast.error(err.response?.data?.message || "Failed to load stats");
       if (err.response?.status === 401) {
@@ -138,16 +138,16 @@ const Appointments: React.FC = () => {
 
   // === MODAL HANDLERS ===
   const handleView = async (booking: Booking) => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-    try {
-      const { data } = await axios.get(`${API_URL}/bookings/${booking.id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setViewBooking(data.data);
-    } catch {
-      toast.error("Failed to load details");
-    }
+    setViewBooking(booking);
+    // const token = localStorage.getItem("token");
+    // if (!token) return;
+    // try {
+    //   const { data } = await axios.get(`${API_URL}/bookings/${booking.id}`, {
+    //     headers: { Authorization: `Bearer ${token}` },
+    //   });
+    // } catch {
+    //   toast.error("Failed to load details");
+    // }
   };
 
   const handleEdit = (booking: Booking) => setEditBooking({ ...booking });
@@ -188,7 +188,15 @@ const Appointments: React.FC = () => {
 
   // === TABLE COLUMNS ===
   const columns = [
-    { key: "id" as const, header: "ID" },
+    // { 
+    //   key: "1" as const, 
+    //   header: "S/N",
+    //   render: () => (
+    //     <span className="font-medium! font-[Raleway]! whitespace-nowrap" style={{ color: "var(--primary-color)" }}>
+    //       {String(x+=1).padStart(3, "0")}
+    //     </span>
+    //   ),
+    // },
     { key: "name" as const, header: "Name" },
     { key: "email" as const, header: "Email" },
     { key: "phone" as const, header: "Phone" },
@@ -196,7 +204,7 @@ const Appointments: React.FC = () => {
       key: "booking_date" as const,
       header: "Date",
       render: (b: Booking) => (
-        <span className="font-medium whitespace-nowrap" style={{ color: "var(--primary-color)" }}>
+        <span className="font-medium! font-[Raleway]! whitespace-nowrap" style={{ color: "var(--primary-color)" }}>
           {format(new Date(b.booking_date), "MMM dd, yyyy")}
         </span>
       ),
@@ -207,7 +215,7 @@ const Appointments: React.FC = () => {
       header: "Status",
       render: (b: Booking) => (
         <span
-          className="px-3 py-1.5 rounded-lg text-xs font-medium border"
+          className="px-3 py-1.5 rounded-lg text-xs font-medium border border-(--accent-color)/20 mx-auto"
           style={{
             backgroundColor:
               b.status === "pending"
@@ -358,10 +366,10 @@ const Appointments: React.FC = () => {
       {/* STATS CARDS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {[
-          { label: "Total", value: totalAppointment, bg: "var(--primary-color)", text: "white" },
-          { label: "Pending", value: pending, bg: "white", text: "#00382B", border: true },
-          { label: "Completed", value: completed, bg: "var(--color-green)", text: "black" },
-          { label: "Cancelled", value: cancelled, bg: "var(--cancelled-color)", text: "black" },
+          { label: "Total", value: totalAppointment ?? 0, bg: "var(--primary-color)", text: "white" },
+          { label: "Pending", value: pending ?? 0, bg: "white", text: "#00382B", border: true },
+          { label: "Completed", value: completed ?? 0, bg: "var(--color-green)", text: "black" },
+          { label: "Cancelled", value: cancelled ? cancelled : 0, bg: "var(--cancelled-color)", text: "black" },
         ].map((stat, i) => (
           <div
             key={i}
@@ -374,7 +382,7 @@ const Appointments: React.FC = () => {
             }}
           >
             <span className="text-sm opacity-90">{stat.label}</span>
-            <p className="text-3xl font-bold mt-1">
+            <p className="text-3xl font-bold! font-[Raleway]! mt-1">
               {statsLoading ? "..." : stat.value}
             </p>
           </div>

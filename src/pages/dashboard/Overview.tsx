@@ -1,6 +1,5 @@
 // src/pages/Overview.tsx
 import React, { useState, useEffect, useCallback } from "react";
-import { IoIosNotifications } from "react-icons/io";
 import { FaRegUserCircle, FaTimes } from "react-icons/fa";
 import { BiImageAlt } from "react-icons/bi";
 import axios, { AxiosError } from "axios";

@@ -57,11 +57,11 @@ export default function DashboardTable<T extends { id: number }>({
       <div className="bg-white rounded-xl shadow-sm w-full overflow-x-auto">
         <table className="w-full text-left border-collapse text-(--accent-color)">
           <thead>
-            <tr className="text-gray-600 border-b">
+            <tr className="text-gray-600 border-b border-b-(--accent-color)/20">
               {columns.map((col) => (
                 <th
                   key={col.key as string}
-                  className="py-6 px-6 uppercase tracking-wider text-sm font-semibold text-gray-700"
+                  className="py-6 px-6 uppercase tracking-wider text-sm text-center font-semibold! text-gray-700"
                 >
                   {col.header}
                 </th>
@@ -72,11 +72,11 @@ export default function DashboardTable<T extends { id: number }>({
             {data.map((item, index) => (
               <tr
                 key={item.id}
-                className={`border-b-2 border-black/10  hover:bg-gray-50 transition-colors duration-200 font-[Raleway]! ${index % 2 === 0 ? "bg-white" : "bg-[#901E76]/10" // 👈 replace with your color code
+                className={`border-b-2 border-black/10 text-center hover:bg-gray-50 transition-colors duration-200 font-[Raleway]! ${index % 2 === 0 ? "bg-white" : "bg-[#901E76]/10" // 👈 replace with your color code
                   }`}
               >
                 {columns.map((col) => (
-                  <td key={col.key as string} className="py-6 px-6 align-middle font-[Playfair Display]!">
+                  <td key={col.key as string} className="py-6 px-6 align-middle font-[Raleway]!">
                     {col.render ? (
                       col.render(item)
                     ) : col.key === "image" ? (

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Eye, Trash2 } from "lucide-react";
-import { IoIosNotifications } from "react-icons/io";
 import { FaRegUserCircle } from "react-icons/fa";
 import { toast } from "sonner";
 import ConfirmModal from "../../modals/ConfirmDialog";

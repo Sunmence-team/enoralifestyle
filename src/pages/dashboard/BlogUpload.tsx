@@ -1,6 +1,4 @@
-// src/pages/dashboard/BlogUpload.tsx
 import React, { useState, useEffect } from "react";
-import { IoIosNotifications } from "react-icons/io";
 import { FaRegUserCircle, FaTimes } from "react-icons/fa";
 import { BiImageAlt } from "react-icons/bi";
 import axios from "axios";

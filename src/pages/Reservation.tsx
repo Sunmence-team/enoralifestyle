@@ -8,6 +8,7 @@ import { useCartStore } from "../store/cartStore";
 import axios from "axios";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { toast } from "sonner";
+import { formatterUtility } from "../utilities/formatterutility";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const DEPOSIT = 5000;
@@ -86,7 +87,7 @@ const Reservation: React.FC = () => {
     onSubmit: () => setShowPaymentModal(true),
   });
 
-  const totalAmount = items.reduce((s, i) => s + i.price, 0);
+  const totalAmount = items.reduce((s, i) => s + (i.quantity ? (i.price * i.quantity) : i.price), 0);
 
   const createBooking = async () => {
     const payload = {
@@ -341,7 +342,7 @@ const Reservation: React.FC = () => {
                     <span className="font-medium!">{i.title}</span>
                     &nbsp;&nbsp;&nbsp;<span className="text-(--primary-color) font-medium! font-[Inter]!">X {i.quantity}</span>
                   </div>
-                  <span>₦{i.price.toLocaleString()}</span>
+                  <span>{formatterUtility(Number(i.quantity ? (i.price*i.quantity) : i.price))}</span>
                 </div>
               ))}
             </div>

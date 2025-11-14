@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Eye, Trash2 } from "lucide-react";
-import { FaRegUserCircle } from "react-icons/fa";
+import { MdLogout } from "react-icons/md";
 import { toast } from "sonner";
 import ConfirmModal from "../../modals/ConfirmDialog";
 import ViewContactModal from "../../modals/ViewContact";
@@ -157,10 +157,7 @@ const ManageContacts: React.FC = () => {
 
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
-                <IoNotifications size={22} style={{ color: "var(--primary-color)" }} />
-              </div>
-              <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
-                <FaRegUserCircle size={22} style={{ color: "var(--primary-color)" }} />
+                <MdLogout size={22} style={{ color: "var(--primary-color)" }} />
               </div>
             </div>
           </div>

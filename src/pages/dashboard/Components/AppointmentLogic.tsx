@@ -1,7 +1,7 @@
 // src/pages/Appointments.tsx
 import React, { useEffect, useState, useCallback } from "react";
 import { IoNotifications } from "react-icons/io5";
-import { FaRegUserCircle } from "react-icons/fa";
+import { MdLogout } from "react-icons/md";
 import DashboardTable from "./DashboardTable";
 import axios from "axios";
 import { toast } from "sonner";
@@ -267,10 +267,7 @@ const Appointments: React.FC = () => {
 
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
-            <IoNotifications size={22} style={{ color: "var(--primary-color)" }} />
-          </div>
-          <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
-            <FaRegUserCircle size={22} style={{ color: "var(--primary-color)" }} />
+            <MdLogout size={22} style={{ color: "var(--primary-color)" }} />
           </div>
         </div>
       </div>

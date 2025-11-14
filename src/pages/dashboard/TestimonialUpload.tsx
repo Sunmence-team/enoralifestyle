@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaRegUserCircle } from "react-icons/fa";
+import { MdLogout } from "react-icons/md";
 import { BiImageAlt } from "react-icons/bi";
 import type { testimonialProps } from "../../utilities/sharedInterFaces";
 import { toast } from "sonner";
@@ -103,10 +103,7 @@ export default function UploadTestimonial() {
       const token = localStorage.getItem("token");
       formdata.append("full_name", testimonialDetails.full_name);
       formdata.append("image", testimonialDetails.image);
-      formdata.append(
-        "comment",
-        encodeURIComponent(testimonialDetails.comment)
-      );
+      formdata.append("comment", testimonialDetails.comment);
       formdata.append("occupation", testimonialDetails.occupation);
       const res = await fetch(`${baseUrl}/testimonials`, {
         method: "POST",
@@ -332,10 +329,7 @@ export default function UploadTestimonial() {
 
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
-                <IoNotifications size={22} style={{ color: "var(--primary-color)" }} />
-              </div>
-              <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
-                <FaRegUserCircle size={22} style={{ color: "var(--primary-color)" }} />
+                <MdLogout size={22} style={{ color: "var(--primary-color)" }} />
               </div>
             </div>
           </div>
@@ -355,7 +349,7 @@ export default function UploadTestimonial() {
                 name="full_name"
                 onChange={handleChange}
                 placeholder="Provide your full name"
-                className="w-full border border-(--primary-color) rounded-lg p-3 text-sm placeholder:text-[var(--primary-color)] bg-[var(--light-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+                className="w-full border border-(--primary-color) rounded-lg p-3 text-sm placeholder:text-(--primary-color) bg-[var(--light-primary)] focus:outline-none focus:ring-2 focus:ring-(--primary-color)"
               />
               {error &&
                 !testimonialDetails.full_name &&
@@ -369,7 +363,7 @@ export default function UploadTestimonial() {
 
           <div className="w-full mb-5 ">
             <label className="mb-4">Image</label>
-            <div className="border border-dashed border-[var(--primary-color)] rounded-lg p-6 text-center hover:border-[var(--primary-color)] bg-[var(--light-primary)] transition-colors">
+            <div className="border border-dashed border-(--primary-color) rounded-lg p-6 text-center hover:border-(--primary-color) bg-[var(--light-primary)] transition-colors">
               <input
                 type="file"
                 accept="image/*"
@@ -390,10 +384,10 @@ export default function UploadTestimonial() {
                 ) : (
                   <>
                     <div className="w-10 h-10 flex items-center justify-center">
-                      <BiImageAlt className="w-10 h-10 text-[var(--primary-color)]" />
+                      <BiImageAlt className="w-10 h-10 text-(--primary-color)" />
                     </div>
                     <div className="flex items-center gap-3 mt-2">
-                      <div className="text-sm rounded-full px-2 py-0.5 border border-[var(--primary-color)] ">
+                      <div className="text-sm rounded-full px-2 py-0.5 border border-(--primary-color) ">
                         Choose File
                       </div>
                       <div className="text-xs">No file chosen</div>
@@ -417,7 +411,7 @@ export default function UploadTestimonial() {
               placeholder="A brief summary of the testimonial"
               rows={3}
               name="comment"
-              className="w-full border border-[var(--primary-color)] rounded-lg p-3 text-sm placeholder:text-[var(--primary-color)] bg-[var(--light-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--primary-color)]"
+              className="w-full border border-(--primary-color) rounded-lg p-3 text-sm placeholder:text-(--primary-color) bg-[var(--light-primary)] focus:outline-none focus:ring-1 focus:ring-(--primary-color)"
             />
             {error &&
               !testimonialDetails.comment &&
@@ -435,7 +429,7 @@ export default function UploadTestimonial() {
               name="occupation"
               onChange={handleChange}
               placeholder="Input your occupation here..."
-              className="w-full border border-[var(--primary-color)] rounded-lg p-3 text-sm placeholder:text-[var(--primary-color)] bg-[var(--light-primary)] focus:outline-none focus:ring-1 focus:ring-[var(--primary-color)]"
+              className="w-full border border-(--primary-color) rounded-lg p-3 text-sm placeholder:text-(--primary-color) bg-[var(--light-primary)] focus:outline-none focus:ring-1 focus:ring-(--primary-color)"
             />
             {error &&
               !testimonialDetails.occupation &&
@@ -448,7 +442,7 @@ export default function UploadTestimonial() {
           <button
             onClick={handleCreateTestimonial}
             disabled={creatingTestimonial}
-            className="w-full bg-[var(--primary-color)] text-white font-medium py-3 rounded-lg cursor-pointer transition"
+            className="w-full bg-(--primary-color) text-white font-medium py-3 rounded-lg cursor-pointer transition"
           >
             {creatingTestimonial
               ? "Uploading Testimonial..."
@@ -460,21 +454,21 @@ export default function UploadTestimonial() {
         <div className="bg-white rounded-xl shadow border border-black/10 overflow-hidden p-4 flex flex-col gap-4">
           <h2 className="font-bold text-2xl">Manage Testimonials</h2>
           <table className="w-full text-left border-collapse">
-            <thead className="bg-gray-100 border-b">
-              <tr className="text-gray-600 border-b">
-                <th className="py-6 px-6 uppercase tracking-wider text-sm font-semibold text-gray-700">
+            <thead className="bg-gray-100">
+              <tr className="text-gray-600 border-b border-b-(--accent-color)/20">
+                <th className="py-6 px-6 uppercase text-center tracking-wider text-sm font-semibold text-gray-700">
                   ID
                 </th>
-                <th className="py-6 px-6 uppercase tracking-wider text-sm font-semibold text-gray-700">
+                <th className="py-6 px-6 uppercase text-center tracking-wider text-sm font-semibold text-gray-700">
                   Full Name
                 </th>
-                <th className="py-6 px-6 uppercase tracking-wider text-sm font-semibold text-gray-700">
+                <th className="py-6 px-6 uppercase text-center tracking-wider text-sm font-semibold text-gray-700">
                   Occupation
                 </th>
-                <th className="py-6 px-6 uppercase tracking-wider text-sm font-semibold text-gray-700">
+                <th className="py-6 px-6 uppercase text-center tracking-wider text-sm font-semibold text-gray-700">
                   Comment
                 </th>
-                <th className="py-6 px-6 uppercase tracking-wider text-sm font-semibold text-gray-700">
+                <th className="py-6 px-6 uppercase text-center tracking-wider text-sm font-semibold text-gray-700">
                   Actions
                 </th>
               </tr>
@@ -483,9 +477,12 @@ export default function UploadTestimonial() {
             <tbody>
               {loadingTestimonials ? (
                 Array.from({ length: 5 }).map((_, i) => (
-                  <tr key={i} className="animate-pulse border-b">
+                  <tr key={i} className="animate-pulse border-b border-b-(--accent-color)/20">
                     <td className="p-5">
                       <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+                    </td>
+                    <td className="p-5">
+                      <div className="h-4 bg-gray-300 rounded w-5/6"></div>
                     </td>
                     <td className="p-5">
                       <div className="h-4 bg-gray-300 rounded w-5/6"></div>
@@ -503,7 +500,7 @@ export default function UploadTestimonial() {
                   </tr>
                 ))
               ) : testimonials.length === 0 ? (
-                <tr className="border-b hover:bg-gray-50 transition">
+                <tr className="border-b border-b-(--accent-color)/20 hover:bg-gray-50 transition">
                   <td className="p-8 text-center" colSpan={4}>
                     {" "}
                     No Testimonial found.
@@ -513,18 +510,18 @@ export default function UploadTestimonial() {
                 testimonials.map((t, index) => (
                   <tr
                     key={index}
-                    className={`border-b hover:bg-gray-50 transition-colors duration-200 ${index % 2 === 0 ? "bg-white" : "bg-[#901E76]/20"
+                    className={`border-b border-b-(--accent-color)/20 hover:bg-gray-50 transition-colors duration-200 ${index % 2 === 0 ? "bg-white" : "bg-[#901E76]/10"
                       }`}
                     onMouseOver={() => setSelectedTestimonial(t)}
                   >
-                    <td className="py-4 px-6 align-middle">{index + 1}</td>
-                    <td className="py-4 px-6 align-middle">{t.full_name}</td>
-                    <td className="py-4 px-6 align-middle">{t.occupation}</td>
-                    <td className="py-7 px-6 align-middle line-clamp-1">
-                      {decodeURIComponent(t.comment.slice(0, 170))}...
+                    <td className="py-4 px-6 font-[Raleway]! text-center">{index + 1}</td>
+                    <td className="py-4 px-6 font-[Raleway]! text-center">{t.full_name}</td>
+                    <td className="py-4 px-6 font-[Raleway]! text-center">{t.occupation}</td>
+                    <td className="py-7 px-6 font-[Raleway]! text-center">
+                      <p className="max-w-md mx-auto font-[Raleway]! line-clamp-1">{t.comment}</p>
                     </td>
-                    <td className="py-4 px-6 align-middle">
-                      <div className="flex gap-3 justify-center text-[var(--primary-color)]">
+                    <td className="py-4 px-6 font-[Raleway]! text-center">
+                      <div className="flex gap-3 justify-center text-(--primary-color)">
                         <button
                           className="cursor-pointer hover:bg-gray-300 p-2 rounded-sm hover:text-(--primary-color)"
                           onClick={handleViewTestimonial}
@@ -572,7 +569,7 @@ export default function UploadTestimonial() {
                             key={idx}
                             onClick={() => setCurrentPageFromApi(t)}
                             className={`w-8 h-8 flex items-center justify-center font-bold ${t === currentPageFromApi
-                                ? "bg-[var(--primary-color)]"
+                                ? "bg-(--primary-color)"
                                 : "bg-gray-300"
                               } cursor-pointer text-white rounded-lg`}
                           >

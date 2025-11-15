@@ -35,7 +35,7 @@ export default function Package() {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [selectedServices, setSelectedServices] = useState<number[]>([]);
-  const [people, setPeople] = useState();
+  const [people, setPeople] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 

@@ -126,6 +126,16 @@ const Footer: React.FC = () => {
         </div>
       </div>
 
+      <div className="bg-(--primary-color) border border-white/40 fixed bottom-10 w-10 h-10 flex items-center justify-center text-2xl rounded-full z-99 right-5">
+        <a
+            href="https://wa.me/+2347035544194"
+            target="_blank"
+            className="text-(--secondary-color) transition"
+          >
+            <FaWhatsapp />
+          </a>
+      </div>
+
       {/* ===== Terms Modal ===== */}
       {showTerms && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">

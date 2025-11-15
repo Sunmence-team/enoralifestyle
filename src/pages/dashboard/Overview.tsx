@@ -1,14 +1,13 @@
 // src/pages/Overview.tsx
 import React, { useState, useEffect, useCallback } from "react";
 import { FaTimes } from "react-icons/fa";
-import { MdLogout } from "react-icons/md";
 import { BiImageAlt } from "react-icons/bi";
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import DashboardTable from "./Components/DashboardTable";
 import { formatterUtility } from "../../utilities/formatterutility";
-import { IoNotifications } from "react-icons/io5";
+import LogoutHandler from "../../components/buttons/LogoutBtn";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
@@ -17,6 +16,7 @@ interface Service {
   id: number;
   name: string;
   description: string | null;
+  people: string;
   price: string;
   image: string | null;
   type: string;
@@ -43,6 +43,7 @@ export default function Overview() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
+  const [people, setPeople] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -130,6 +131,7 @@ export default function Overview() {
     formData.append("name", name);
     formData.append("description", description);
     formData.append("price", price);
+    formData.append("people", people);
     formData.append("type", "service");
     if (image) formData.append("image", image);
 
@@ -183,8 +185,10 @@ export default function Overview() {
 
   const startEdit = (service: Service) => {
     setIsEditing(true);
+
     setEditingId(service.id);
     setName(service.name);
+    setPeople(service.people);
     setPrice(service.price.replace(/[^0-9.-]+/g, ""));
     setDescription(service.description || "");
     setImage(null);
@@ -237,13 +241,10 @@ export default function Overview() {
         <h2 className="font-bold text-2xl">
           {isEditing ? "Edit Service" : "Add Service"}
         </h2>
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="flex flex-row justify-between items-center gap-4">
 
           <div className="flex items-center gap-3">
-            
-            <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
-              <MdLogout size={22} style={{ color: "var(--primary-color)" }} />
-            </div>
+            <LogoutHandler />
           </div>
         </div>
       </div>
@@ -278,6 +279,28 @@ export default function Overview() {
                 id="price"
                 className="w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-(--primary-color)"
               />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium! font-[Raleway]! mb-2">
+              Select User Type
+            </label>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-h-64 overflow-y-auto p-4 border border-(--primary-color)/30 bg-(--pending-bg)/15 font-[Raleway]! rounded-md outline-0 placeholder:text-(--primary-color)/50">
+              {["single", "couple"].map((s) => (
+                <label
+                  key={s}
+                  className="flex items-center gap-2 cursor-pointer p-2 hover:bg-pink-100 rounded transition"
+                >
+                  <input
+                    type="checkbox"
+                    checked={people === s}
+                    onChange={() => setPeople(s)}
+                    className="w-4 h-4 text-(--primary-color) rounded focus:ring-(--primary-color)"
+                  />
+                  <span className="text-sm font-medium capitalize">{s}</span>
+                </label>
+              ))}
             </div>
           </div>
 
@@ -369,11 +392,20 @@ export default function Overview() {
           columns={[
             { key: "image", header: "IMAGE" },
             { key: "name", header: "NAME" },
+            { 
+              key: "people", 
+              header: "END USER",
+              render: (service: Service) => (
+                <span className="font-bold capitalize font-[Raleway]!">
+                  {service.people}
+                </span>
+              ),
+            },
             {
               key: "price",
               header: "PRICE",
               render: (service: Service) => (
-                <span className="font-bold text-pink-600 text-xl">
+                <span className="font-bold text-pink-600 text-xl font-[Raleway]!">
                   {formatterUtility(Number(service.price))}
                 </span>
               ),

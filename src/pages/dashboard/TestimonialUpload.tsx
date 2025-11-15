@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { MdLogout } from "react-icons/md";
 import { BiImageAlt } from "react-icons/bi";
 import type { testimonialProps } from "../../utilities/sharedInterFaces";
 import { toast } from "sonner";
@@ -11,7 +10,7 @@ import EditTestimonialModal, {
   type EditTestimonialProps,
 } from "../../modals/EditTestimonialModal";
 import { useNavigate } from "react-router-dom";
-import { IoNotifications } from "react-icons/io5";
+import LogoutHandler from "../../components/buttons/LogoutBtn";
 
 export default function UploadTestimonial() {
   const navigate = useNavigate();
@@ -325,12 +324,10 @@ export default function UploadTestimonial() {
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center w-full mb-3">
           <h2 className="font-bold text-2xl">Uplaod Testimonial</h2>
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="flex flex-row justify-between items-center gap-4">
 
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
-                <MdLogout size={22} style={{ color: "var(--primary-color)" }} />
-              </div>
+              <LogoutHandler />
             </div>
           </div>
         </div>

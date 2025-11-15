@@ -11,7 +11,7 @@ interface Column<T> {
   render?: (item: T) => React.ReactNode;
 }
 
-interface DashboardTableProps<T extends { id: number }> {
+interface DashboardTableProps<T extends { id: number; }> {
   data: T[];
   columns: Column<T>[];
   onEdit?: (item: T) => void;
@@ -54,7 +54,7 @@ export default function DashboardTable<T extends { id: number }>({
 
   return (
     <div className="w-full flex flex-col items-center py-4">
-      <div className="bg-white rounded-xl shadow-sm w-full overflow-x-auto">
+      <div className="bg-white rounded-xl shadow-sm w-full overflow-x-auto styled-scrollbar">
         <table className="w-full text-left border-collapse text-(--accent-color)">
           <thead>
             <tr className="text-gray-600 border-b border-b-(--accent-color)/20">

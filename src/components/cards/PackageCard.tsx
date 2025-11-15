@@ -10,6 +10,7 @@ interface PackageCardProps {
   description: string;
   image: string;
   price: string;
+  people: string;
   showMidLine?: boolean;
 }
 
@@ -107,16 +108,24 @@ const PackageCard = (item: PackageCardProps) => {
                 alt={selectedPackage.title}
                 className="w-full h-full object-cover rounded-t-3xl"
               />
-
-              <p className="absolute top-0 left-4 mt-4 text-2xl font-semibold! text-white">
-                Price:{" "}
-                <span className="font-bold!">
-                  {formatterUtility(Number(selectedPackage.price))}
-                </span>
-              </p>
+              
+              <div className="absolute top-0 left-4 mt-4">
+                <p className="text-2xl font-semibold! text-white">
+                  Price:{" "}
+                  <span className="font-bold!">
+                    {formatterUtility(Number(selectedPackage.price))}
+                  </span>
+                </p>
+                <p className="text-2xl font-semibold! text-white">
+                  Type:{" "}
+                  <span className="font-bold! capitalize">
+                    {selectedPackage.people}
+                  </span>
+                </p>
+              </div>
             </div>
 
-            <div className="p-6 lg:h-[40vh] md:h-[30vh] h-[50vh] overflow-y-auto styled-scrollbar">
+            <div className="p-6 lg:max-h-[40vh] md:max-h-[30vh] max-h-[50vh] overflow-y-auto styled-scrollbar">
               <h2 className="text-[24px] font-semibold text-black mb-2">
                 {selectedPackage.title}
               </h2>

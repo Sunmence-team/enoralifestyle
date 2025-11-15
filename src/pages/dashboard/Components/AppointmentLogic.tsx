@@ -1,17 +1,19 @@
 // src/pages/Appointments.tsx
 import React, { useEffect, useState, useCallback } from "react";
-import { IoNotifications } from "react-icons/io5";
-import { MdLogout } from "react-icons/md";
 import DashboardTable from "./DashboardTable";
 import axios from "axios";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
+import LogoutHandler from "../../../components/buttons/LogoutBtn";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 interface Booking {
   id: number;
+  transaction_detail: {
+    transaction_ref: string;
+  };
   name: string;
   email: string;
   phone: string;
@@ -21,6 +23,7 @@ interface Booking {
   status: "pending" | "confirmed" | "attended" | "cancelled";
   created_at: string;
   updated_at: string;
+  bookingable_items: Booking[]
 }
 
 const Appointments: React.FC = () => {
@@ -188,15 +191,15 @@ const Appointments: React.FC = () => {
 
   // === TABLE COLUMNS ===
   const columns = [
-    // { 
-    //   key: "1" as const, 
-    //   header: "S/N",
-    //   render: () => (
-    //     <span className="font-medium! font-[Raleway]! whitespace-nowrap" style={{ color: "var(--primary-color)" }}>
-    //       {String(x+=1).padStart(3, "0")}
-    //     </span>
-    //   ),
-    // },
+    { 
+      key: "transaction_detail" as const, 
+      header: "Order Id",
+      render: (b: Booking) => (
+        <span className="font-medium! font-[Raleway]! whitespace-nowrap" style={{ color: "var(--primary-color)" }}>
+          {b.transaction_detail?.transaction_ref}
+        </span>
+      ),
+    },
     { key: "name" as const, header: "Name" },
     { key: "email" as const, header: "Email" },
     { key: "phone" as const, header: "Phone" },
@@ -260,15 +263,13 @@ const Appointments: React.FC = () => {
   return (
     <div className="w-full space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="flex flex-row justify-between items-center gap-4">
         <h1 className="text-2xl md:text-3xl font-bold" style={{ color: "var(--accent-color)" }}>
           Appointments
         </h1>
 
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
-            <MdLogout size={22} style={{ color: "var(--primary-color)" }} />
-          </div>
+          <LogoutHandler />
         </div>
       </div>
 
@@ -311,7 +312,7 @@ const Appointments: React.FC = () => {
             <option value="cancelled">Cancelled</option>
           </select>
 
-          <div className="flex gap-2">
+          <div className="flex md:flex-row flex-col gap-2">
             <input
               type="date"
               value={fromDate}
@@ -405,18 +406,26 @@ const Appointments: React.FC = () => {
       {/* === MODALS (Professional & Branded) === */}
       {viewBooking && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl">
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl lg:max-h-[80vh] md:max-h-[70vh] max-h-[70vh] overflow-y-auto styled-scrollbar">
             <h3 className="text-xl font-bold mb-4" style={{ color: "var(--accent-color)" }}>
               Booking Details
             </h3>
             <div className="space-y-3 text-sm">
-              <p><strong>Name:</strong> {viewBooking.name}</p>
-              <p><strong>Email:</strong> {viewBooking.email}</p>
-              <p><strong>Phone:</strong> {viewBooking.phone}</p>
-              <p><strong>Date:</strong> {format(new Date(viewBooking.booking_date), "PPP")}</p>
-              <p><strong>Time:</strong> {viewBooking.booking_time}</p>
-              <p><strong>Status:</strong> <span className="capitalize">{viewBooking.status}</span></p>
-              {viewBooking.notes && <p><strong>Notes:</strong> {viewBooking.notes}</p>}
+              <p className="font-[Raleway]!"><strong>Name:</strong> {viewBooking.name}</p>
+              <p className="font-[Raleway]!"><strong>Email:</strong> {viewBooking.email}</p>
+              <p className="font-[Raleway]!"><strong>Phone:</strong> {viewBooking.phone}</p>
+              <p className="font-[Raleway]!"><strong>Date:</strong> {format(new Date(viewBooking.booking_date), "PPP")}</p>
+              <p className="font-[Raleway]!"><strong>Time:</strong> {viewBooking.booking_time}</p>
+              <p className="font-[Raleway]!"><strong>Status:</strong> <span className="capitalize font-[Raleway]!">{viewBooking.status}</span></p>
+              <p className="font-[Raleway]!"><strong>Notes:</strong> {viewBooking.notes || "-"}</p>
+              <p className="font-[Raleway]!">
+                <strong>Selected Services/packages:</strong> 
+                <ul>
+                  {viewBooking.bookingable_items.map((item, index) => (
+                    <li className="font-medium! font-[Raleway]!" key={index}>{item.name}</li>
+                  ))}
+                </ul>
+              </p>
             </div>
             <button
               onClick={() => setViewBooking(null)}

@@ -23,7 +23,7 @@ const Sidebar : React.FC = () => {
             <NavLink
               key={link.name}
               to={link.href}
-              className='flex flex-col gap-10 items-center justify-center mb-6 hover:bg-[var(--pink-color)] p-2 rounded-md transition-colors'
+              className='flex flex-col gap-10 items-center justify-center mb-6 hover:bg-(--pink-color) p-2 rounded-md transition-colors'
             >
               <div className='p-2 bg-white rounded-md'>
                 {link.icon}

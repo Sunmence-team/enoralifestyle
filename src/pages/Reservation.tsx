@@ -14,9 +14,9 @@ const API_URL = import.meta.env.VITE_API_BASE_URL;
 const DEPOSIT = 5000;
 
 const BANK_DETAILS = {
-  accountName: "Enora Lifestyle And Spa",
-  bankName: "GTBank",
-  accountNumber: "0123456789",
+  accountName: import.meta.env.VITE_ACCCOUNT_NAME || "-",
+  bankName: import.meta.env.VITE_BANK_NAME || "-",
+  accountNumber: import.meta.env.VITE_ACCCOUNT_NUMBER || "-",
 };
 
 const getTodayDate = () => {
@@ -35,15 +35,22 @@ const ReservationSchema = Yup.object().shape({
       return new Date(value) >= new Date(getTodayDate());
     }),
   booking_time: Yup.string()
-    .required("Booking time is required")
-    .test("is-valid-time", "Time must be between 9:00 AM and 6:00 PM", (value) => {
+  .required("Booking time is required")
+  .test(
+    "is-valid-time",
+    "Time must be between 9:00 AM and 6:30 PM",
+    (value) => {
       if (!value) return false;
+
       const [hours, minutes] = value.split(":").map(Number);
       const totalMinutes = hours * 60 + minutes;
+
       const start = 9 * 60;
-      const end = 18 * 60;
-      return totalMinutes >= start && totalMinutes < end;
-    }),
+      const end = 18 * 60 + 30;
+
+      return totalMinutes >= start && totalMinutes <= end;
+    }
+  ),
   notes: Yup.string(),
 });
 
@@ -132,7 +139,7 @@ const Reservation: React.FC = () => {
         form.append("amount", DEPOSIT.toFixed(2));
         form.append("payment_type", "manual");
         form.append("proof_of_payment", proofFile);
-        await axios.post(
+        const response = await axios.post(
           `${API_URL}/bookings/${bookingId}/transactions`,
           form,
           { headers: { "Content-Type": "multipart/form-data" } }
@@ -143,7 +150,7 @@ const Reservation: React.FC = () => {
         });
         closeModalAndReset();
         clearCart?.();
-        navigate("/payment-status?type=booking&status=success&reference=manual&booking=" + bookingId, { replace: true });
+        navigate(`/payment-status?type=booking&status=success&reference=manual-${response.data.transaction?.transaction_ref}&booking=` + bookingId, { replace: true });
       }
     } catch (e: any) {
       const message = e.response?.data?.message || e.message || "Something went wrong.";
@@ -202,7 +209,7 @@ const Reservation: React.FC = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.name}
-                className="indent-3 text-base floating-label-input w-full h-[56px] rounded-md transition-all duration-200 outline-0 bg-[#d9d9d9]/15 border border-(--primary-color)/20"
+                className="indent-3 text-base floating-label-input w-full h-14 rounded-md transition-all duration-200 outline-0 bg-[#d9d9d9]/15 border border-(--primary-color)/20"
                 placeholder=" "
               />
               <label htmlFor="name" className="floating-label absolute top-1 text-(--accent-color) text-base pointer-events-none transition-all duration-200 left-3">
@@ -220,7 +227,7 @@ const Reservation: React.FC = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.email}
-                className="indent-3 text-base floating-label-input w-full h-[56px] rounded-md transition-all duration-200 outline-0 bg-[#d9d9d9]/15 border border-(--primary-color)/20"
+                className="indent-3 text-base floating-label-input w-full h-14 rounded-md transition-all duration-200 outline-0 bg-[#d9d9d9]/15 border border-(--primary-color)/20"
                 placeholder=" "
               />
               <label htmlFor="email" className="floating-label absolute top-1 text-(--accent-color) text-base pointer-events-none transition-all duration-200 left-3">
@@ -237,7 +244,7 @@ const Reservation: React.FC = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.phone}
-                className="indent-3 text-base floating-label-input w-full h-[56px] rounded-md transition-all duration-200 outline-0 bg-[#d9d9d9]/15 border border-(--primary-color)/20"
+                className="indent-3 text-base floating-label-input w-full h-14 rounded-md transition-all duration-200 outline-0 bg-[#d9d9d9]/15 border border-(--primary-color)/20"
                 placeholder=" "
               />
               <label htmlFor="phone" className="floating-label absolute top-1 text-(--accent-color) text-base pointer-events-none transition-all duration-200 left-3">
@@ -246,69 +253,69 @@ const Reservation: React.FC = () => {
               {formik.touched.phone && formik.errors.phone && <div className="text-red-500 text-sm mt-1">{formik.errors.phone}</div>}
             </div>
 
-{/* DATE FIELD */}
-{/* DATE FIELD */}
-<div className="relative">
-  <input
-    type={formik.values.booking_date ? "date" : "text"}
-    id="booking_date"
-    name="booking_date"
-    min={getTodayDate()}
-    onFocus={(e: React.FocusEvent<HTMLInputElement>) => {
-      e.currentTarget.type = "date";
-      (e.currentTarget as any).showPicker?.(); // ensures date picker opens immediately
-    }}
-    onClick={(e: React.MouseEvent<HTMLInputElement>) => {
-      if (e.currentTarget.type !== "date") {
-        e.currentTarget.type = "date";
-        (e.currentTarget as any).showPicker?.();
-      }
-    }}
-    onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-      if (!formik.values.booking_date) e.currentTarget.type = "text";
-      formik.handleBlur(e);
-    }}
-    onChange={formik.handleChange}
-    value={formik.values.booking_date}
-    className="indent-3 text-base h-[56px] w-full rounded-md transition-all duration-200 outline-0 bg-[#d9d9d9]/15 border border-(--primary-color)/20 text-gray-800 placeholder-gray-500"
-    placeholder="Booking Date (mm-dd-yy)"
-  />
-  {formik.touched.booking_date && formik.errors.booking_date && (
-    <div className="text-red-500 text-sm mt-1">{formik.errors.booking_date}</div>
-  )}
-</div>
+            {/* DATE FIELD */}
+            {/* DATE FIELD */}
+            <div className="relative">
+              <input
+                type={formik.values.booking_date ? "date" : "text"}
+                id="booking_date"
+                name="booking_date"
+                min={getTodayDate()}
+                onFocus={(e: React.FocusEvent<HTMLInputElement>) => {
+                  e.currentTarget.type = "date";
+                  (e.currentTarget as any).showPicker?.(); // ensures date picker opens immediately
+                }}
+                onClick={(e: React.MouseEvent<HTMLInputElement>) => {
+                  if (e.currentTarget.type !== "date") {
+                    e.currentTarget.type = "date";
+                    (e.currentTarget as any).showPicker?.();
+                  }
+                }}
+                onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+                  if (!formik.values.booking_date) e.currentTarget.type = "text";
+                  formik.handleBlur(e);
+                }}
+                onChange={formik.handleChange}
+                value={formik.values.booking_date}
+                className="indent-3 text-base h-14 w-full rounded-md transition-all duration-200 outline-0 bg-[#d9d9d9]/15 border border-(--primary-color)/20 text-gray-800 placeholder-gray-500"
+                placeholder="Booking Date (mm-dd-yy)"
+              />
+              {formik.touched.booking_date && formik.errors.booking_date && (
+                <div className="text-red-500 text-sm mt-1">{formik.errors.booking_date}</div>
+              )}
+            </div>
 
-{/* TIME FIELD */}
-<div className="relative">
-  <input
-    type={formik.values.booking_time ? "time" : "text"}
-    id="booking_time"
-    name="booking_time"
-    min="09:00"
-    max="17:59"
-    onFocus={(e: React.FocusEvent<HTMLInputElement>) => {
-      e.currentTarget.type = "time";
-      (e.currentTarget as any).showPicker?.(); // open immediately
-    }}
-    onClick={(e: React.MouseEvent<HTMLInputElement>) => {
-      if (e.currentTarget.type !== "time") {
-        e.currentTarget.type = "time";
-        (e.currentTarget as any).showPicker?.();
-      }
-    }}
-    onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-      if (!formik.values.booking_time) e.currentTarget.type = "text";
-      formik.handleBlur(e);
-    }}
-    onChange={formik.handleChange}
-    value={formik.values.booking_time}
-    className="indent-3 text-base h-[56px] w-full rounded-md transition-all duration-200 outline-0 bg-[#d9d9d9]/15 border border-(--primary-color)/20 text-gray-800 placeholder-gray-500"
-    placeholder="Booking Time (hh:mm AM/PM)"
-  />
-  {formik.touched.booking_time && formik.errors.booking_time && (
-    <div className="text-red-500 text-sm mt-1">{formik.errors.booking_time}</div>
-  )}
-</div>
+            {/* TIME FIELD */}
+            <div className="relative">
+              <input
+                type={formik.values.booking_time ? "time" : "text"}
+                id="booking_time"
+                name="booking_time"
+                min="09:00"
+                max="17:59"
+                onFocus={(e: React.FocusEvent<HTMLInputElement>) => {
+                  e.currentTarget.type = "time";
+                  (e.currentTarget as any).showPicker?.(); // open immediately
+                }}
+                onClick={(e: React.MouseEvent<HTMLInputElement>) => {
+                  if (e.currentTarget.type !== "time") {
+                    e.currentTarget.type = "time";
+                    (e.currentTarget as any).showPicker?.();
+                  }
+                }}
+                onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+                  if (!formik.values.booking_time) e.currentTarget.type = "text";
+                  formik.handleBlur(e);
+                }}
+                onChange={formik.handleChange}
+                value={formik.values.booking_time}
+                className="indent-3 text-base h-14 w-full rounded-md transition-all duration-200 outline-0 bg-[#d9d9d9]/15 border border-(--primary-color)/20 text-gray-800 placeholder-gray-500"
+                placeholder="Booking Time (hh:mm AM/PM)"
+              />
+              {formik.touched.booking_time && formik.errors.booking_time && (
+                <div className="text-red-500 text-sm mt-1">{formik.errors.booking_time}</div>
+              )}
+            </div>
 
 
 
@@ -339,7 +346,7 @@ const Reservation: React.FC = () => {
               {items.map((i) => (
                 <div key={i.id} className="flex justify-between">
                   <div className="">
-                    <span className="font-medium!">{i.title}</span>
+                    <span className="font-medium! capitalize">{i.title}</span>
                     &nbsp;&nbsp;&nbsp;<span className="text-(--primary-color) font-medium! font-[Inter]!">X {i.quantity}</span>
                   </div>
                   <span>{formatterUtility(Number(i.quantity ? (i.price*i.quantity) : i.price))}</span>
@@ -445,15 +452,15 @@ const Reservation: React.FC = () => {
                 </div>
               ) : paymentMethod === "manual" ? (
                 <div className="space-y-4">
-                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-base">
-                    <p className="font-bold text-blue-900 mb-2">Bank Transfer Details</p>
-                    <div className="space-y-1 text-gray-700">
-                      <p><strong>Account Name:</strong> {BANK_DETAILS.accountName}</p>
-                      <p><strong>Bank:</strong> {BANK_DETAILS.bankName}</p>
+                  <div className="bg-(--primary-color)/10 border border-(--primary-color)/50 rounded-lg p-2 text-base">
+                    <p className="font-bold! text-(--primary-color) mb-2">Bank Transfer Details</p>
+                    <div className="space-y-2 text-(--accent-color) text-sm">
+                      <p className="font-[Raleway]!"><strong className="font-[Raleway]!">Account Name:</strong> {BANK_DETAILS.accountName}</p>
+                      <p className="font-[Raleway]!"><strong className="font-[Raleway]!">Bank:</strong> {BANK_DETAILS.bankName}</p>
                       <p className="flex items-center gap-2">
-                        <strong>Account No:</strong>
+                        <strong className="font-[Raleway]!">Account No:</strong>
                         <span
-                          className="font-mono text-(--primary-color) cursor-pointer underline flex items-center gap-1"
+                          className="font-mono! text-(--primary-color) cursor-pointer underline flex items-center text-base font-bold! gap-1"
                           onClick={() => {
                             navigator.clipboard.writeText(BANK_DETAILS.accountNumber);
                             toast.success("Copied!", { duration: 1500 });

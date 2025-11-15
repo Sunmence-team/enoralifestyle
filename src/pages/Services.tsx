@@ -13,6 +13,7 @@ interface Service {
   name: string;
   description: string;
   price: string;
+  people: string;
   image: string | null;
   created_at: string;
   type: "service" | "package";
@@ -213,7 +214,8 @@ const Services = () => {
                 id={item.id.toString()}
                 index={index}
                 title={item.name}
-                price={parseFloat(item.price)}
+                price={Number(item.price)}
+                people={item.people}
                 description={item.description}
                 image={`${IMAGE_URL}/${item.image}`}
               />

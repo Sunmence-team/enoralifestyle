@@ -1,13 +1,12 @@
 // src/pages/Package.tsx
 import React, { useState, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
-import { MdLogout } from "react-icons/md";
 import { BiImageAlt } from "react-icons/bi";
 import axios from "axios";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import DashboardTable from "./Components/DashboardTable";
-import { IoNotifications } from "react-icons/io5";
+import LogoutHandler from "../../components/buttons/LogoutBtn";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
@@ -23,6 +22,7 @@ interface Package {
   name: string;
   description: string | null;
   price: string;
+  people: "single" | "couple";
   image: string | null;
   services: number[] | string[];
 }
@@ -35,6 +35,7 @@ export default function Package() {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [selectedServices, setSelectedServices] = useState<number[]>([]);
+  const [people, setPeople] = useState();
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -140,6 +141,7 @@ export default function Package() {
     formData.append("description", description || "");
     formData.append("price", price);
     formData.append("type", "package");
+    formData.append("people", people);
     selectedServices.forEach((id) => formData.append("services[]", id.toString()));
     if (image) formData.append("image", image);
 
@@ -240,12 +242,10 @@ export default function Package() {
         <h2 className="font-semibold! text-2xl">
           {isEditing ? "Edit Package" : "Create Package"}
         </h2>
-           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+           <div className="flex flex-row justify-between items-center gap-4">
         
                   <div className="flex items-center gap-3">
-                    <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
-                      <MdLogout size={22} style={{ color: "var(--primary-color)" }} />
-                    </div>
+                    <LogoutHandler />
                   </div>
                 </div>
       </div>
@@ -314,10 +314,32 @@ export default function Package() {
                       onChange={() => handleServiceToggle(s.id)}
                       className="w-4 h-4 text-(--primary-color) rounded focus:ring-(--primary-color)"
                     />
-                    <span className="text-sm font-medium">{s.name}</span>
+                    <span className="text-sm font-medium capitalize">{s.name}</span>
                   </label>
                 ))
               )}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium! font-[Raleway]! mb-2">
+              Select User Type
+            </label>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-h-64 overflow-y-auto p-4 border border-(--primary-color)/30 bg-(--pending-bg)/15 font-[Raleway]! rounded-md outline-0 placeholder:text-(--primary-color)/50">
+              {["single", "couple"].map((s) => (
+                <label
+                  key={s}
+                  className="flex items-center gap-2 cursor-pointer p-2 hover:bg-pink-100 rounded transition"
+                >
+                  <input
+                    type="checkbox"
+                    checked={people === s}
+                    onChange={() => setPeople(s)}
+                    className="w-4 h-4 text-(--primary-color) rounded focus:ring-(--primary-color)"
+                  />
+                  <span className="text-sm font-medium capitalize">{s}</span>
+                </label>
+              ))}
             </div>
           </div>
 
@@ -385,6 +407,15 @@ export default function Package() {
           columns={[
             { key: "image", header: "IMAGE" },
             { key: "name", header: "NAME" },
+            { 
+              key: "people", 
+              header: "END USER",
+              render: (pkg: Package) => (
+                <span className="font-bold capitalize font-[Raleway]!">
+                  {pkg.people}
+                </span>
+              ),
+            },
             {
               key: "price",
               header: "PRICE",
@@ -404,7 +435,7 @@ export default function Package() {
                       const service = services.find(
                         (s) => s.id === (typeof sid === "string" ? parseInt(sid) : sid)
                       );
-                      return <li className="font-[Raleway]! font-medium!" key={sid}>• {service?.name || `ID: ${sid}`}</li>;
+                      return <li className="font-[Raleway]! capitalize font-medium!" key={sid}>• {service?.name || `ID: ${sid}`}</li>;
                     })
                   ) : (
                     <span className="text-gray-400 italic font-[Raleway]!">None</span>

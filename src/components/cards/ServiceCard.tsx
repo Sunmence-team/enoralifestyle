@@ -10,6 +10,7 @@ interface ServiceCardProps {
   description: string;
   image: string;
   price: number;
+  people: string;
 }
 
 const ServiceCard = (item: ServiceCardProps) => {
@@ -88,30 +89,38 @@ const ServiceCard = (item: ServiceCardProps) => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-5">
           <div className="bg-white rounded-3xl max-w-lg w-full relative shadow-2xl overflow-hidden animate-fadeIn">
             <div className="relative h-[250px]">
-              <div className="absolute inset-0 bg-black/60"></div>
+                <div className="absolute inset-0 bg-black/60"></div>
 
-              <button
-                onClick={() => setSelectedService(null)}
-                className="cursor-pointer absolute top-4 right-4 bg-gray-200 hover:bg-gray-300 text-gray-600 p-2 rounded-full transition-all"
-              >
-                <FiX size={20} />
-              </button>
+                <button
+                    onClick={() => setSelectedService(null)}
+                    className="cursor-pointer absolute top-4 right-4 bg-gray-200 hover:bg-gray-300 text-gray-600 p-2 rounded-full transition-all"
+                >
+                    <FiX size={20} />
+                </button>
 
-              <img
-                src={selectedService.image}
-                alt={selectedService.title}
-                className="w-full h-full object-cover rounded-t-3xl"
-              />
+                <img
+                    src={selectedService.image}
+                    alt={selectedService.title}
+                    className="w-full h-full object-cover rounded-t-3xl"
+                />
 
-              <p className="absolute top-0 left-4 mt-4 text-2xl font-semibold! text-white">
-                Price:{" "}
-                <span className="font-bold!">
-                  {formatterUtility(Number(selectedService.price))}
-                </span>
-              </p>
+                <div className="absolute top-0 left-4 mt-4">
+                    <p className="text-2xl font-semibold! text-white">
+                        Price:{" "}
+                        <span className="font-bold!">
+                            {formatterUtility(Number(selectedService.price))}
+                        </span>
+                    </p>
+                    <p className="text-2xl font-semibold! text-white">
+                        Type:{" "}
+                        <span className="font-bold! capitalize">
+                            {selectedService.people}
+                        </span>
+                    </p>
+                </div>
             </div>
 
-            <div className="p-6 lg:h-[40vh] md:h-[30vh] h-[50vh] overflow-y-auto styled-scrollbar">
+            <div className="p-6 lg:max-h-[40vh] md:max-h-[30vh] max-h-[50vh] overflow-y-auto styled-scrollbar">
               <h2 className="text-[24px] font-semibold text-black mb-2">
                 {selectedService.title}
               </h2>

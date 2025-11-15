@@ -61,7 +61,7 @@ const PaymentStatus: React.FC = () => {
         const res = await fetch(
           `${
             import.meta.env.VITE_API_BASE_URL
-          }/resources/files/WELLTHRIX.pdf?purchase_id=${purchase_id}`
+          }/resources/files/aids_digestion_sleep.pdf?purchase_id=${purchase_id}`
         );
 
         let reqdata = await res.json();
@@ -149,21 +149,21 @@ const PaymentStatus: React.FC = () => {
 
             <div className="bg-gray-100 p-4 rounded-xl text-sm text-gray-700 mb-6">
               <p>
-                <strong>Booking ID:</strong> {reference}
+                <strong>Booking ID:</strong> {reference === "manual" ? `Manual-${reference}` : reference}
               </p>
             </div>
 
             <div className="flex flex-wrap sm:flex-nowrap gap-3 justify-center">
               <Link
                 to="/"
-                className="whitespace-nowrap px-5 py-2.5 bg-(--primary-color) text-white rounded-xl font-medium hover:opacity-90 transition"
+                className="whitespace-nowrap px-5 py-2.5 bg-(--primary-color) text-white rounded-lg font-medium hover:opacity-90 transition"
               >
                 Back to Home
               </Link>
 
               <Link
                 to="/services"
-                className="whitespace-nowrap px-5 py-2.5 border border-(--primary-color) text-(--primary-color) rounded-xl font-medium hover:bg-(--primary-color)/5 transition"
+                className="whitespace-nowrap px-5 py-2.5 border border-(--primary-color) text-(--primary-color) rounded-lg font-medium hover:bg-(--primary-color)/5 transition"
               >
                 Book Again
               </Link>

@@ -87,10 +87,10 @@ const Navbar: React.FC = () => {
               className={({ isActive }) =>
                 `transition-colors duration-200 cursor-pointer ${
                   isActive
-                    ? `${isScrolled ? "text-(--accent-color)" : "text-white"} font-semibold`
+                    ? `${isScrolled ? "text-(--accent-color)" : "text-white"} font-semibold!`
                     : isScrolled
-                    ? "text-(--accent-color)/90 hover:text-(--accent-color)"
-                    : "text-white/60 hover:text-white"
+                      ? "text-(--accent-color)/90 hover:text-(--accent-color)"
+                      : "text-white/60 hover:text-white"
                 }`
               }
             >

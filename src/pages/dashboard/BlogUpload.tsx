@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
-import { MdLogout } from "react-icons/md";
 import { BiImageAlt } from "react-icons/bi";
 import axios from "axios";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import DashboardTable from "./Components/DashboardTable";
-import { IoNotifications } from "react-icons/io5";
+import LogoutHandler from "../../components/buttons/LogoutBtn";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL || "";
 const IMAGE_URL = (import.meta.env.VITE_IMAGE_BASE_URL || "").replace(/\/?$/, "/");
@@ -279,12 +278,10 @@ export default function BlogUpload() {
       {/* Header */}
       <div className="flex justify-between items-center w-full mb-8 px-4 lg:px-0">
         <h2 className="font-bold text-3xl text-gray-800">Upload Blog</h2>
-           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+           <div className="flex flex-row justify-between items-center gap-4">
         
                   <div className="flex items-center gap-3">
-                    <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
-                      <MdLogout size={22} style={{ color: "var(--primary-color)" }} />
-                    </div>
+                    <LogoutHandler />
                   </div>
                 </div>
       </div>

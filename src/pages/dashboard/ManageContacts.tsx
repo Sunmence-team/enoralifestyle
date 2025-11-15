@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Eye, Trash2 } from "lucide-react";
-import { MdLogout } from "react-icons/md";
 import { toast } from "sonner";
 import ConfirmModal from "../../modals/ConfirmDialog";
 import ViewContactModal from "../../modals/ViewContact";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
-import { IoNotifications } from "react-icons/io5";
+import LogoutHandler from "../../components/buttons/LogoutBtn";
 interface Contact {
   id: number;
   name: string;
@@ -153,12 +152,10 @@ const ManageContacts: React.FC = () => {
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center w-full mb-3">
           <h2 className="font-bold text-2xl">Manage Contact</h2>
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="flex flex-row justify-between items-center gap-4">
 
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-full transition hover:scale-105" style={{ backgroundColor: "var(--pink-color)" }}>
-                <MdLogout size={22} style={{ color: "var(--primary-color)" }} />
-              </div>
+              <LogoutHandler />
             </div>
           </div>
         </div>

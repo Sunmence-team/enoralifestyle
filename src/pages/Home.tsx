@@ -25,6 +25,7 @@ interface ApiItem {
   type: "package" | "service";
   image: string | null;
   price: string;
+  people: string;
   created_at: string;
 }
 
@@ -365,26 +366,26 @@ const Home: React.FC = () => {
             </h2>
 
             <div className="text-gray-700 leading-relaxed space-y-4 text-[15px] md:text-sm lg:text-base">
-              <p className="font-[inter]">
+              <p className="font-[inter]!">
                 At Enoralifestyle Spa, we believe self-care is not a luxury—it
                 is a lifestyle.
               </p>
-              <p className="font-[inter]">
+              <p className="font-[inter]!">
                 We are a world-class spa destination offering a full range of
                 wellness and beauty treatments designed to relax your body,
                 refresh your mind, and restore your natural glow.
               </p>
-              <p className="font-[inter]">
+              <p className="font-[inter]!">
                 Our mission is to promote total body wellness through
                 personalized therapies that relieve pain, reduce stress, and
                 enhance overall health.
               </p>
-              <p className="font-[inter]">
+              <p className="font-[inter]!">
                 Step into our serene environment where expert hands, soothing
                 aromas, and natural products come together to create an
                 experience of true relaxation and renewal.
               </p>
-              <p className="font-[inter]">
+              <p className="font-[inter]!">
                 At Enoralifestyle Spa, your well-being is our priority—because
                 you deserve to feel your best, inside and out.
               </p>
@@ -420,6 +421,7 @@ const Home: React.FC = () => {
                     title={item.name}
                     description={item.description}
                     price={item.price}
+                    people={item.people}
                     image={
                       item.image ? `${IMAGE_URL}/${item.image}` : assets.our1
                     }
@@ -463,7 +465,8 @@ const Home: React.FC = () => {
                     id={item.id.toString()}
                     index={index}
                     title={item.name}
-                    price={parseFloat(item.price)}
+                    price={Number(item.price)}
+                    people={item.people}
                     description={item.description}
                     image={
                       item.image ? `${IMAGE_URL}/${item.image}` : assets.ser1
@@ -496,9 +499,12 @@ const Home: React.FC = () => {
           </div>
 
           <div className={`text bg-image-gradient w-[60%]`}>
-            <h1 className="md:text-[48px] text-[30px] md:text-start text-center font-bold! text-white lg:text-(--accent-color) mb-3">
-              Our <span className="text-(--primary-color)">Ebook</span>
-            </h1>
+            <div className="mb-3">
+              <h1 className="md:text-[48px] text-[30px] md:text-start text-center font-bold! text-white lg:text-(--accent-color)">
+                Our <span className="text-(--primary-color)">Ebook</span>
+              </h1>
+              <p className="font-[Inter]! font-semibold! md:text-start text-center text-2xl">Titled: Weight loss hack for busy people</p>
+            </div>
             <p className="md:text-start text-center font-[Inter]! text-[16px]">
               This course is designed to simplify weight loss cutting through
               the jargon and confusion, so you can achieve results that fit
@@ -541,7 +547,7 @@ const Home: React.FC = () => {
                   <h3 className="text-lg font-bold! text-(--accent-color) mb-2">
                     {faq.q}
                   </h3>
-                  <p className="text-gray-600 text-sm leading-relaxed font-[inter]">
+                  <p className="text-gray-600 text-sm leading-relaxed font-[inter]!">
                     {faq.a}
                   </p>
                 </div>
@@ -551,117 +557,118 @@ const Home: React.FC = () => {
         </div>
 
         <section className="mt-10 px-5 lg:px-10">
-          <h1 className="md:text-[48px] text-[30px] text-center font-semibold md:mb-25 mb-10">
+          <h1 className="md:text-[48px] text-[30px] text-center font-semibold lg:mb-25 mb-10">
             <span className="text-(--primary-color)">Client’s Review</span>
           </h1>
 
           {/* Scrollable container for sm & md; static grid on lg */}
-          <div className="flex gap-6 overflow-x-auto lg:overflow-y-visible overflow-y-hidden lg:overflow-x-visible lg:justify-center pb-5 snap-x snap-mandatory lg:flex-row lg:flex-wrap">
+          <div className="flex gap-6 overflow-x-auto lg:overflow-y-visible lg:h-max md:h-[43vh] overflow-y-hidden lg:overflow-x-visible lg:justify-center pb-5 snap-x snap-mandatory lg:flex-row lg:flex-wrap">
             {loadingTestimonials
               ? [1, 2, 3].map((_, idx) => <TestimonialCardSkeleton key={idx} />)
               : testimonials.length < 3
-              ? reviews.map((review, index) => (
-                  <div
-                    key={index}
-                    className={`
+                ? reviews.map((review, index) => (
+                    <div
+                      key={index}
+                      className={`
+                          flex flex-col shrink-0 w-[300px] h-[360px] snap-center 
+                          lg:flex-1 lg:min-w-[350px] lg:h-[380px]
+                          transition-all duration-300
+                          ${index % 2 !== 0 && "lg:-translate-y-14"}
+                        `}
+                    >
+                      {/* Top section (review content) */}
+                      <div className="border border-black/20 rounded-t-2xl px-4 py-8 flex-1 flex flex-col bg-white">
+                        <div className="flex items-center gap-1">
+                          <img src={assets.blac} alt="" />
+                        </div>
+
+                        <div className="text mt-5">
+                          <p className="text-gray-700 text-sm md:text-base leading-relaxed">
+                            {review.reviewText}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Bottom section (profile) */}
+                      <div
+                        className="p-3 rounded-b-2xl"
+                        style={{ backgroundColor: review.bgColor }}
+                      >
+                        <div className="flex items-center gap-2">
+                          <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden flex-shrink-0">
+                            <img
+                              src={review.profileImage}
+                              alt={review.name}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-white text-sm md:text-base">
+                              {review.name}
+                            </h4>
+                            <p className="text-xs md:text-sm text-white">
+                              {review.role}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                : testimonials.map((t, idx) => (
+                    <div
+                      key={idx}
+                      className={`
                         flex flex-col shrink-0 w-[300px] h-[360px] snap-center 
                         lg:flex-1 lg:min-w-[350px] lg:h-[380px]
                         transition-all duration-300
-                        ${index % 2 !== 0 && "lg:-translate-y-14"}
+                        ${idx % 2 !== 0 && "lg:-translate-y-14"}
                       `}
-                  >
-                    {/* Top section (review content) */}
-                    <div className="border border-black/20 rounded-t-2xl px-4 py-8 flex-1 flex flex-col bg-white">
-                      <div className="flex items-center gap-1">
-                        <img src={assets.blac} alt="" />
-                      </div>
-
-                      <div className="text mt-5">
-                        <p className="text-gray-700 text-sm md:text-base leading-relaxed">
-                          {review.reviewText}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Bottom section (profile) */}
-                    <div
-                      className="p-3 rounded-b-2xl"
-                      style={{ backgroundColor: review.bgColor }}
                     >
-                      <div className="flex items-center gap-2">
-                        <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden flex-shrink-0">
-                          <img
-                            src={review.profileImage}
-                            alt={review.name}
-                            className="w-full h-full object-cover"
-                          />
+                      {/* Top section (review content) */}
+                      <div className="border border-black/20 rounded-t-2xl px-4 py-8 flex-1 flex flex-col bg-white">
+                        <div className="flex items-center gap-1">
+                          <img src={idx % 2 === 0 ? assets.pur : assets.blac} alt="" />
+                        
                         </div>
-                        <div>
-                          <h4 className="font-semibold text-white text-sm md:text-base">
-                            {review.name}
-                          </h4>
-                          <p className="text-xs md:text-sm text-white">
-                            {review.role}
+
+                        <div className="text mt-5">
+                          <p className="text-gray-700 text-sm md:text-base leading-relaxed">
+                            {t.comment}
                           </p>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                ))
-              : testimonials.map((t, idx) => (
-                  <div
-                    key={idx}
-                    className={`
-                      flex flex-col shrink-0 w-[300px] h-[360px] snap-center 
-                      lg:flex-1 lg:min-w-[350px] lg:h-[380px]
-                      transition-all duration-300
-                      ${idx % 2 !== 0 && "lg:-translate-y-14"}
-                    `}
-                  >
-                    {/* Top section (review content) */}
-                    <div className="border border-black/20 rounded-t-2xl px-4 py-8 flex-1 flex flex-col bg-white">
-                      <div className="flex items-center gap-1">
-                        <img src={idx % 2 === 0 ? assets.pur : assets.blac} alt="" />
-                      
-                      </div>
 
-                      <div className="text mt-5">
-                        <p className="text-gray-700 text-sm md:text-base leading-relaxed">
-                          {decodeURIComponent(t.comment)}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Bottom section (profile) */}
-                    <div
-                      className="p-3 rounded-b-2xl"
-                      style={{
-                        backgroundColor:
-                          idx % 2 !== 0 ? "#000000CC" : "#C97BB7",
-                      }}
-                    >
-                      <div className="flex items-center gap-2">
-                        <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden shrink-0">
-                          <img
-                            src={`${import.meta.env.VITE_IMAGE_BASE_URL}/${
-                              t.image
-                            }`}
-                            alt={t.full_name}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-white text-sm md:text-base">
-                            {t.full_name}
-                          </h4>
-                          <p className="text-xs md:text-sm text-white">
-                            {t.occupation}
-                          </p>
+                      {/* Bottom section (profile) */}
+                      <div
+                        className="p-3 rounded-b-2xl"
+                        style={{
+                          backgroundColor:
+                            idx % 2 !== 0 ? "#000000CC" : "#C97BB7",
+                        }}
+                      >
+                        <div className="flex items-center gap-2">
+                          <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden shrink-0">
+                            <img
+                              src={`${import.meta.env.VITE_IMAGE_BASE_URL}/${
+                                t.image
+                              }`}
+                              alt={t.full_name}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-white text-sm md:text-base">
+                              {t.full_name}
+                            </h4>
+                            <p className="text-xs md:text-sm text-white">
+                              {t.occupation}
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+            }
           </div>
         </section>
       </div>

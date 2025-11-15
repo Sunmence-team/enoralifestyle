@@ -109,7 +109,7 @@ const Packages: React.FC = () => {
               />
             </div>
 
-            {/* Price Range */}
+            {/* Type */}
             <div className="flex items-center gap-3">
               <select
                 value={userType}

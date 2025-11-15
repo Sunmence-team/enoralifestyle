@@ -25,24 +25,22 @@ const Services = () => {
 
   // Filter states
   const [search, setSearch] = useState("");
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
+  const [userType, setUserType] = useState("");
 
-  const hasActiveFilters = search || minPrice || maxPrice;
+  const hasActiveFilters = search || userType;
 
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Services - Enora Lifestyle And Spa";
   }, []);
 
-  const fetchServices = async (filters?: { search?: string; min_price?: string; max_price?: string }) => {
+  const fetchServices = async (filters?: { search?: string; people?: string; }) => {
     try {
       setLoading(true);
 
       const params: any = {};
       if (filters?.search?.trim()) params.search = filters.search.trim();
-      if (filters?.min_price) params.min_price = filters.min_price;
-      if (filters?.max_price) params.max_price = filters.max_price;
+      if (filters?.people) params.people = filters.people;
 
       const response = await axios.get(`${API_URL}/services`, { params });
 
@@ -63,13 +61,12 @@ const Services = () => {
   }, []);
 
   const handleApplyFilters = () => {
-    fetchServices({ search, min_price: minPrice, max_price: maxPrice });
+    fetchServices({ search, people: userType });
   };
 
   const handleClearFilters = () => {
     setSearch("");
-    setMinPrice("");
-    setMaxPrice("");
+    setUserType("");
     fetchServices();
   };
 
@@ -108,33 +105,28 @@ const Services = () => {
               />
             </div>
 
-            {/* Price Range */}
+            {/* Type */}
             <div className="flex items-center gap-3">
-              <input
-                type="number"
-                placeholder="Min"
-                value={minPrice}
-                onChange={(e) => setMinPrice(e.target.value)}
-                className="lg:w-28 w-1/2 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border focus:border-(--primary-color) transition"
+              <select
+                value={userType}
+                onChange={(e) => setUserType(e.target.value)}
+                className="w-full px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border focus:border-(--primary-color) transition"
                 style={{
                   backgroundColor: "white",
                   border: "1px solid var(--pink-color)",
                   color: "var(--accent-color)",
                 }}
-              />
-              <span className="text-gray-500 hidden sm:inline">—</span>
-              <input
-                type="number"
-                placeholder="Max"
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(e.target.value)}
-                className="lg:w-28 w-1/2 px-4 py-3.5 text-sm rounded-lg focus:outline-none focus:border focus:border-(--primary-color) transition"
-                style={{
-                  backgroundColor: "white",
-                  border: "1px solid var(--pink-color)",
-                  color: "var(--accent-color)",
-                }}
-              />
+              >
+                <option value={""}>Package Type</option>
+                {
+                  ["couple", "single"].map((type, index) => (
+                    <option
+                      key={index}
+                      value={type}
+                    >{type}</option>
+                  ))
+                }
+              </select>
             </div>
 
             {/* Action Buttons */}

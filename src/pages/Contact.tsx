@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Contacthero from "../components/herosections/Contacthero";
 import { assets } from "../assets/assests";
 import { toast } from "sonner";
@@ -12,6 +12,11 @@ const Contact = () => {
   const [email, setEmail] = React.useState("");
   const [message, setMessage] = React.useState("");
   const [postingMessage, setPostingMessage] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.title = "Contact Us - Enora Lifestyle And Spa";
+  }, []);
 
   const postContact = async (e: React.FormEvent) => {
     e.preventDefault();

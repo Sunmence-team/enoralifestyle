@@ -23,6 +23,8 @@ import Reservation from "./pages/Reservation";
 import ManageContacts from "./pages/dashboard/ManageContacts";
 import PaymentStatus from "./pages/PaymentStatus";
 import UploadTestimonial from "./pages/dashboard/TestimonialUpload";
+import NotFound from "./pages/view/NotFound";
+import Ebooks from "./pages/Ebooks";
 
 const App: React.FC = () => {
   return (
@@ -30,6 +32,7 @@ const App: React.FC = () => {
       <Toaster />
 
       <Routes>
+        <Route path="*" element={<NotFound />} />
         {/* Auth Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -52,6 +55,10 @@ const App: React.FC = () => {
         <Route
           path="/reservation"
           element={<MainLayout children={<Reservation />} />}
+        />
+        <Route
+          path="/ebooks"
+          element={<MainLayout children={<Ebooks />} />}
         />
        
 

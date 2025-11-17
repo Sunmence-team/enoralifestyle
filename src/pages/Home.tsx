@@ -217,18 +217,18 @@ const Home: React.FC = () => {
       if (res.ok) {
         setTestimonials(data.data.data);
       } else {
-        toast.error(`Failed to load testimonials. ${data.message}.`);
+        console.error(`Failed to load testimonials. ${data.message}.`);
       }
     } catch (error: any) {
       if (
         error?.message?.includes("Unexpected token '<'") ||
         error?.message === "Failed to fetch"
       ) {
-        return toast.error(
+        return console.error(
           "An uexpected error occured while loading testimonials"
         );
       } else {
-        toast.error(error?.message || "Error loading testimonials");
+        console.error(error?.message || "Error loading testimonials");
       }
     } finally {
       setLoadingTestimonials(false);
@@ -413,7 +413,7 @@ const Home: React.FC = () => {
                 No packages available
               </div>
             ) : (
-              packages.map((item, index) => (
+              packages.slice(0, 3).map((item, index) => (
                 <div className="min-w-[340px]" key={index}>
                   <PackageCard
                     id={item.id.toString()}
@@ -458,7 +458,7 @@ const Home: React.FC = () => {
                 No services available
               </div>
             ) : (
-              services.map((item, index) => (
+              services.slice(0, 6).map((item, index) => (
                 <div className="min-w-[340px]" key={index}>
                   <ServiceCard
                     key={item.id}
@@ -498,12 +498,12 @@ const Home: React.FC = () => {
             />
           </div>
 
-          <div className={`text bg-image-gradient w-[60%]`}>
+          <div className={`text bg-image-gradient lg:px-auto w-[60%]`}>
             <div className="mb-3">
-              <h1 className="md:text-[48px] text-[30px] md:text-start text-center font-bold! text-white lg:text-(--accent-color)">
-                Our <span className="text-(--primary-color)">Ebook</span>
+              <h1 className="md:text-[48px] text-[35px] md:text-start text-center font-bold! text-white lg:text-(--accent-color)">
+                Our <span className="text-(--primary-color) font-bold!">Ebook</span>
               </h1>
-              <p className="font-[Inter]! font-semibold! md:text-start text-center text-2xl">Titled: Weight loss hack for busy people</p>
+              <p className="font-[Inter]! font-semibold! md:text-start text-center md:text-2xl text-lg">Titled: Weight loss hack for busy people</p>
             </div>
             <p className="md:text-start text-center font-[Inter]! text-[16px]">
               This course is designed to simplify weight loss cutting through
@@ -516,7 +516,8 @@ const Home: React.FC = () => {
               but also boost your overall health. Disease free, no waste of
               money on hospital rounds, fake medications and unethical doctors.
             </p>
-            <div className="mt-6 flex md:justify-start justify-center">
+            <p className="font-[Inter]! font-medium! md:text-start text-center mt-2">This is more than an  e-book. It is a lifestyle shift that saves you countless health worries. You’ll want to get it instantly. 5k</p>
+            <div className="mt-4 flex md:justify-start justify-center">
               <button
                 className="flex items-center justify-center gap-2 bg-(--primary-color) hover:bg-(--primary-color) text-white font-medium! px-6 py-3 rounded-sm transition-colors duration-200 shadow-sm cursor-pointer"
                 onClick={() => setIsModalOpen(true)}
@@ -570,7 +571,7 @@ const Home: React.FC = () => {
                     <div
                       key={index}
                       className={`
-                          flex flex-col shrink-0 w-[300px] h-[360px] snap-center 
+                          flex flex-col shrink-0 w-[300px] snap-center 
                           lg:flex-1 lg:min-w-[350px] lg:h-[380px]
                           transition-all duration-300
                           ${index % 2 !== 0 && "lg:-translate-y-14"}
@@ -579,7 +580,7 @@ const Home: React.FC = () => {
                       {/* Top section (review content) */}
                       <div className="border border-black/20 rounded-t-2xl px-4 py-8 flex-1 flex flex-col bg-white">
                         <div className="flex items-center gap-1">
-                          <img src={assets.blac} alt="" />
+                          <img src={index % 2 === 0 ? assets.blac : assets.pur} alt="" />
                         </div>
 
                       <div className="text mt-5">
@@ -595,7 +596,7 @@ const Home: React.FC = () => {
                         style={{ backgroundColor: review.bgColor }}
                       >
                         <div className="flex items-center gap-2">
-                          <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden flex-shrink-0">
+                          <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden shrink-0">
                             <img
                               src={review.profileImage}
                               alt={review.name}
@@ -618,7 +619,7 @@ const Home: React.FC = () => {
                     <div
                       key={idx}
                       className={`
-                        flex flex-col shrink-0 w-[300px] h-[360px] snap-center 
+                        flex flex-col shrink-0 w-[300px] h-[400px] snap-center 
                         lg:flex-1 lg:min-w-[350px] lg:h-[380px]
                         transition-all duration-300
                         ${idx % 2 !== 0 && "lg:-translate-y-14"}

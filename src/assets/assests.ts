@@ -26,6 +26,9 @@ import pac from "./images/pack.jpg"
 import login from "./images/login.jpg"
 import blac from "./images/black.png"
 import pur from "./images/pur.png"
+import thickellipse from "./images/thickellipse.png"
+import faintellipse from "./images/faintellipse.png"
+import ebookbg from "./images/ebookbg.jpg"
 
 export const assets = {
     logo,
@@ -56,4 +59,7 @@ export const assets = {
     login,
     blac,
     pur,
+    thickellipse,
+    faintellipse,
+    ebookbg,
 };

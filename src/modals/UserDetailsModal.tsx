@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { formatterUtility } from "../utilities/formatterutility";
 
 interface UserDetailsModalProps {
   isOpen: boolean;
@@ -78,7 +79,7 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
             disabled={isLoading}
             className="px-4 py-2 cursor-pointer hover:bg-[#550342] bg-(--primary-color) text-white rounded-md"
           >
-            {isLoading ? "Initializing Payment..." : "Initialize Payment"}
+            {isLoading ? `Initializing Payment...` : `Pay ${formatterUtility(Number(5000))} Now`}
           </button>
         </div>
       </form>

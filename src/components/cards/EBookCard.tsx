@@ -95,7 +95,7 @@ const EBookCard : React.FC<EbookCardProps> = (item) => {
                             className="flex items-center justify-center gap-2 bg-(--primary-color) hover:bg-(--primary-color) text-white font-medium! px-6 h-10 rounded-sm transition-colors duration-200 shadow-sm cursor-pointer"
                             onClick={() => setIsModalOpen(true)}
                         >
-                            Buy Now
+                            Buy {formatterUtility(Number(5000))} Now
                         </button>
                         <button
                             className="cursor-pointer bg-transparent text-(--primary-color) font-medium px-6 h-10 transition-colors duration-200 border border-(--primary-color) rounded-sm"
@@ -146,7 +146,7 @@ const EBookCard : React.FC<EbookCardProps> = (item) => {
                             <h2 className="text-[24px] font-semibold! text-black mb-2">
                                 {selectedEbook.title}
                             </h2>
-                            <p className="text-gray-600 text-sm font-[Inter]! leading-relaxed">
+                            <p className="text-gray-600 text-sm font-[Inter]! leading-relaxed whitespace-pre-line">
                                 {selectedEbook.description}
                             </p>
                         </div>

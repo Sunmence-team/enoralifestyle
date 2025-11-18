@@ -14,6 +14,7 @@ import ServiceCardSkeleton from "../components/skeletons/ServiceCardSkeleton";
 import PackageCardSkeleton from "../components/skeletons/PackageCardSkeleton";
 import TestimonialCardSkeleton from "../components/skeletons/TestimonialCardSkeleton";
 import type { testimonialProps } from "../utilities/sharedInterFaces";
+import { formatterUtility } from "../utilities/formatterutility";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
@@ -516,13 +517,13 @@ const Home: React.FC = () => {
               but also boost your overall health. Disease free, no waste of
               money on hospital rounds, fake medications and unethical doctors.
             </p>
-            <p className="font-[Inter]! font-medium! md:text-start text-center mt-2">This is more than an  e-book. It is a lifestyle shift that saves you countless health worries. You’ll want to get it instantly. 5k</p>
+            <p className="font-[Inter]! font-medium! md:text-start text-center mt-2">This is more than an  e-book. It is a lifestyle shift that saves you countless health worries. You’ll want to get it instantly for 5k.</p>
             <div className="mt-4 flex md:justify-start justify-center">
               <button
                 className="flex items-center justify-center gap-2 bg-(--primary-color) hover:bg-(--primary-color) text-white font-medium! px-6 py-3 rounded-sm transition-colors duration-200 shadow-sm cursor-pointer"
                 onClick={() => setIsModalOpen(true)}
               >
-                Buy Now
+                Buy Now for {formatterUtility(Number(5000))}
               </button>
             </div>
           </div>

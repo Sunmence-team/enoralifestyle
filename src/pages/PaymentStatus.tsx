@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import Footer from "../components/Footer";
+import SEO from "../components/SEO"; // Import the SEO component
 
 const PaymentStatus: React.FC = () => {
   const navigate = useNavigate();
@@ -31,6 +32,11 @@ const PaymentStatus: React.FC = () => {
   if (status === "failed" || status === "error") {
     return (
       <>
+        <SEO
+          title="Payment Failed"
+          description="Your payment could not be processed. Please try again."
+          url="/payment-status"
+        />
         <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-red-50 to-pink-50">
           <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md text-center border border-red-100">
             <XCircle className="mx-auto text-red-600 w-16 h-16 mb-4" />
@@ -80,35 +86,42 @@ const PaymentStatus: React.FC = () => {
     };
 
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 bg-[#901e76]/10">
-        <div className="bg-white rounded-3xl shadow-xl p-8 w-md text-center border border-[#901e76]/50">
-          <CheckCircle2 className="mx-auto text-[#901e76] w-16 h-16 mb-4" />
-          <h1 className="text-2xl font-bold mb-2">Payment Successful!</h1>
-          <p className="text-gray-600 mb-6">Your eBook is ready to download.</p>
+      <>
+        <SEO
+          title="eBook Payment Successful"
+          description="Your eBook purchase was successful. Download your eBook now!"
+          url="/payment-status?type=ebook"
+        />
+        <div className="min-h-screen flex items-center justify-center px-4 bg-[#901e76]/10">
+          <div className="bg-white rounded-3xl shadow-xl p-8 w-md text-center border border-[#901e76]/50">
+            <CheckCircle2 className="mx-auto text-[#901e76] w-16 h-16 mb-4" />
+            <h1 className="text-2xl font-bold mb-2">Payment Successful!</h1>
+            <p className="text-gray-600 mb-6">Your eBook is ready to download.</p>
 
-          <div className="bg-gray-100 p-4 rounded-xl text-sm text-gray-700 mb-6">
-            <p>
-              <strong>Reference:</strong> {reference}
-            </p>
-          </div>
+            <div className="bg-gray-100 p-4 rounded-xl text-sm text-gray-700 mb-6">
+              <p>
+                <strong>Reference:</strong> {reference}
+              </p>
+            </div>
 
-          <div className="flex flex-wrap sm:flex-nowrap gap-3 justify-center">
-            <Link
-              to="/"
-              className="whitespace-nowrap px-5 py-2.5 border border-(--primary-color) text-(--primary-color) rounded-lg font-medium hover:bg-(--primary-color)/5 transition"
-            >
-              Back Home
-            </Link>
-            <button
-              onClick={handleDownload}
-              disabled={downloading}
-              className="inline-block bg-(--primary-color) text-white px-6 py-3 rounded-lg font-medium hover:opacity-90 transition cursor-pointer"
-            >
-              Download eBook
-            </button>
+            <div className="flex flex-wrap sm:flex-nowrap gap-3 justify-center">
+              <Link
+                to="/"
+                className="whitespace-nowrap px-5 py-2.5 border border-(--primary-color) text-(--primary-color) rounded-lg font-medium hover:bg-(--primary-color)/5 transition"
+              >
+                Back Home
+              </Link>
+              <button
+                onClick={handleDownload}
+                disabled={downloading}
+                className="inline-block bg-(--primary-color) text-white px-6 py-3 rounded-lg font-medium hover:opacity-90 transition cursor-pointer"
+              >
+                Download eBook
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -116,6 +129,11 @@ const PaymentStatus: React.FC = () => {
   if (typeParam === "booking" && isSuccess) {
     return (
       <>
+        <SEO
+          title="Booking Confirmed"
+          description="Your appointment is secured. We'll see you soon!"
+          url="/payment-status?type=booking"
+        />
         <div className="min-h-screen flex items-center justify-center px-4">
           <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md text-center border border-[#901e76]/50">
             <CheckCircle2 className="mx-auto text-[#901e76] w-16 h-16 mb-4" />

@@ -5,6 +5,7 @@ import axios from "axios";
 import { GoArrowLeft } from "react-icons/go";
 import Footer from "../components/Footer";
 import { toast } from "sonner";
+import SEO from "../components/SEO"; // Import the SEO component
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
@@ -120,112 +121,121 @@ export default function BlogDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col justify-between">
-      {/* Back Button */}
-      <div className="flex items-center gap-3 px-5 lg:px-10 pt-8">
-        <button
-          onClick={() => navigate("/blog")}
-          className="flex items-center gap-1 text-(--primary-color) hover:text-black transition"
-        >
-          <GoArrowLeft size={30} />
-          <span className="font-medium text-lg"></span>
-        </button>
-      </div>
+    <>
+      <SEO
+        title={blog.title}
+        description={blog.short_description}
+        imageUrl={blog.cover_image ? `${IMAGE_URL}/${blog.cover_image}` : undefined}
+        url={`/blog/${id}`}
+      />
+      <div className="min-h-screen bg-white flex flex-col justify-between">
+        {/* Back Button */}
+        <div className="flex items-center gap-3 px-5 lg:px-10 pt-8">
+          <button
+            onClick={() => navigate("/blog")}
+            className="flex items-center gap-1 text-(--primary-color) hover:text-black transition"
+          >
+            <GoArrowLeft size={30} />
+            <span className="font-medium text-lg"></span>
+          </button>
+        </div>
 
-      {/* Blog Title */}
-      <div className="px-5 lg:px-10 mt-6">
-        <h1 className="text-2xl lg:text-3xl font-semibold! text-gray-900 leading-snug">
-          {blog.title}
-        </h1>
-      </div>
-
-      {/* Blog Image */}
-      {blog.cover_image && (
+        {/* Blog Title */}
         <div className="px-5 lg:px-10 mt-6">
-          <img
-            src={`${IMAGE_URL}/${blog?.cover_image}`}
-            alt={blog.title}
-            className="w-full max-h-[350px] object-cover rounded-2xl shadow-md"
-          />
+          <h1 className="text-2xl lg:text-3xl font-semibold! text-gray-900 leading-snug">
+            {blog.title}
+          </h1>
         </div>
-      )}
 
-      {/* Blog Content */}
-      <div className="px-5 lg:px-10 py-10">
-        {/* <p className="text-gray-700 text-[16px] leading-relaxed whitespace-pre-line font-[Inter]! font-semibold! mb-4">
-          {blog.short_description}
-        </p> */}
-        <p className="text-gray-700 text-[16px] leading-relaxed whitespace-pre-line font-[Inter]!">
-          {blog?.body?.content}
-        </p>
-      </div>
+        {/* Blog Image */}
+        {blog.cover_image && (
+          <div className="px-5 lg:px-10 mt-6">
+            <img
+              src={`${IMAGE_URL}/${blog?.cover_image}`}
+              alt={blog.title}
+              className="w-full max-h-[350px] object-cover rounded-2xl shadow-md"
+            />
+          </div>
+        )}
 
-      {/* Comment Section */}
-      <div className="px-5 lg:px-10 py-12">
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 lg:gap-20 gap-10">
-          {/* Comments List */}
-          <div className="bg-[#C97BB7] rounded-2xl p-6 shadow-md">
-            <p className="text-xl font-semibold! font-[Raleway]! text-white mb-4">Comments</p>
-            {loadingComments ? (
-              <p className="text-white italic">Loading comments...</p>
-            ) : comments.length === 0 ? (
-              <p className="text-white italic">No comments yet. Be the first!</p>
-            ) : (
-              <div
-                className="space-y-4 max-h-[280px] overflow-y-auto pr-2 styled-scrollbar2"
-              >
-                {comments.map((c, index) => (
-                  <div
-                    key={index+c?.id}
-                    className="bg-white rounded-lg p-4 shadow-sm border border-gray-200"
-                  >
-                    <h4 className="font-medium! text-gray-900 font-[Inter]!">{c?.name}</h4>
-                    <div className="flex flex-col justify-between items-start mt-2">
-                      <p className="text-gray-700 text-sm leading-snug font-[Inter]!">{c?.text}</p>
-                      <p className="text-xs mt-2 w-full text-end text-gray-500">
-                        {new Date(c?.created_at).toLocaleString()}
-                      </p>
+        {/* Blog Content */}
+        <div className="px-5 lg:px-10 py-10">
+          {/* <p className="text-gray-700 text-[16px] leading-relaxed whitespace-pre-line font-[Inter]! font-semibold! mb-4">
+            {blog.short_description}
+          </p> */}
+          <p className="text-gray-700 text-[16px] leading-relaxed whitespace-pre-line font-[Inter]!">
+            {blog?.body?.content}
+          </p>
+        </div>
+
+        {/* Comment Section */}
+        <div className="px-5 lg:px-10 py-12">
+          <div className="max-w-6xl mx-auto grid lg:grid-cols-2 lg:gap-20 gap-10">
+            {/* Comments List */}
+            <div className="bg-[#C97BB7] rounded-2xl p-6 shadow-md">
+              <p className="text-xl font-semibold! font-[Raleway]! text-white mb-4">Comments</p>
+              {loadingComments ? (
+                <p className="text-white italic">Loading comments...</p>
+              ) : comments.length === 0 ? (
+                <p className="text-white italic">No comments yet. Be the first!</p>
+              ) : (
+                <div
+                  className="space-y-4 max-h-[280px] overflow-y-auto pr-2 styled-scrollbar2"
+                >
+                  {comments.map((c, index) => (
+                    <div
+                      key={index+c?.id}
+                      className="bg-white rounded-lg p-4 shadow-sm border border-gray-200"
+                    >
+                      <h4 className="font-medium! text-gray-900 font-[Inter]!">{c?.name}</h4>
+                      <div className="flex flex-col justify-between items-start mt-2">
+                        <p className="text-gray-700 text-sm leading-snug font-[Inter]!">{c?.text}</p>
+                        <p className="text-xs mt-2 w-full text-end text-gray-500">
+                          {new Date(c?.created_at).toLocaleString()}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+                  ))}
+                </div>
+              )}
+            </div>
 
-          {/* Comment Form */}
-          <div className="p-6">
-            <p className="text-xl font-medium text-gray-800 mb-5">Drop your comment</p>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <input
-                type="text"
-                placeholder="Full name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-(--primary-color)/20 transition"
-                required
-              />
-              <textarea
-                placeholder="Drop your Enquires here"
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                rows={4}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-(--primary-color)/20 transition resize-none"
-                required
-              />
-              <button
-                type="submit"
-                className="w-full bg-(--primary-color) text-white font-medium py-3 rounded-lg hover:bg-opacity-90 transition"
-                disabled={submitting}
-              >
-                {submitting ? "Posting..." : "Submit Comment"}
-              </button>
-            </form>
+            {/* Comment Form */}
+            <div className="p-6">
+              <p className="text-xl font-medium text-gray-800 mb-5">Drop your comment</p>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <input
+                  type="text"
+                  placeholder="Full name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-(--primary-color)/20 transition"
+                  required
+                />
+                <textarea
+                  placeholder="Drop your Enquires here"
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  rows={4}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-(--primary-color)/20 transition resize-none"
+                  required
+                />
+                <button
+                  type="submit"
+                  className="w-full bg-(--primary-color) text-white font-medium py-3 rounded-lg hover:bg-opacity-90 transition"
+                  disabled={submitting}
+                >
+                  {submitting ? "Posting..." : "Submit Comment"}
+                </button>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Footer */}
-      <Footer />
-    </div>
+        {/* Footer */}
+        <Footer />
+      </div>
+    </>
   );
 }
+

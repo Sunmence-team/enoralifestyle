@@ -15,6 +15,7 @@ import PackageCardSkeleton from "../components/skeletons/PackageCardSkeleton";
 import TestimonialCardSkeleton from "../components/skeletons/TestimonialCardSkeleton";
 import type { testimonialProps } from "../utilities/sharedInterFaces";
 import { formatterUtility } from "../utilities/formatterutility";
+import SEO from "../components/SEO"; // Import the SEO component
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
@@ -52,7 +53,6 @@ interface PaymentResponse {
 const Home: React.FC = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Home - Enora Lifestyle And Spa";
   }, []);
 
   const [packages, setPackages] = useState<ApiItem[]>([]);
@@ -285,6 +285,12 @@ const Home: React.FC = () => {
 
   return (
     <>
+      <SEO
+        title="Home"
+        description="Relax, recharge, and renew with spa treatments tailored to your body, beauty, and wellness needs."
+        imageUrl={assets.hero}
+        url="/"
+      />
       <div>
         {/* HERO SECTION */}
         <HeroSection

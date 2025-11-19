@@ -326,7 +326,7 @@ const Home: React.FC = () => {
               </div>
             ) : (
               blogs.slice(0, 6).map((blog, index) => (
-                <div className="md:max-w-[340px] max-w-[320px]" key={index}>
+                <div className="md:min-w-[340px] min-w-[320px] max-w-[340px]" key={index}>
                   <BlogCrd
                     id={String(blog?.id)}
                     title={blog?.title}

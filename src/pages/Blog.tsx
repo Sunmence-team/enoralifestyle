@@ -181,24 +181,8 @@ const Blog: React.FC = () => {
             </div>
           )}
 
-          {/* Error State */}
-          {error && (
-            <div className="text-center py-24">
-              <p className="text-xl sm:text-2xl font-medium mb-6" style={{ color: "var(--cancelled-color)" }}>
-                {error}
-              </p>
-              <button
-                onClick={() => window.location.reload()}
-                className="px-8 py-3 rounded-xl text-white font-medium transition hover:opacity-90"
-                style={{ backgroundColor: "var(--primary-color)" }}
-              >
-                Try Again
-              </button>
-            </div>
-          )}
-
           {/* Empty State */}
-          {!loading && !error && blogs.length === 0 && (
+          {!loading && blogs.length === 0 && (
             <div className="text-center py-16">
               <div
                 className="w-28 h-28 rounded-full flex items-center justify-center mx-auto mb-6"

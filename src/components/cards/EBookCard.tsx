@@ -92,13 +92,13 @@ const EBookCard : React.FC<EbookCardProps> = (item) => {
                     <p className='line-clamp-3 font-[Inter]! leading-5 text-sm'>{item.description}</p>
                     <div className="mt-4 flex gap-3 justify-sart w-full">
                         <button
-                            className="flex items-center justify-center gap-2 bg-(--primary-color) hover:bg-(--primary-color) text-white font-medium! px-6 h-10 rounded-sm transition-colors duration-200 shadow-sm cursor-pointer"
+                            className="flex items-center justify-center gap-2 bg-(--primary-color) hover:bg-(--primary-color) text-white font-medium! lg:px-6 px-4 h-10 rounded-sm transition-colors duration-200 shadow-sm cursor-pointer"
                             onClick={() => setIsModalOpen(true)}
                         >
                             Buy {formatterUtility(Number(5000))} Now
                         </button>
                         <button
-                            className="cursor-pointer bg-transparent text-(--primary-color) font-medium px-6 h-10 transition-colors duration-200 border border-(--primary-color) rounded-sm"
+                            className="cursor-pointer bg-transparent text-(--primary-color) font-medium lg:px-6 px-4 h-10 transition-colors duration-200 border border-(--primary-color) rounded-sm"
                             onClick={() => setSelectedEbook(item)}
                         >
                             View Details

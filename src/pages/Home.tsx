@@ -65,7 +65,6 @@ const Home: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [isLoadingBlogs, setIsLoadingBlogs] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (isModalOpen) {
@@ -127,9 +126,9 @@ const Home: React.FC = () => {
         const data = response.data?.data?.data || response.data?.data || [];
         setBlogs(Array.isArray(data) ? data : []);
       } catch (err) {
+        setBlogs([]);
         const error = err as AxiosError;
         console.error("Failed to fetch blogs:", error);
-        setError("Failed to load blogs. Please try again later.");
       } finally {
         setTimeout(() => {
           setIsLoadingBlogs(false);
@@ -312,7 +311,7 @@ const Home: React.FC = () => {
                     <BlogCardSkeleton />
                   </div>
                 ))
-            ) : !isLoadingBlogs && !error && blogs.length === 0 ? (
+            ) : !isLoadingBlogs && blogs.length === 0 ? (
               <div className="text-center pt-16 relative w-full">
                 <div className="bg-gray-100 w-24 h-24 rounded-full flex flex-col items-center justify-center mx-auto mb-6">
                   <div className="absolute">
@@ -410,8 +409,14 @@ const Home: React.FC = () => {
                   </div>
                 ))
             ) : packages.length === 0 ? (
-              <div className="w-full text-center py-20 text-gray-500">
-                No packages available
+              <div className="md:col-span-3 text-center pt-16 relative w-full">
+                <div className="bg-gray-100 w-24 h-24 rounded-full flex flex-col items-center justify-center mx-auto mb-6">
+                  <div className="absolute">
+                    <p className="text-xl text-gray-600 font-medium">
+                      No packages available currently
+                    </p>
+                  </div>
+                </div>
               </div>
             ) : (
               packages.slice(0, 3).map((item, index) => (
@@ -455,8 +460,14 @@ const Home: React.FC = () => {
                 .fill(0)
                 .map((_, index) => <ServiceCardSkeleton key={index} />)
             ) : services.length === 0 ? (
-              <div className="col-span-full text-center py-20 text-gray-500">
-                No services available
+              <div className="md:col-span-3 text-center pt-16 relative w-full">
+                <div className="bg-gray-100 w-24 h-24 rounded-full flex flex-col items-center justify-center mx-auto mb-6">
+                  <div className="absolute">
+                    <p className="text-xl text-gray-600 font-medium">
+                      No services available at the moment
+                    </p>
+                  </div>
+                </div>
               </div>
             ) : (
               services.slice(0, 6).map((item, index) => (

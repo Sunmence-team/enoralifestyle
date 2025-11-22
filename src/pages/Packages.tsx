@@ -6,6 +6,8 @@ import PackageCard from "../components/cards/PackageCard";
 import axios, { AxiosError } from "axios";
 import PackageCardSkeleton from "../components/skeletons/PackageCardSkeleton";
 import SEO from "../components/SEO"; // Import the SEO component
+import { useScreenSize } from "../hook/useScreenSize";
+import PaginationControls from "../utilities/PaginationControls";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
@@ -24,6 +26,11 @@ interface Package {
 const Packages: React.FC = () => {
   const [packages, setPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const { isDesktop, isTablet } = useScreenSize();
+
+  const itemsPerPage = isDesktop ? 9 : isTablet ? 8 : 6 
 
   // Filter states
   const [search, setSearch] = useState("");
@@ -33,7 +40,7 @@ const Packages: React.FC = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [loading]);
 
   // Fetch packages with filters
   const fetchPackages = async (filters?: { search?: string; people?: string; }) => {
@@ -43,12 +50,17 @@ const Packages: React.FC = () => {
       const params: any = {};
       if (filters?.search?.trim()) params.search = filters.search.trim();
       if (filters?.people) params.people = filters.people;
+      params.page = currentPage;
+      params.page = currentPage;
+      params.per_page = itemsPerPage;
 
       const response = await axios.get(`${API_URL}/packages`, { params });
 
       if (response.status === 200) {
-        const { data } = response.data.data;
+        const { data, current_page, last_page } = response.data.data;
         setPackages(data);
+        setCurrentPage(current_page);
+        setTotalPages(last_page);
       }
     } catch (err) {
       const error = err as AxiosError;
@@ -62,7 +74,7 @@ const Packages: React.FC = () => {
   // Initial load
   useEffect(() => {
     fetchPackages();
-  }, []);
+  }, [currentPage, itemsPerPage]);
 
   const handleApplyFilters = () => {
     fetchPackages({ search, people: userType });
@@ -172,7 +184,7 @@ const Packages: React.FC = () => {
         {/* PACKAGES GRID */}
         <div className="mt-12 lg:px-10 px-5 pb-20">
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-10">
               {Array(6)
                 .fill(0)
                 .map((_, i) => (
@@ -212,7 +224,7 @@ const Packages: React.FC = () => {
               )}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-10">
               {packages.map((item, index) => (
                 <PackageCard
                   key={item.id}
@@ -228,6 +240,11 @@ const Packages: React.FC = () => {
               ))}
             </div>
           )}
+          <PaginationControls
+            currentPage={currentPage}
+            totalPages={totalPages}
+            setCurrentPage={setCurrentPage}
+          />
         </div>
       </div>
     </>

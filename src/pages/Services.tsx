@@ -5,6 +5,8 @@ import ServiceCard from "../components/cards/ServiceCard";
 import axios from "axios";
 import ServiceCardSkeleton from "../components/skeletons/ServiceCardSkeleton";
 import SEO from "../components/SEO"; // Import the SEO component
+import PaginationControls from "../utilities/PaginationControls";
+import { useScreenSize } from "../hook/useScreenSize";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
@@ -23,6 +25,11 @@ interface Service {
 const Services = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const { isDesktop, isTablet } = useScreenSize();
+
+  const itemsPerPage = isDesktop ? 15 : isTablet ? 8 : 6 
 
   // Filter states
   const [search, setSearch] = useState("");
@@ -32,7 +39,7 @@ const Services = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [loading]);
 
   const fetchServices = async (filters?: { search?: string; people?: string; }) => {
     try {
@@ -41,12 +48,17 @@ const Services = () => {
       const params: any = {};
       if (filters?.search?.trim()) params.search = filters.search.trim();
       if (filters?.people) params.people = filters.people;
+      params.page = currentPage;
+      params.page = currentPage;
+      params.per_page = itemsPerPage;
 
       const response = await axios.get(`${API_URL}/services`, { params });
 
       if (response.status === 200) {
-        const { data } = response.data.data;
+        const { data, current_page, last_page } = response.data.data;
         setServices(data);
+        setCurrentPage(current_page);
+        setTotalPages(last_page);
       }
     } catch (err) {
       console.error("Failed to load services:", err);
@@ -58,7 +70,7 @@ const Services = () => {
 
   useEffect(() => {
     fetchServices();
-  }, []);
+  }, [currentPage, itemsPerPage]);
 
   const handleApplyFilters = () => {
     fetchServices({ search, people: userType });
@@ -168,7 +180,7 @@ const Services = () => {
         {/* SERVICES GRID */}
         <div className="mt-12 lg:px-10 px-5 pb-20">
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-10">
               {Array(6)
                 .fill(0)
                 .map((_, i) => (
@@ -206,7 +218,7 @@ const Services = () => {
               )}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-10">
               {services.map((item, index) => (
                 <ServiceCard
                   key={item.id}
@@ -221,6 +233,11 @@ const Services = () => {
               ))}
             </div>
           )}
+          <PaginationControls
+            currentPage={currentPage}
+            totalPages={totalPages}
+            setCurrentPage={setCurrentPage}
+          />
         </div>
       </div>
     </>

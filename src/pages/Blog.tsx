@@ -6,6 +6,8 @@ import BlogCrd from "../components/cards/BlogCrd";
 import axios, { AxiosError } from "axios";
 import BlogCardSkeleton from "../components/skeletons/BlogCardSkeleton";
 import SEO from "../components/SEO"; // Import the SEO component
+import { useScreenSize } from "../hook/useScreenSize";
+import PaginationControls from "../utilities/PaginationControls";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const IMAGE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
@@ -22,6 +24,11 @@ const Blog: React.FC = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const { isDesktop, isTablet } = useScreenSize();
+
+  const itemsPerPage = isDesktop ? 9 : isTablet ? 8 : 6 
 
   // Filter states
   const [fromDate, setFromDate] = useState("");
@@ -32,7 +39,7 @@ const Blog: React.FC = () => {
   // Scroll to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [loading]);
 
   // Fetch blogs with date filters
   const fetchBlogs = async (filters?: { from_date?: string; to_date?: string }) => {
@@ -43,12 +50,17 @@ const Blog: React.FC = () => {
       const params: any = {};
       if (filters?.from_date) params.from_date = filters.from_date;
       if (filters?.to_date) params.to_date = filters.to_date;
+      params.page = currentPage;
+      params.page = currentPage;
+      params.per_page = itemsPerPage;
 
       const response = await axios.get(`${API_URL}/blogs`, { params });
 
       if (response.status === 200) {
-        const { data } = response.data.data;
+        const { data, current_page, last_page } = response.data.data;
         setBlogs(data);
+        setCurrentPage(current_page);
+        setTotalPages(last_page);
       }
     } catch (err) {
       const error = err as AxiosError;
@@ -62,7 +74,7 @@ const Blog: React.FC = () => {
   // Initial load
   useEffect(() => {
     fetchBlogs();
-  }, []);
+  }, [currentPage, itemsPerPage]);
 
   const handleApplyFilters = () => {
     fetchBlogs({ from_date: fromDate, to_date: toDate });
@@ -179,7 +191,7 @@ const Blog: React.FC = () => {
 
             {/* Loading State */}
             {loading && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-10">
                 {Array(6)
                   .fill(0)
                   .map((_, i) => (
@@ -226,7 +238,7 @@ const Blog: React.FC = () => {
 
             {/* Blog Grid */}
             {!loading && !error && blogs.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-10">
                 {blogs.map((blog) => (
                   <BlogCrd
                     key={blog.id}
@@ -238,6 +250,12 @@ const Blog: React.FC = () => {
                 ))}
               </div>
             )}
+
+            <PaginationControls
+              currentPage={currentPage}
+              totalPages={totalPages}
+              setCurrentPage={setCurrentPage}
+            />
           </div>
         </section>
       </div>

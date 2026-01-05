@@ -69,7 +69,7 @@ const Services = () => {
   };
 
   useEffect(() => {
-    fetchServices();
+    fetchServices({ search, people: userType });
   }, [currentPage, itemsPerPage]);
 
   const handleApplyFilters = () => {

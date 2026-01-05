@@ -1,6 +1,6 @@
 export const formatterUtility = (amount: number, noSign=false) => {
-    const sign = noSign ? "" : "₦";
-    return `${sign}${amount.toLocaleString()}`
+        const sign = noSign ? "" : "₦";
+        return `${sign}${amount.toLocaleString()}`
 }
 
 export const formatISODateToCustom = (isoString: string) => {

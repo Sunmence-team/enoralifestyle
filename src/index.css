@@ -141,3 +141,19 @@ button:disabled:hover {
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
   background: #9f5f91;
 }
+
+.fadeInUp{
+  /* animation: name duration timing-function delay iteration-count direction fill-mode; */
+  animation: fadeInUp 1s ease-out 0s 1 forwards forwards;
+}
+
+@keyframes fadeInUp {
+  0% { 
+    opacity: 0;
+    transform: 'translateY(20px)';
+  };
+  100% { 
+    opacity: 1; 
+    transform: 'translateY(0)'; 
+  }
+}

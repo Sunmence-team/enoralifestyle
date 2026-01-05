@@ -71,9 +71,8 @@ const Packages: React.FC = () => {
     }
   };
 
-  // Initial load
   useEffect(() => {
-    fetchPackages();
+    fetchPackages({ search, people: userType });
   }, [currentPage, itemsPerPage]);
 
   const handleApplyFilters = () => {

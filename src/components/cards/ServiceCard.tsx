@@ -124,7 +124,7 @@ const ServiceCard = (item: ServiceCardProps) => {
               <h2 className="text-[24px] font-semibold text-black mb-2">
                 {selectedService.title}
               </h2>
-              <p className="text-gray-600 text-sm leading-relaxed">
+              <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">
                 {selectedService.description}
               </p>
             </div>

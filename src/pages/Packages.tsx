@@ -73,7 +73,7 @@ const Packages: React.FC = () => {
 
   useEffect(() => {
     fetchPackages({ search, people: userType });
-  }, [currentPage, itemsPerPage]);
+  }, [currentPage, itemsPerPage, search, userType]);
 
   const handleApplyFilters = () => {
     fetchPackages({ search, people: userType });

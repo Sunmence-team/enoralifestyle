@@ -153,7 +153,7 @@ const Packages: React.FC = () => {
 
               {/* Action Buttons */}
               <div className="flex gap-3 lg:ml-auto">
-                <button
+                {/* <button
                   onClick={handleApplyFilters}
                   className="lg:w-max md:w-1/2 mx-auto w-full px-6 py-3.5 font-medium rounded-lg text-white transition hover:opacity-90 focus:outline-none focus:border focus:border-(--primary-color) focus:ring-offset-2"
                   style={{
@@ -161,7 +161,7 @@ const Packages: React.FC = () => {
                   }}
                 >
                   Apply Filters
-                </button>
+                </button> */}
 
                 {hasActiveFilters && (
                   <button

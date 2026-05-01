@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+ import { useEffect, useState } from "react";
 import HeroSection from "../components/herosections/Herosection";
 import { assets } from "../assets/assests";
 import ServiceCard from "../components/cards/ServiceCard";
@@ -70,7 +70,7 @@ const Services = () => {
 
   useEffect(() => {
     fetchServices({ search, people: userType });
-  }, [currentPage, itemsPerPage]);
+  }, [currentPage, itemsPerPage, search, userType]);
 
   const handleApplyFilters = () => {
     fetchServices({ search, people: userType });

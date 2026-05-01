@@ -129,7 +129,7 @@ const PackageCard = (item: PackageCardProps) => {
               <h2 className="text-[24px] font-semibold text-black mb-2">
                 {selectedPackage.title}
               </h2>
-              <p className="text-gray-600 text-sm leading-relaxed">
+              <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">
                 {selectedPackage.description}
               </p>
             </div>

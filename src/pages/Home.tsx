@@ -294,8 +294,8 @@ const Home: React.FC = () => {
       <div>
         {/* HERO SECTION */}
         <HeroSection
-          title="Premium Spa Experience Designed for You"
-          subtitle="Relax, recharge, and renew with spa treatments tailored to your body, beauty, and wellness needs."
+          title="Body spa in Ibadan for massage, facial and general wellness."
+          subtitle="Relax, recharge, and renew at one of the most trusted and highly rated spas in Ibadan. Enjoy expert massage therapy, advanced facials, and luxury wellness treatments tailored to you."
           button1Text="Book Now"
           button2Text="View Services"
           backgroundImage={assets.hero}

@@ -72,9 +72,9 @@ const Services = () => {
     fetchServices({ search, people: userType });
   }, [currentPage, itemsPerPage, search, userType]);
 
-  const handleApplyFilters = () => {
-    fetchServices({ search, people: userType });
-  };
+  // const handleApplyFilters = () => {
+  //   fetchServices({ search, people: userType });
+  // };
 
   const handleClearFilters = () => {
     setSearch("");
@@ -150,7 +150,7 @@ const Services = () => {
 
               {/* Action Buttons */}
               <div className="flex gap-3 lg:ml-auto">
-                <button
+                {/* <button
                   onClick={handleApplyFilters}
                   className="px-6 py-3.5 font-medium rounded-lg text-white transition hover:opacity-90 focus:outline-none focus:border focus:border-(--primary-color) focus:ring-offset-2 lg:w-max  md:w-1/2 mx-auto w-full"
                   style={{
@@ -158,7 +158,7 @@ const Services = () => {
                   }}
                 >
                   Apply Filters
-                </button>
+                </button> */}
 
                 {hasActiveFilters && (
                   <button

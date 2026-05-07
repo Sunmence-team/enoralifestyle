@@ -75,9 +75,9 @@ const Packages: React.FC = () => {
     fetchPackages({ search, people: userType });
   }, [currentPage, itemsPerPage, search, userType]);
 
-  const handleApplyFilters = () => {
-    fetchPackages({ search, people: userType });
-  };
+  // const handleApplyFilters = () => {
+  //   fetchPackages({ search, people: userType });
+  // };
 
   const handleClearFilters = () => {
     setSearch("");

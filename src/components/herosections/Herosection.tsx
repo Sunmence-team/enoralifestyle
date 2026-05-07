@@ -31,7 +31,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
       <div className="absolute inset-0 bg-black/60"></div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-3xl px-4">
+      <div className="relative z-10 md:w-3/4 w-full px-4">
         <h1 className="text-4xl md:text-6xl font-semibold! leading-tight mb-4">
           {title}
         </h1>
